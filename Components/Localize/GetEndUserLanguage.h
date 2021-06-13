@@ -1,7 +1,18 @@
+/**
+ * @file GetEndUserLanguage.h
+ * @author AokiMinoru (personal-git@aokiminoru.work)
+ * @brief エンドユーザーの言語情報取得関数群
+ * @version 0.1
+ * @date 2021-06-13
+ * 
+ * @copyright Copyright (c) 2021
+ * 
+ */
+
 #ifndef GET_ENDUSER_LANGUAGE_H
 #define GET_ENDUSER_LANGUAGE_H
 
-#include "Constant/LocalizeConstant.h"
+#include "Enum/LocalizeConstant.h"
 #include <string>
 #include <utility>
 #include "../Utility/nameof.hpp"

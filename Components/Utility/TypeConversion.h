@@ -1,3 +1,14 @@
+/**
+ * @file TypeConversion.h
+ * @author AokiMinoru (personal-git@aokiminoru.work)
+ * @brief 型変換の関数（主にビットマップフォントに使用予定）
+ * @version 0.1
+ * @date 2021-06-13
+ * 
+ * @copyright Copyright (c) 2021
+ * 
+ */
+
 #ifndef TYPE_CONVERSION_H
 #define TYPE_CONVERSION_H
 

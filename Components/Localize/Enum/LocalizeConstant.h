@@ -1,3 +1,14 @@
+/**
+ * @file LocalizeConstant.h
+ * @author AokiMinoru (personal-git@aokiminoru.work)
+ * @brief 言語一覧。BMフォント、シナリオなどローカライズが必要なアセットフォルダはこの名称で分岐させること！
+ * @version 0.1
+ * @date 2021-06-13
+ * 
+ * @copyright Copyright (c) 2021
+ * 
+ */
+
 #ifndef LOCALIZE_CONSTANT_H
 #define LOCALIZE_CONSTANT_H
 

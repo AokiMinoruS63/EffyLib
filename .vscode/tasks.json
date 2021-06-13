@@ -22,7 +22,7 @@
             "args": 
             [
                 // Input
-                "Main.o", "hogeClass.o",
+                "Main.o", "hogeClass.o", "BMFont.o","ScreenSizeGenerator.o", "TouchMgr.o", 
 
                 // Output
                 "-o", "index.html",
@@ -34,6 +34,8 @@
                 "-LDxLibForHTML5/lib",
 
                 // Dependent Libraries
+                "-s", "LLD_REPORT_UNDEFINED",
+                "--allow-undefined",
                 "-s", "USE_BULLET=1", "-s", "USE_FREETYPE=1", 
                 "-s", "USE_OGG=1", "-s", "USE_LIBPNG=1", 
                 "-s", "USE_VORBIS=1", "-s", "USE_ZLIB=1",
@@ -47,7 +49,7 @@
                 // Packaging Configurations
                 "--source-map-base", "http://localhost:8080/",
                 "--preload-file", "assets@/",
-                "--shell-file", "template.html"
+                "--shell-file", "template.html", "--experimental-wasm-simd"
             ],
             "group": "build"
         },
@@ -69,7 +71,7 @@
             "args": 
             [
                 // Input
-                "Main.o", "hogeClass.o",
+                "Main.o", "hogeClass.o", "BMFont.o", "ScreenSizeGenerator.o", "TouchMgr.o",
 
                 // Output
                 "-o", "index.html",
@@ -81,6 +83,8 @@
                 "-LDxLibForHTML5/lib",
 
                 // Dependent Libraries
+                "-s", "LLD_REPORT_UNDEFINED",
+                "--allow-undefined",
                 "-s", "USE_BULLET=1", "-s", "USE_FREETYPE=1", 
                 "-s", "USE_OGG=1", "-s", "USE_LIBPNG=1", 
                 "-s", "USE_VORBIS=1", "-s", "USE_ZLIB=1",
@@ -94,7 +98,7 @@
                 // Packaging Configurations
                 "--source-map-base", "http://localhost:8080/",
                 "--preload-file", "assets@/",
-                "--shell-file", "template.html"
+                "--shell-file", "template.html", "--experimental-wasm-simd"
             ],
             "group": "build"
         },

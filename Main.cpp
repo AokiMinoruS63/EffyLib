@@ -8,13 +8,13 @@
  */
 
 #include "DxLib.h"
-
+#include "Components/Touch/TouchMgr.h"
 #ifdef EMSCRIPTEN
 #  include <emscripten.h>
 #endif
 
 static bool shouldExit = false;
-
+TouchMgr *touchMgr;
 void mainLoop() {
 	if (ProcessMessage() == -1) {
 		shouldExit = true;
@@ -23,11 +23,12 @@ void mainLoop() {
 	ClearDrawScreen();
 
 	{
-		int MouseX, MouseY;
-		int CircleColor = (GetMouseInput() & MOUSE_INPUT_LEFT) ? GetColor(255, 255, 0) : GetColor(255, 0, 0);
+		touchMgr->calc();
+		//int MouseX, MouseY;
+		touch_t touch = touchMgr->get();
+		int CircleColor = ( touch.status != TouchStatus::NoTouch && touch.status != TouchStatus::JustRelease) ? GetColor(255, 255, 0) : GetColor(255, 0, 0);
 
-		GetMousePoint(&MouseX, &MouseY);
-		DrawCircle(MouseX, MouseY, 64, CircleColor);
+		DrawCircle(touch.x, touch.y, 64, CircleColor);
 	}
 
 	{
@@ -64,7 +65,7 @@ int main () {
     if (DxLib_Init() == -1) {
 		return -1;
     }
-
+	touchMgr = new TouchMgr();
     ChangeFont("07LogoTypeGothic7.ttf");
 	SetDrawScreen(DX_SCREEN_BACK);
 
