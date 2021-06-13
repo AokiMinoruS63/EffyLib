@@ -1,1 +1,7 @@
 .DS_Store
+index.js
+index.html
+index.wasm
+index.wasm.map
+index.data
+*.o
