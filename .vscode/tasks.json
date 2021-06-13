@@ -1,0 +1,181 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "shell",
+            "label": "Build: Compile (Debug)",
+            "command": "bash",
+            "args": [
+                // Input
+                "compile.sh"  
+
+                // em++ Specific Configurations
+            ],
+            "group": "build"
+        },
+        {
+            "type": "shell",
+            "label": "Build: Link (Debug)",
+            "command": "em++",
+            "args": 
+            [
+                // Input
+                "Main.o", "hogeClass.o",
+
+                // Output
+                "-o", "index.html",
+
+                // Compiler Flags
+                "-O0", "-std=c++17", "-g4",
+
+                // Library Directory
+                "-LDxLibForHTML5/lib",
+
+                // Dependent Libraries
+                "-s", "USE_BULLET=1", "-s", "USE_FREETYPE=1", 
+                "-s", "USE_OGG=1", "-s", "USE_LIBPNG=1", 
+                "-s", "USE_VORBIS=1", "-s", "USE_ZLIB=1",
+                "-lDxDrawFunc", "-lDxUseCLib", "-lDxLib",
+
+                // em++ Specific Configurations
+                "--emrun",
+                "-s", "FULL_ES2=1",
+                "-s", "ALLOW_MEMORY_GROWTH=1",
+
+                // Packaging Configurations
+                "--source-map-base", "http://localhost:8080/",
+                "--preload-file", "assets@/",
+                "--shell-file", "template.html"
+            ],
+            "group": "build"
+        },
+        {
+            "type": "shell",
+            "label": "Build: Compile (Release)",
+            "command": "bash",
+            "args": [
+                // Input
+                "compile.sh", 
+                // em++ Specific Configurations
+            ],
+            "group": "build"
+        },
+        {
+            "type": "shell",
+            "label": "Build: Link (Release)",
+            "command": "em++",
+            "args": 
+            [
+                // Input
+                "Main.o", "hogeClass.o",
+
+                // Output
+                "-o", "index.html",
+
+                // Compiler Flags
+                "-O2", "-std=c++17",
+
+                // Library Directory
+                "-LDxLibForHTML5/lib",
+
+                // Dependent Libraries
+                "-s", "USE_BULLET=1", "-s", "USE_FREETYPE=1", 
+                "-s", "USE_OGG=1", "-s", "USE_LIBPNG=1", 
+                "-s", "USE_VORBIS=1", "-s", "USE_ZLIB=1",
+                "-lDxDrawFunc", "-lDxUseCLib", "-lDxLib",
+
+                // em++ Specific Configurations
+                "--emrun",
+                "-s", "FULL_ES2=1",
+                "-s", "ALLOW_MEMORY_GROWTH=1",
+
+                // Packaging Configurations
+                "--source-map-base", "http://localhost:8080/",
+                "--preload-file", "assets@/",
+                "--shell-file", "template.html"
+            ],
+            "group": "build"
+        },
+        {
+            "type": "shell",
+            "label": "Build: Debug",
+            "dependsOn": 
+            [
+                    "Build: Compile (Debug)", "Build: Link (Debug)",
+            ],
+            "dependsOrder": "sequence",
+            "group":{
+                    "kind": "build",
+                    "isDefault": true
+            }
+        },
+        {
+            "type": "shell",
+            "label": "Build: Release",
+            "dependsOn": 
+            [
+                    "Build: Compile (Release)", "Build: Link (Release)",
+            ],
+            "dependsOrder": "sequence",
+            "group": "build"
+        },
+        {
+            "type": "shell",
+            "label": "Run Local Server and Open Browser",
+            "command": "emrun",
+            "args": [
+                "--port", "8080",
+                "--serve_after_close",
+                "index.html"
+            ],
+            "group": "none"
+        },
+        {
+            "type": "shell",
+            "label": "Run Local Server",
+            "command": "emrun",
+            "args": 
+            [
+                "--hostname", "localhost",
+                "--port", "8080",
+                "--no_browser",
+                "index.html"
+            ],
+            "isBackground": true,
+            "problemMatcher": [
+                {
+                    "pattern": [
+                        {
+                            "regexp": ".",
+                            "file": 1,
+                            "location": 2,
+                            "message": 3
+                        }
+                    ],
+                    "background": {
+                        "activeOnStart": true,
+                        "beginsPattern": ".",
+                        "endsPattern": "Now listening at",
+                    }
+                }
+            ],
+            "group": "none"
+        },
+        {
+            "label": "Stop Local Server",
+            "type": "shell",
+            "command": "echo ${input:terminate}",
+            "group": "none"
+        }
+    ],
+    "inputs": [
+        {
+            "id": "terminate",
+            "type": "command",
+            "command": "workbench.action.tasks.terminate",
+            "args": "Run Local Server"
+        }
+    ]
+}
