@@ -24,6 +24,13 @@ class ScreenSizeGenerator {
     // パーティションを入れない高さ(ローカル高さ)
     static const int SCREEN_HEIGHT = 1136;
 
+    #ifdef EMSCRIPTEN
+    // ブラウザのパーティションの幅
+    static const int BROWSER_PERTISION_WIDTH = 874;
+    // ブラウザのパーティションの片面の幅
+    static const int BROWSER_PERTISION_WIDTH_HALF = 437;
+    #endif
+
     /* コンストラクタ・デストラクタ */
    
 

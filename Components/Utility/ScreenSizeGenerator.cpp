@@ -26,8 +26,7 @@ int ScreenSizeGenerator::getHeight() {
  */
 int ScreenSizeGenerator::getWidthWithPartition() {
     #ifdef EMSCRIPTEN
-    // Emscriptenにはパーティションはない
-    return SCREEN_WIDTH;
+    return SCREEN_WIDTH + BROWSER_PERTISION_WIDTH;
     #else
     // TODO: Android,iOSはパーティションがある場合がある
     #endif

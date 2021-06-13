@@ -34,6 +34,7 @@ void mainLoop() {
 	{
 		int StringColor = CheckHitKey(KEY_INPUT_SPACE) ? GetColor(0, 255, 0) : GetColor(255, 255, 255);
 		DrawString(3, 3, "Hello DxLib on HTML5!", StringColor);
+		DrawLine(1513,0,1513,1136,GetColor(255,0,0),2);
 		/*
 		std::string c = "鳥";//"鼻";// 鳥 40165(9CE5)//u8"\u9F3B";// 鼻 40763
 		char c2[] = u8"\u9CE5";//u8"\u9F3B";
@@ -60,7 +61,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 #else
 int main () {
 #endif
-	SetGraphMode(640, 1136, 32);
+	SetGraphMode(1514, 1136, 32);
 
     if (DxLib_Init() == -1) {
 		return -1;

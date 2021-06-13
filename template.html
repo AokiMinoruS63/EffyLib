@@ -17,11 +17,11 @@
       /* the canvas *must not* have any border or padding, or mouse coords will be wrong */
       @media screen and (orientation: landscape) {
      /* 横向きの場合のスタイル */
-     canvas.emscripten { height:90vh;border: 0px none; background-color: black; }
+     canvas.emscripten { height:75vh;border: 0px none; background-color: black; }
       }
       @media screen and (orientation: portrait) {
         /* 縦向きの場合のスタイル */
-        canvas.emscripten { width:66vw;border: 0px none; background-color: black; }
+        canvas.emscripten { width:100vw;border: 0px none; background-color: black; }
       }
 
       #emscripten_logo {
@@ -110,9 +110,9 @@
 
     
     <div class="emscripten_border">
-      <canvas class="emscripten" id="canvas" width="640px" height="1136px" oncontextmenu="event.preventDefault()" tabindex=-1></canvas>
+      <canvas class="emscripten" id="canvas" width="1514px" height="1136px" oncontextmenu="event.preventDefault()" tabindex=-1></canvas>
     </div>
-    <textarea id="output" rows="8"></textarea>
+    <!-- <textarea id="output" rows="8"></textarea> -->
 
     <script type='text/javascript'>
       var statusElement = document.getElementById('status');
