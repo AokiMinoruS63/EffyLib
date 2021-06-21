@@ -25,6 +25,7 @@ TouchMgr *touchMgr;
 BMFontMgr *bmFontMgr;
 const BMFont::bmFont_t *bmFont;
 
+// グローバルポスフラグ、グローバルスケール、回転前縦スケール、回転前横スケール、回転U、回転V、角度、回転後横スケール、回転後縦スケール追加
 int drawFont(BMFont_t bm, int id, float x, float y, float scale = 1.0f, COLOR_U8 color = GetColorU8(255,255,255,255)) {
 	int size[2]={0,0};
 	// 画像取得に失敗したら何もしない
@@ -87,7 +88,7 @@ int drawFont(BMFont_t bm, int id, float x, float y, float scale = 1.0f, COLOR_U8
 
 	// ２Ｄの２ポリゴンの描画
 	// TODO: パーティション座標に差し替え
-	DrawPolygon2D( Vert, 2, bm.graphHandle, TRUE ) ;
+	drawPolygon2D( Vert, 2, bm.graphHandle, TRUE ) ;
 
 	// 幅を返す
 	return (str->xadvance() + bm.bmFont->info()->padding()->Get(1)+ bm.bmFont->info()->padding()->Get(3) + bm.bmFont->info()->spacing()->Get(0))  * scale;
@@ -155,14 +156,16 @@ void mainLoop() {
 		*/
 
 		// 境界線描画
-		DrawLine(1513,0,1513,1136,GetColor(255,0,0),2);
 		DrawBox(0,0,874/2,1136,GetColor(0,0,100),TRUE);
 		DrawBox(1514-874/2,0,1514,1136,GetColor(0,0,100),TRUE);
+		DrawLine(1513,0,1513,1136,GetColor(255,0,0),2);
+		DrawLine(0,1136,1513,1136,GetColor(255,0,0),10);
 
+		// タッチ画像描画
 		touch_t touch = touchMgr->get();
 		int CircleColor = ( touch.status != TouchStatus::NoTouch && touch.status != TouchStatus::JustRelease) ? GetColor(255, 255, 0) : GetColor(255, 0, 0);
 
-		drawCircle(touch.x, touch.y, 64, CircleColor, TRUE);
+		drawCircle(touch.x, touch.y, 64, CircleColor);
 
 		/*
 		std::string c = "鳥";//"鼻";// 鳥 40165(9CE5)//u8"\u9F3B";// 鼻 40763

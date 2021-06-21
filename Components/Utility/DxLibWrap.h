@@ -362,4 +362,16 @@ int drawRectGraph( int DestX, int DestY, int SrcX, int SrcY, int Width, int Heig
                     int GraphHandle, int TransFlag, int TurnFlag, int GlobalPos = FALSE, 
                     int ReverceXFlag = FALSE, int ReverceYFlag = FALSE ) ;
 
+/**
+ * @brief ポリゴンから２D画像を描画します
+ * 
+ * @param VertexArray ポリゴンの頂点情報配列（３の倍数はあることになる）
+ * @param PolygonNum ポリゴン（三角形）の個数
+ * @param GrHandle 画像ハンドル
+ * @param TransFlag 画像の透明度を有効にするかどうか( TRUE：有効にする　FALSE：無効にする )
+ * @param GlobalPos パーティションを考慮したグローバル座標で描画するか、のフラグ。TRUEでグローバル座標描画
+ * @return int 0: 成功、-1: エラー発生
+ */
+int drawPolygon2D(DxLib::VERTEX2D *VertexArray, int PolygonNum, int GrHandle, int TransFlag, int GlobalPos = FALSE);
+
 #endif

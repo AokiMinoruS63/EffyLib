@@ -199,3 +199,21 @@ int drawRectGraph( int DestX, int DestY, int SrcX, int SrcY, int Width, int Heig
         setScreenPosToGlobal(&DestX, &DestY);
     return DrawRectGraph(DestX, DestY, SrcX, SrcY, Width, Height, GraphHandle, TransFlag, ReverceXFlag, ReverceYFlag);
 }
+
+// ポリゴンから２D画像を描画します
+int drawPolygon2D(DxLib::VERTEX2D *VertexArray, int PolygonNum, int GrHandle, int TransFlag, int GlobalPos) {
+    if (GlobalPos == FALSE) {
+        int x, y;
+        float fx, fy;
+        for(int i=0;i<PolygonNum*3;i++) {
+            x = (int)VertexArray[i].pos.x;
+            y = (int)VertexArray[i].pos.y;
+            fx = VertexArray[i].pos.x - (float)x;
+            fy = VertexArray[i].pos.y - (float)y;
+            setScreenPosToGlobal(&x, &y);
+            VertexArray[i].pos = VGet(((float)x) + fx, ((float)y) + fy, 0.0);
+
+        }
+    }
+    return DrawPolygon2D(VertexArray, PolygonNum, GrHandle, TransFlag);
+}
