@@ -89,14 +89,14 @@ Language getEndUserLanguage() {
  * 
  * @return エンドユーザーの使用言語
  */
-const char *getEndUserLanguageToString() {
+std::string getEndUserLanguageToString() {
     Language lang;
     std::string endUserStr="";
     #ifdef EMSCRIPTEN
     lang = Language(getEnduserLanguageEM());
     #endif
     endUserStr = NAMEOF_ENUM(lang);
-    return std::move(endUserStr.c_str());
+    return std::move(endUserStr);
 }
 
 #endif

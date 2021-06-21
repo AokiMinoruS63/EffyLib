@@ -12,7 +12,6 @@ TouchMgr::TouchMgr() {
         touch.posLogX.push_back(0);
         touch.posLogY.push_back(0);
     }
-    screenSizeGenerator = new ScreenSizeGenerator();
 }
 
 /**
@@ -45,7 +44,7 @@ void TouchMgr::calc() {
     
     /* 座標・タップ情報取得 */
     #ifdef EMSCRIPTEN
-    GetMousePoint(&touch.x, &touch.y);
+    getMousePoint(&touch.x, &touch.y);
     touch.inputLog[0] = GetMouseInput()& MOUSE_INPUT_LEFT ? true:false;
     #else
     if (GetTouchInputNum() > 0)
@@ -59,8 +58,6 @@ void TouchMgr::calc() {
     }
     #endif
 
-    // 座標系をローカルに変換
-    screenSizeGenerator->setPositionToLocal(&touch.x, &touch.y);
     // ログ・タップステータス初期化
     touch.posLogX[0] = touch.x;
     touch.posLogY[0] = touch.y;
@@ -105,16 +102,15 @@ touch_t TouchMgr::get() {
  * @return touch_t 現在のパーティションを考慮したタップ情報を返す
  */
 touch_t TouchMgr::getGlobalTouch() {
+    touch_t globalTouch = touch;
     #ifdef EMSCRIPTEN
-    // Emscriptenはそのまま返す
-    return touch;
+    setScreenPosToGlobal(&globalTouch.x, &globalTouch.y);
     #else
     // Android,iOSは変換して返す
-    touch_t globalTouch = touch;
-    screenSizeGenerator->setPositionToGlobal(&globalTouch.x,&globalTouch.y);
+    screenSizeGenerator->setScreenPosToGlobal(&globalTouch.x,&globalTouch.y);
     for(int i=0;i<TOUCH_LOG_MAX;i++) {
-        screenSizeGenerator->setPositionToGlobal(&globalTouch.posLogX[i]],&globalTouch.posLogY[i]);
+        screenSizeGenerator->setScreenPosToGlobal(&globalTouch.posLogX[i]],&globalTouch.posLogY[i]);
     }
-    return globalTouch;
     #endif
+    return touch;
 }

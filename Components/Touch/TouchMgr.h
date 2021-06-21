@@ -14,8 +14,7 @@
 
 #include "TouchData.h"
 #include "Enum/TouchStatus.h"
-#include "../Utility/ScreenSizeGenerator.h"
-#include "../../DxLibForHTML5/include/DxLib.h"
+#include "../Utility/DxLibWrap.h"
 
 class TouchMgr {
     private:
@@ -29,9 +28,6 @@ class TouchMgr {
     /* 変数 */
     // タッチ情報
     touch_t touch;
-
-    /* インスタンス */
-    ScreenSizeGenerator *screenSizeGenerator;
 
     /* コンストラクタ・デストラクタ */
     public:

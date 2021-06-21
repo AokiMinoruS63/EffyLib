@@ -12,57 +12,23 @@
 #ifndef SCREEN_SIZE_GENERATOR_H
 #define SCREEN_SIZE_GENERATOR_H
 
+// パーティションを入れない幅を返す
+int getScreenWidth();
+// パーティションを入れない高さを返す
+int getScreenHeight();
+// パーティションを入れた幅を返す
+int getScreenWidthWithPartition();
+// パーティションを入れた高さを返す
+int getScreenHeightWithPartition();
+// パーティションの入ったグローバルポジションからローカルポジションへの変換
+void setScreenPosToLocal(int *x, int *y);
+// ローカルポジションからパーティションの入ったグローバルポジションへの変換
+void setScreenPosToGlobal(int *x, int *y);
+
+/* ブラウザ限定処理 */
 #ifdef EMSCRIPTEN
-
-
-class ScreenSizeGenerator {
-     public:
-    /* 定数 */
-
-    // パーティションを入れない幅（ローカル幅）
-    static const int SCREEN_WIDTH = 640;
-    // パーティションを入れない高さ(ローカル高さ)
-    static const int SCREEN_HEIGHT = 1136;
-
-    #ifdef EMSCRIPTEN
-    // ブラウザのパーティションの幅
-    static const int BROWSER_PERTISION_WIDTH = 874;
-    // ブラウザのパーティションの片面の幅
-    static const int BROWSER_PERTISION_WIDTH_HALF = 437;
-    #endif
-
-    /* コンストラクタ・デストラクタ */
-   
-
-    ScreenSizeGenerator(){}
-    ~ScreenSizeGenerator(){}
-
-    // パーティションを入れない幅を返す
-    int getWidth();
-    // パーティションを入れない高さを返す
-    int getHeight();
-    // パーティションを入れた幅を返す
-    int getWidthWithPartition();
-    // パーティションを入れた高さを返す
-    int getHeightWithPartition();
-    // パーティションの入ったグローバルポジションからローカルポジションへの変換
-    void setPositionToLocal(int *x, int *y);
-    // ローカルポジションからパーティションの入ったグローバルポジションへの変換
-    void setPositionToGlobal(int *x, int *y);
-
-    /* ブラウザ限定処理 */
-    #ifdef EMSCRIPTEN
-    // ブラウザの座標をセットする（ローカル・グローバル共通処理のため）
-    void setBrowserGeneralPos(int *x, int *y);
-    private:
-    // 伸び縮みしているブラウザの幅の現在の比率を返す
-    float getBrowserCanvasWidthRate();
-    // 伸び縮みしているブラウザの高さの現在の比率を返す
-    float getBrowserCanvasHeightRate();
-    #endif
-};
-
-
+// ブラウザの座標をセットする（ローカル・グローバル共通処理のため）
+void setBrowserGeneralPos(int *x, int *y);
 
 #endif
 #endif

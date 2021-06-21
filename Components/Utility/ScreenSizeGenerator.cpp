@@ -6,7 +6,28 @@
  * 
  * @return int パーティションを除いた画面の幅
  */
-int ScreenSizeGenerator::getWidth() {
+
+/* 定数 */
+
+// パーティションを入れない幅（ローカル幅）
+static const int SCREEN_WIDTH = 640;
+// パーティションを入れない高さ(ローカル高さ)
+static const int SCREEN_HEIGHT = 1136;
+
+#ifdef EMSCRIPTEN
+// ブラウザのパーティションの幅
+static const int BROWSER_PERTISION_WIDTH = 874;
+// ブラウザのパーティションの片面の幅
+static const int BROWSER_PERTISION_WIDTH_HALF = BROWSER_PERTISION_WIDTH / 2;
+
+// 伸び縮みしているブラウザの幅の現在の比率を返す
+float getBrowserCanvasWidthRate();
+// 伸び縮みしているブラウザの高さの現在の比率を返す
+float getBrowserCanvasHeightRate();
+
+#endif
+
+int getScreenWidth() {
     return SCREEN_WIDTH;
 }
 
@@ -15,7 +36,7 @@ int ScreenSizeGenerator::getWidth() {
  * 
  * @return int パーティションを除いた画面の高さ
  */
-int ScreenSizeGenerator::getHeight() {
+int getScreenHeight() {
     return SCREEN_HEIGHT;
 }
 
@@ -24,7 +45,7 @@ int ScreenSizeGenerator::getHeight() {
  * 
  * @return int パーティションを入れた画面の幅
  */
-int ScreenSizeGenerator::getWidthWithPartition() {
+int getScreenWidthWithPartition() {
     #ifdef EMSCRIPTEN
     return SCREEN_WIDTH + BROWSER_PERTISION_WIDTH;
     #else
@@ -38,7 +59,7 @@ int ScreenSizeGenerator::getWidthWithPartition() {
  * 
  * @return int パーティションを入れた画面の高さ
  */
-int ScreenSizeGenerator::getHeightWithPartition() {
+int getScreenHeightWithPartition() {
     #ifdef EMSCRIPTEN
     // Emscriptenにはパーティションはない
     return SCREEN_HEIGHT;
@@ -49,19 +70,21 @@ int ScreenSizeGenerator::getHeightWithPartition() {
 }
 
 // パーティションの入ったグローバルポジションからローカルポジションへの変換
-void ScreenSizeGenerator::setPositionToLocal(int *x, int *y) {
+void setScreenPosToLocal(int *x, int *y) {
     #ifdef EMSCRIPTEN
-    // Emscriptenにはパーティションはないのでブラウザの伸び縮みのみ計算
-    setBrowserGeneralPos(x,y);
+    // 幅のパーティション分減算
+    *x -= BROWSER_PERTISION_WIDTH_HALF;
+    // ブラウザの伸び縮みの計算
     #else
     // TODO: Android,iOSはパーティションがある場合がある
     #endif
 }
+
 // ローカルポジションからパーティションの入ったグローバルポジションへの変換
-void ScreenSizeGenerator::setPositionToGlobal(int *x, int *y) {
+void setScreenPosToGlobal(int *x, int *y) {
     #ifdef EMSCRIPTEN
-    // Emscriptenにはパーティションはないのでブラウザの伸び縮みのみ計算
-    setBrowserGeneralPos(x,y);
+    // 幅のパーティションのみ加算
+    *x += BROWSER_PERTISION_WIDTH_HALF;
     #else
     // TODO: Android,iOSはパーティションがある場合がある
     #endif
@@ -73,8 +96,8 @@ void ScreenSizeGenerator::setPositionToGlobal(int *x, int *y) {
  * 
  * @return float １.０が最大
  */
-float ScreenSizeGenerator::getBrowserCanvasWidthRate() {
-    return ((float)getWidthWithPartition()) / ((float)getBrowserCanvasWidthEM());
+float getBrowserCanvasWidthRate() {
+    return ((float)getScreenWidthWithPartition()) / ((float)getBrowserCanvasWidthEM());
 }
 
 /**
@@ -82,8 +105,8 @@ float ScreenSizeGenerator::getBrowserCanvasWidthRate() {
  * 
  * @return float １.０が最大
  */
-float ScreenSizeGenerator::getBrowserCanvasHeightRate() {
-    return ((float)getHeightWithPartition()) / ((float)getBrowserCanvasHeightEM());
+float getBrowserCanvasHeightRate() {
+    return ((float)getScreenHeightWithPartition()) / ((float)getBrowserCanvasHeightEM());
 }
 
 /**
@@ -92,7 +115,7 @@ float ScreenSizeGenerator::getBrowserCanvasHeightRate() {
  * @param x 伸び縮み適用後のX座標
  * @param y 伸び縮み適用後のY座標
  */
-void ScreenSizeGenerator::setBrowserGeneralPos(int *x, int *y) {
+void setBrowserGeneralPos(int *x, int *y) {
     float Rate = isBrowserLandscapeEM()==1 ?
     getBrowserCanvasWidthRate() :
     getBrowserCanvasHeightRate();
