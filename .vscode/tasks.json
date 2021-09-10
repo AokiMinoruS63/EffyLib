@@ -22,7 +22,7 @@
             "args": 
             [
                 // Input
-                "Main.o", "hogeClass.o","ScreenSizeGenerator.o", "DxLibWrap.o", "BMFontMgr.o", "TouchMgr.o", 
+                "Main.o", "hogeClass.o","ScreenSizeGenerator.o", "DxLibWrap.o", "BMFontMgr.o", "TouchMgr.o", "Sprite.o",
 
                 // Output
                 "-o", "index.html",
@@ -71,7 +71,7 @@
             "args": 
             [
                 // Input
-                "Main.o", "hogeClass.o", "ScreenSizeGenerator.o", "DxLibWrap.o", "BMFontMgr.o",  "TouchMgr.o",
+                "Main.o", "hogeClass.o", "ScreenSizeGenerator.o", "DxLibWrap.o", "BMFontMgr.o",  "TouchMgr.o", "Sprite.o",
 
                 // Output
                 "-o", "index.html",

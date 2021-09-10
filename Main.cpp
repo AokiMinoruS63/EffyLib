@@ -16,6 +16,7 @@
 #include <utility>
 #include <Utility/DxLibWrap.h>
 #include <Utility/TypeConversion.h>
+#include <Sprite/Sprite.h>
 //#include <Components/hogeClass.h>
 #ifdef EMSCRIPTEN
 #  include <emscripten.h>
@@ -28,8 +29,8 @@ const BMFont::bmFont_t *bmFont;
 
 // グローバルポスフラグ、グローバルスケール、回転前縦スケール、回転前横スケール、回転U、回転V、角度、回転後横スケール、回転後縦スケール追加
 int drawFont(BMFont_t bm, int id, float x, float y, float scale = 1.0f, int GlobalPos = FALSE, COLOR_U8 color = GetColorU8(255,255,255,255),
-		float beforeScaleX = 1.0f,float beforeScaleY = 1.0f, float rotateU = 0.5f,float rotateV = 0.5f,
-		 float angle = 0, float afterScaleX = 1.0f,float afterScaleY = 1.0f) {
+		float angle = 0, float rotateU = 0.5f,float rotateV = 0.5f, float beforeScaleX = 1.0f,float beforeScaleY = 1.0f, 
+		 float afterScaleX = 1.0f,float afterScaleY = 1.0f) {
 	int size[2]={0,0};
 	// 画像取得に失敗したら何もしない
 	if(GetGraphSize(bm.graphHandle, &size[0], &size[1]) == -1)return 0;
@@ -65,27 +66,8 @@ int drawFont(BMFont_t bm, int id, float x, float y, float scale = 1.0f, int Glob
 	pos[0][1] = pos[1][1] = sy;
 	pos[2][1] = pos[3][1] = gy;
 
-/*
-	// 距離、角度計算
-	for(int i=0;i<4;i++) {
-		pos[i][2] = (sqrt((oy-ox)*(oy-ox)+(pos[i][1]-pos[i][0])*(pos[i][1]-pos[i][0])));
-		pos[i][3] = atan2(pos[i][1] - oy,pos[i][0] - ox);
-		pos[i][0] = pos[i][2] * cos(pos[i][3] + angle);
-		pos[i][1] = pos[i][2] * sin(pos[i][3] + angle);
-	}
-	*/
-	
-	static LONG cnt=0;
-	angle = ((float)((cnt%1000)/20))/10;
-	cnt++;
-
-	rotateU=0;
-	rotateV=0;
 	float ox = sx + gx * 2.0f * rotateU;
 	float oy = sy + gy * 2.0f * rotateV;
-	
-	//ｘ’＝ｘcosθ-ysinθ
-	//ｙ’＝ｘsinθ+ycosθ
 
 	pos[0][0] = (sx - ox) * cos(angle) + (sy - oy) * sin(angle);
 	pos[1][0] = (gx - ox) * cos(angle) + (sy - oy) * sin(angle);
@@ -96,27 +78,6 @@ int drawFont(BMFont_t bm, int id, float x, float y, float scale = 1.0f, int Glob
 	pos[1][1] = (sy - oy) * cos(angle) - (gx - ox) * sin(angle);
 	pos[2][1] = (gy - oy) * cos(angle) - (sx - ox) * sin(angle);
 	pos[3][1] = (gy - oy) * cos(angle) - (gx - ox) * sin(angle);
-	/*
-	pos[0][0] = (-(gx - sx) / 2) * cos(angle) + (-(gy - sy) / 2) * sin(angle);
-	pos[0][1] = (-(gy - sy) / 2) * cos(angle) - (-(gx - sx) / 2) * sin(angle);
-	pos[1][0] = ((gx - sx) / 2) * cos(angle) + (-(gy - sy) / 2) * sin(angle);
-	pos[1][1] = (-(gy - sy) / 2) * cos(angle) - ((gx - sx) / 2) * sin(angle);
-	pos[2][0] = (-(gx - sx) / 2) * cos(angle) + ((gy - sy) / 2) * sin(angle);
-	pos[2][1] = ((gy - sy) / 2) * cos(angle) - (-(gx - sx) / 2) * sin(angle);
-	pos[3][0] = ((gx - sx) / 2) * cos(angle) + ((gy - sy) / 2) * sin(angle);
-	pos[3][1] = ((gy - sy) / 2) * cos(angle) - ((gx - sx) / 2) * sin(angle);
-	*/	
-	/*
-	x1 = mx + (-(gx - sx) / 2) * cos(angle) + (-(gy - sy) / 2) * sin(angle);
-y1 = my + (-(gy - sy) / 2) * cos(angle) - (-(gx - sx) / 2) * sin(angle);
-x2 = mx + ((gx - sx) / 2) * cos(angle) + (-(gy - sy) / 2) * sin(angle);
-y2 = my + (-(gy - sy) / 2) * cos(angle) - ((gx - sx) / 2) * sin(angle);
-x3 = mx + (-(gx - sx) / 2) * cos(angle) + ((gy - sy) / 2) * sin(angle);
-y3 = my + ((gy - sy) / 2) * cos(angle) - (-(gx - sx) / 2) * sin(angle);
-x4 = mx + ((gx - sx) / 2) * cos(angle) + ((gy - sy) / 2) * sin(angle);
-y4 = my + ((gy - sy) / 2) * cos(angle) - ((gx - sx) / 2) * sin(angle);
-	*/
-
 
 	// 回転後の拡大率適用
 	pos[0][0] *= afterScaleX;
@@ -178,9 +139,7 @@ y4 = my + ((gy - sy) / 2) * cos(angle) - ((gx - sx) / 2) * sin(angle);
 	Vert[ 5 ].v   = sv ;
 
 	// ２Ｄの２ポリゴンの描画
-	// TODO: パーティション座標に差し替え
 	drawPolygon2D( Vert, 2, bm.graphHandle, TRUE, GlobalPos ) ;
-	drawCircle((int)(ox + x), (int)(oy+y), 3, GetColor(255,0,0));
 	// 幅を返す
 	return (str->xadvance() + bm.bmFont->info()->padding()->Get(1)+ bm.bmFont->info()->padding()->Get(3) + bm.bmFont->info()->spacing()->Get(0))  * scale;
 }
@@ -247,10 +206,12 @@ void mainLoop() {
 		*/
 
 		// 境界線描画
+		/*
 		DrawBox(0,0,874/2,1136,GetColor(0,0,100),TRUE);
 		DrawBox(1514-874/2,0,1514,1136,GetColor(0,0,100),TRUE);
 		DrawLine(1513,0,1513,1136,GetColor(255,0,0),2);
 		DrawLine(0,1136,1513,1136,GetColor(255,0,0),10);
+		*/
 
 		// タッチ画像描画
 		touch_t touch = touchMgr->get();
@@ -284,8 +245,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 #else
 int main () {
 #endif
-	SetGraphMode(1514, 1136, 32);
 
+#ifdef EMSCRIPTEN
+	SetGraphMode(1136, 852, 32);
+#else
+	SetGraphMode(852, 1136, 32)
+#endif
 // Emscriptenは非同期読み込み不可のようなのでそれ以外の時のみ使用する
 #ifndef EMSCRIPTEN
 	// 非同期読み込みモードオン
@@ -299,6 +264,9 @@ int main () {
 	bmFontMgr->load("GameFont_Blue");
     ChangeFont("07LogoTypeGothic7.ttf");
 	SetDrawScreen(DX_SCREEN_BACK);
+	Sprite *spr = new Sprite();
+	//Sprite *spr = new Sprite();
+	//spr->setColor(255,255,255,255);
 
 #ifdef EMSCRIPTEN
 	emscripten_set_main_loop(mainLoop, 0, 1);	

@@ -12,7 +12,8 @@
                 "${env:EMSDK}/upstream/emscripten/system/include/compat",
                 "${env:EMSDK}/upstream/emscripten/system/lib/libcxxabi/include",
                 "${env:EMSDK}/upstream/emscripten/system/lib/libc/musl/arch/emscripten",
-                "${workspaceFolder}/Components/Utility"
+                "${workspaceFolder}/Components/Utility",
+                "${workspaceFolder}/Components/Sprite"
             ],
             "forcedInclude": [
                 "${workspaceFolder}/.vscode/Undefs.h"

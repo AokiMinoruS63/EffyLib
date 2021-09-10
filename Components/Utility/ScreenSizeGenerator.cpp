@@ -10,15 +10,15 @@
 /* 定数 */
 
 // パーティションを入れない幅（ローカル幅）
-static const int SCREEN_WIDTH = 640;
+static const int SCREEN_WIDTH = 1136;
 // パーティションを入れない高さ(ローカル高さ)
-static const int SCREEN_HEIGHT = 1136;
+static const int SCREEN_HEIGHT = 852;
 
 #ifdef EMSCRIPTEN
 // ブラウザのパーティションの幅
-static const int BROWSER_PERTISION_WIDTH = 874;
+static const int BROWSER_PERTISION_WIDTH = 0;
 // ブラウザのパーティションの片面の幅
-static const int BROWSER_PERTISION_WIDTH_HALF = BROWSER_PERTISION_WIDTH / 2;
+static const int BROWSER_PERTISION_WIDTH_HALF = 0;
 
 // 伸び縮みしているブラウザの幅の現在の比率を返す
 float getBrowserCanvasWidthRate();
