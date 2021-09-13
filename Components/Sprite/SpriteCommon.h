@@ -27,6 +27,8 @@ typedef struct {
 	bool loop;
 	// ストップしているなら**true**
 	bool stop;
+	// カーブの尖り具合(0〜1.0。0で半分からカーブ、１で先端)
+	float edgeRate;
 }sprite_common_t;
 
 #endif

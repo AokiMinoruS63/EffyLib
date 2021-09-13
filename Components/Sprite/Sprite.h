@@ -43,7 +43,9 @@ class Sprite {
 	private:
 	/* 共通情報 */
 	sprite_common_t common;
+
 	/* 基本情報 */
+
 	// グローバルのタイムライン
 	sprite_timeline_t globalTimeline;
 	// グローバルの現在のパラメータ
@@ -82,12 +84,17 @@ class Sprite {
 		/* endFrame  */	0,
 		/* frame 	 */	0,
 		/* loop 	 */	true,
-		/* stop 	 */	false
+		/* stop 	 */	false,
+		/* edgeRate  */ 0
 	};
 
 	Sprite();
 	~Sprite();
 
+	/**
+	 * @brief 計算処理を行う
+	 * 
+	 */
 	void calc();
 
 	/*

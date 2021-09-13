@@ -72,6 +72,10 @@ void Sprite::parametersInit(sprite_parameters_t *parameter) {
 	parameter->afterScaleX = one;
 	parameter->afterScaleY = one;
 }
+
+void Sprite::calc() {
+	// TODO: 計算処理を行う。ベジェ曲線を使用した補完を行う
+}
 /*
 void Sprite::getPos(float *x, float *y) {
     *x = this->x;
