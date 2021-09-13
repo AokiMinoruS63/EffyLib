@@ -17,6 +17,7 @@
 #include <Utility/DxLibWrap.h>
 #include <Utility/TypeConversion.h>
 #include <Sprite/Sprite.h>
+#include <Box2D/box2d/box2d.h>
 //#include <Components/hogeClass.h>
 #ifdef EMSCRIPTEN
 #  include <emscripten.h>
@@ -58,7 +59,6 @@ int drawFont(BMFont_t bm, int id, float x, float y, float scale = 1.0f, int Glob
 	sy *= beforeScaleY;
 	gy *= beforeScaleY;
 
-	
 
 	// 代入処理
 	pos[0][0] = pos[2][0] = sx;
