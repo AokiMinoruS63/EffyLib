@@ -19,24 +19,29 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
+#include "../../box2d/b2_draw.h"
 
-#ifndef B2_POLYGON_AND_CIRCLE_CONTACT_H
-#define B2_POLYGON_AND_CIRCLE_CONTACT_H
-
-#include "box2d/b2_contact.h"
-
-class b2BlockAllocator;
-
-class b2PolygonAndCircleContact : public b2Contact
+b2Draw::b2Draw()
 {
-public:
-	static b2Contact* Create(b2Fixture* fixtureA, int32 indexA, b2Fixture* fixtureB, int32 indexB, b2BlockAllocator* allocator);
-	static void Destroy(b2Contact* contact, b2BlockAllocator* allocator);
+	m_drawFlags = 0;
+}
 
-	b2PolygonAndCircleContact(b2Fixture* fixtureA, b2Fixture* fixtureB);
-	~b2PolygonAndCircleContact() {}
+void b2Draw::SetFlags(uint32 flags)
+{
+	m_drawFlags = flags;
+}
 
-	void Evaluate(b2Manifold* manifold, const b2Transform& xfA, const b2Transform& xfB) override;
-};
+uint32 b2Draw::GetFlags() const
+{
+	return m_drawFlags;
+}
 
-#endif
+void b2Draw::AppendFlags(uint32 flags)
+{
+	m_drawFlags |= flags;
+}
+
+void b2Draw::ClearFlags(uint32 flags)
+{
+	m_drawFlags &= ~flags;
+}
