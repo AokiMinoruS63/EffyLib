@@ -4,4 +4,5 @@
 /index.wasm
 /index.wasm.map
 /index.data
+/build
 *.o

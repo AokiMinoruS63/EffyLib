@@ -13,7 +13,8 @@
                 "${env:EMSDK}/upstream/emscripten/system/lib/libcxxabi/include",
                 "${env:EMSDK}/upstream/emscripten/system/lib/libc/musl/arch/emscripten",
                 "${workspaceFolder}/Components/Utility",
-                "${workspaceFolder}/Components/Sprite"
+                "${workspaceFolder}/Components/Sprite",
+				"${workspaceFolder}/Components/Box2D"
             ],
             "forcedInclude": [
                 "${workspaceFolder}/.vscode/Undefs.h"
