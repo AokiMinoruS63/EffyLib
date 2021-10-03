@@ -63,6 +63,7 @@ void TouchMgr::calc() {
     touch.posLogY[0] = touch.y;
     touch.status = TouchStatus::NoTouch;
     touch.doubleTap = false;
+	touch.beginIndex = 0;
 
     // タップステータス更新
     if (touch.inputLog[0] == true && touch.inputLog[1] == false)touch.status = TouchStatus::JustTouch;// 押した瞬間
@@ -70,11 +71,24 @@ void TouchMgr::calc() {
     else if (touch.inputLog[0] == true && touch.inputLog[1] == true) //キーリピート処理 
     {
         touch.status = TouchStatus::Repeating;
-        for (int i = 0; i < TOUCH_LOG_MAX; i++)
+        for (int i = 2; i < TOUCH_REPEAT_TIME; i++)
         {
-            if (touch.inputLog[i] == false) { touch.status = TouchStatus::NotRepeating; break; }
+            if (touch.inputLog[i] == false) { 
+				touch.status = TouchStatus::NotRepeating;
+				 break; 
+			}
         }
     }
+	// タッチ開始が何フレーム前か調査
+	if(touch.status != TouchStatus::NoTouch) {
+		for (int i = 2; i < TOUCH_LOG_MAX; i++)
+		{
+			if (touch.inputLog[i] == false) { 
+				touch.beginIndex = i - 1;
+					break; 
+			}
+		}
+	}
     // ダブルタップ更新 
     for (int i = 2; i < DOUBLE_TAP_INTERVAL; i++)
     {

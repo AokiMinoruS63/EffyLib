@@ -37,7 +37,8 @@
 #endif
 */
 
-
+// 相互参照
+class PhysicsWorld;
 
 class Sprite {
 	private:

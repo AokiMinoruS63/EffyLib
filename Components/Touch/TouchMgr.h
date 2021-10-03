@@ -22,6 +22,8 @@ class TouchMgr {
 
     // タッチログを何フレーム保存するか
     const static int TOUCH_LOG_MAX = 60;
+	// 何フレームまで押し続ければリピートになるか
+	const static int TOUCH_REPEAT_TIME = 20;
     // 何フレーム目までに２回タップすればダブルタップになるか
     const static int DOUBLE_TAP_INTERVAL = 5;
 
