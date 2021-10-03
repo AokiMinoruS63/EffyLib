@@ -62,11 +62,7 @@ namespace B2Vec2 {
 	 * @return float 
 	 */
 	float distance(float sx, float sy, float gx, float gy) {
-		gx = gx - sx;
-		sx = 0;
-		gy = gy - sy;
-		sy = 0;
-		return sqrtf(Float::absolute(powf(sx - sy, 2) + powf(gx - gy, 2)));
+		return sqrtf(Float::absolute(powf(gx - sx - gy + sy, 2)));
 	}
 
 	/**
