@@ -109,6 +109,48 @@ class box2DTest {
 		return body;
 	}
 
+	b2Body* create(b2Vec2 center, b2Vec2* vertices, int arrayLength) {
+		center.x /= drawRate;
+		center.y /= drawRate;
+		for(int i = 0; i < arrayLength; i++) {
+			vertices[i].x /= drawRate;
+			vertices[i].y /= drawRate;
+			vertices[i] = B2Vec2::relativePosition(center, vertices[i]);
+		}
+		// 動体オブジェクトの参照値
+		b2BodyDef bodyDef;
+
+		// 動体オブジェクトを定義する
+		bodyDef.type = b2_dynamicBody;
+		bodyDef.position = center;
+		auto body = world->CreateBody(&bodyDef);
+		bodies.push_back(body);
+		// 動体オブジェクトの形を定義する
+		b2PolygonShape dynamicBox;
+		/*
+		if(arrayLength > 7) {
+			printfDx("NumOver\n");
+			return;
+		}
+		*/
+		dynamicBox.Set(vertices, arrayLength);
+		//dynamicBox.SetAsBox(2.0f, 2.0f);
+
+		// 動体オブジェクトの密度・摩擦の関連付け
+		b2FixtureDef fixtureDef;
+		fixtureDef.shape = &dynamicBox;
+
+		// 密度を設定
+		fixtureDef.density = 1.0f;
+		// 摩擦を設定
+		fixtureDef.friction = 1.0f;
+		// 反発を設定
+		fixtureDef.restitution = 0.0;
+		// 動体に適用
+		body->CreateFixture(&fixtureDef);
+		return body;
+	}
+
 	// 連結図形の作成
 	void createChainPolygon(float x, float y) {
 		x /= drawRate;
@@ -246,98 +288,42 @@ class box2DTest {
 		}
 		// 重心
 		auto center = B2Vec2::center(locus);
+
 		// 重心から順に頂点を作成するため、作成する頂点数は最大値-1
 		const int max = b2_maxPolygonVertices - 1;
 		b2BodyDef bodyDef;
 		bodyDef.type = b2_dynamicBody;
 		std::vector<b2Vec2> vertices;
-		for(int i = 0; i < locus.size() / max; i++) {
-			// TODO: 最初は重心
-			vertices.clear();
-			vertices.push_back(center);
-			for(int j = 0; j < max; j++) {
-				const int index = i * max + j;
-				vertices.push_back(locus.at(index));
-				// ボディの作成
-				if(index >= locus.size() - 1 || j == max - 1) {
-					auto objCenter = B2Vec2::center(vertices);
-					
-					B2Vec2::applyRate(&objCenter, drawRate);
-					//B2Vec2::applyRate(vertices, drawRate);
-					for(auto& itr: vertices) {
-						itr.x /= drawRate;
-						itr.y /= drawRate;
-					}
-					B2Vec2::setRelativePosition(objCenter, vertices);
-					bodyDef.position = objCenter;
-					auto body = world->CreateBody(&bodyDef);
-					b2PolygonShape dynamicBox;
-					b2Vec2 vecArray[8];
-					for(int k = 0; k < vertices.size(); k++) {
-						vecArray[k] = vertices.at(k);
-						printfDx("i %d j %d x %f y %f\n", i, k, vecArray[k].x, vecArray[k].y);
-					}
-					dynamicBox.Set(vecArray, vertices.size());
-					b2FixtureDef fixtureDef;
-					fixtureDef.shape = &dynamicBox;
+		b2Vec2 verticesArray[b2_maxPolygonVertices];
+		b2Body *current, *last;
+		last = NULL;
+		vertices.push_back(center);
+		#define CREATE std::copy(vertices.begin(), vertices.end(), verticesArray);\
+					current = create(center, verticesArray, vertices.size());
+		int i = 0;
+		while(i < locus.size()) {
+			vertices.push_back(locus.at(i));
+			if(vertices.size() == max - 1) {
+				CREATE
+				if(last != NULL) {
+					weldJoint(current, last, b2Vec2(center.x / drawRate, center.y / drawRate));
+				}
+				last = current;
 
-					// 密度を設定
-					fixtureDef.density = 1.0f;
-					// 摩擦を設定
-					fixtureDef.friction = 1.0f;
-					// 反発を設定
-					fixtureDef.restitution = 0.0;
-					// 動体に適用
-					body->CreateFixture(&fixtureDef);
-					// startLeft = B2Vec2::relativePosition(center, startLeft);
-					printfDx("CreatePolygon.\n");
-					bodies.push_back(body);
+				vertices.clear();
+				vertices.push_back(center);
+				continue;
+			} else if(i == locus.size() - 1) {
+				if(!B2Vec2::checkCreatePos(b2Vec2(vertices.back().x, vertices.back().y), locus[0])) {
 					break;
 				}
+				vertices.push_back(locus[0]);
+				CREATE
+				break;
 			}
+			i++;
 		}
-		/*
-		x /= drawRate;
-		y /= drawRate;
-		// 動体オブジェクトの参照値
-		b2BodyDef bodyDef;
-
-		// 動体オブジェクトを定義する
-		bodyDef.type = b2_dynamicBody;
-		bodyDef.position.Set(x, y);
-		auto body = world->CreateBody(&bodyDef);
-		bodies.push_back(body);
-		// 動体オブジェクトの形を定義する
-		b2PolygonShape dynamicBox;
-		b2Vec2 vertices[8];
-		vertices[0].Set(0, 2.0);
-		vertices[1].Set(5.0, 0.0);
-		vertices[2].Set(7.0, 2.0);
-		vertices[3].Set(5.0, 4.0);
-		vertices[4].Set(2.0, 4.0);
-		vertices[5].Set(4.0, 12.0);
-		vertices[6].Set(6.0, 8.0);
-		vertices[7].Set(8.0, 4.0);
-		//vertices[8].Set(30.0, 20.0);
-		//vertices[9].Set(0.0, 0.0);
-		//auto hoge = [b2Vec2->new(0.0, 10.0), b2Vec2->new(10.0, 10.0), b2Vec2->new(0.0, 20.0), b2Vec2->new(10.0, 20.0)];
-		//dynamicBox.Set(vertices, 8);
-		dynamicBox.SetAsBox(2.0f, 2.0f);
-
-		// 動体オブジェクトの密度・摩擦の関連付け
-		b2FixtureDef fixtureDef;
-		fixtureDef.shape = &dynamicBox;
-
-		// 密度を設定
-		fixtureDef.density = 1.0f;
-		// 摩擦を設定
-		fixtureDef.friction = 1.0f;
-		// 反発を設定
-		fixtureDef.restitution = 0.0;
-		// 動体に適用
-		body->CreateFixture(&fixtureDef);
-		*/
-
+		#undef CREATE
 	}
 
 	// 手書き線の作成
