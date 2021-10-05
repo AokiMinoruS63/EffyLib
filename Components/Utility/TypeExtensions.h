@@ -17,5 +17,6 @@
 #include "TypeExtensions/B2BodyDef+Extensions.h"
 #include "TypeExtensions/VectorOrArray+Extension.h"
 #include "TypeExtensions/Vector+Extension.h"
+#include "TypeExtensions/B2Body+Extensions.h"
 
 #endif

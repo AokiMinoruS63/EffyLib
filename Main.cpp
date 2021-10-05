@@ -77,21 +77,6 @@ class box2DTest {
 		bodies.push_back(body);
 		// 動体オブジェクトの形を定義する
 		b2PolygonShape dynamicBox;
-		/*
-		b2Vec2 vertices[8];
-		vertices[0].Set(0, 2.0);
-		vertices[1].Set(5.0, 0.0);
-		vertices[2].Set(7.0, 2.0);
-		vertices[3].Set(5.0, 4.0);
-		vertices[4].Set(2.0, 4.0);
-		vertices[5].Set(4.0, 12.0);
-		vertices[6].Set(6.0, 8.0);
-		vertices[7].Set(8.0, 4.0);
-		*/
-		//vertices[8].Set(30.0, 20.0);
-		//vertices[9].Set(0.0, 0.0);
-		//auto hoge = [b2Vec2->new(0.0, 10.0), b2Vec2->new(10.0, 10.0), b2Vec2->new(0.0, 20.0), b2Vec2->new(10.0, 20.0)];
-		//dynamicBox.Set(vertices, 8);
 		dynamicBox.SetAsBox(2.0f, 2.0f);
 
 		// 動体オブジェクトの密度・摩擦の関連付け
@@ -127,14 +112,8 @@ class box2DTest {
 		bodies.push_back(body);
 		// 動体オブジェクトの形を定義する
 		b2PolygonShape dynamicBox;
-		/*
-		if(arrayLength > 7) {
-			printfDx("NumOver\n");
-			return;
-		}
-		*/
+
 		dynamicBox.Set(vertices, arrayLength);
-		//dynamicBox.SetAsBox(2.0f, 2.0f);
 
 		// 動体オブジェクトの密度・摩擦の関連付け
 		b2FixtureDef fixtureDef;
@@ -209,8 +188,7 @@ class box2DTest {
 		// 動体オブジェクトの参照値
 		// 回転を無効にすることでバネのある地面オブジェクトが作れる
 		b2BodyDef bodyDef = B2BodyDef::dynamic(B2Vec2::halfWay(start, end), 1.0, true);
-		//printfDx("start %f, %f end %f %f center %f, %f\n", start.x, start.y, end.x, end.y, center.x, center.y);
-		//printfDx("left %f, %f right %f %f center %f, %f\n", startLeft.x, startLeft.y, startRight.x, startRight.y, center.x, center.y);
+
 		// ボディの作成
 		auto body = world->CreateBody(&bodyDef);
 		bodies.push_back(body);
@@ -243,8 +221,6 @@ class box2DTest {
 		// ジョイントの定義
 		b2WeldJointDef jointDef;
 		jointDef.Initialize(body1, body2, pos);
-		//jointDef.stiffness = 99999;
-		//jointDef.damping = 0.0;
 		// ジョイントを作る
 		world->CreateJoint(&jointDef);
 		// ((b2WeldJoint *)world->CreateJoint(&jointDef))->SetStiffness(9999);
@@ -337,7 +313,7 @@ class box2DTest {
 		locus = B2Vec2::locus(touch.posLogX, touch.posLogY, touch.beginIndex);
 
 		// 始点と終点が範囲内なら塗りつぶし手描き線ポリゴンを作成し、それ以外なら手描き線を描画する
-		if(B2Vec2::isFillPolygon(locus, 50.0)) {
+		if(B2Vec2::isFillPolygon(locus, 90.0)) {
 			createPolygon(touch, width);
 		} else {
 			createHandWrittenLine(touch, width);

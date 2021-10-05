@@ -202,7 +202,6 @@ namespace B2Vec2 {
 	std::vector<b2Vec2> locus(std::vector<int> xVec, std::vector<int> yVec, int beginIndex) {
 		std::vector<b2Vec2> vertices;
 		int beforeIndex = beginIndex;
-		bool firstAct = true;
 		#define START fromIntPos(xVec[beforeIndex], yVec[beforeIndex])
 		#define END fromIntPos(xVec.at(i), yVec.at(i))
 		vertices.push_back(START);
@@ -212,10 +211,7 @@ namespace B2Vec2 {
 				continue;
 			}
 			// 初回でなければ頂点を作成
-			if(!firstAct) {
-				vertices.push_back(END);
-			}
-			firstAct = false;
+			vertices.push_back(END);
 			beforeIndex = i;
 		}
 		#undef START
