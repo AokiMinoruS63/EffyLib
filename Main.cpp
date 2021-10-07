@@ -9,21 +9,7 @@
 
 #include <DxLib.h>
 #include <math.h>
-//#include "Components/Touch/TouchMgr.h"
-//#include <hogeClass.h>
-#include <Touch/TouchMgr.h>
-#include <BMFont/BMFontMgr.h>
-#include <utility>
-#include <Utility/DxLibWrap.h>
-#include <Utility/TypeConversion.h>
-#include <Sprite/Sprite.h>
-#include <Box2D/box2d/box2d.h>
-#include <iostream>
-#include <memory>
-#include <Utility/IdVector.h>
-#include <Utility/Equatable.h>
-#include <Utility/TypeExtensions.h>
-//#include <Components/hogeClass.h>
+#include <EffyLib.h>
 #ifdef EMSCRIPTEN
 #  include <emscripten.h>
 #endif
@@ -400,7 +386,7 @@ class box2DTest {
 	}
 
 	private:
-
+public:
 	// 物理演算を行うワールド
 	b2World* world;	
 

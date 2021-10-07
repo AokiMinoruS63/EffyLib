@@ -10,7 +10,7 @@
  */
 
 #include "PhysicusWorld.h"
-#include "../Sprite/Sprite.h"
+#include "../../Sprite/Sprite.h"
 
 PhysicusWorld::PhysicusWorld(){}
 

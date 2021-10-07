@@ -15,7 +15,7 @@
 #include "Enum/LocalizeConstant.h"
 #include <string>
 #include <utility>
-#include "../Utility/nameof.hpp"
+#include "../OpenSource/nameof.hpp"
 
 #define TO_STRING(Variable) (#Variable)
 

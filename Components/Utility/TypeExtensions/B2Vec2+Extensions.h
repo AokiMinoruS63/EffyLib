@@ -13,7 +13,7 @@
 #define B2VEC2_EXTENSION_H
 
 #include "Float+Extensions.h"
-#include "../../Box2D/box2d/b2_math.h"
+#include "../../OpenSource/Box2D/box2d/b2_math.h"
 #include <cmath>
 #include <vector>
 

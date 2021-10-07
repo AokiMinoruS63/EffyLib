@@ -1,6 +1,6 @@
 #include "Sprite.h"
 #include "SpriteTimelineItem.h"
-#include "../PhysicusWorld/PhysicusWorld.h"
+#include "../Physicus/PhysicusWorld/PhysicusWorld.h"
 
 // TODO: グローバル座標とローカル座標を作る
 // ループフラグも作る。カウント変数も作る

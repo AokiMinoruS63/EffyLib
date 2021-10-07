@@ -12,7 +12,7 @@
 #ifndef B2_BODY_DEF_EXTENSION_H
 #define B2_BODY_DEF_EXTENSION_H
 
-#include "../../Box2D/box2d/b2_body.h"
+#include "../../OpenSource/Box2D/box2d/b2_body.h"
 
 namespace B2BodyDef {
 	/**
