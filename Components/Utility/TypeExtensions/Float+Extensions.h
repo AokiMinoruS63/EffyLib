@@ -13,6 +13,7 @@
 #define FLOAT_EXTENSION_H
 
 namespace Float {
+	
 	/**
 	 * @brief 2つのfloatの中間地点を返す
 	 * 

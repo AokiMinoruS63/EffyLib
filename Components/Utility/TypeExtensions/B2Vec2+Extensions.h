@@ -62,7 +62,7 @@ namespace B2Vec2 {
 	 * @return float 
 	 */
 	float distance(float sx, float sy, float gx, float gy) {
-		return sqrtf(Float::absolute(powf(gx - sx - gy + sy, 2)));
+		return sqrtf(powf(gx - sx, 2) + powf(gy - sy, 2));
 	}
 
 	/**
@@ -253,7 +253,7 @@ namespace B2Vec2 {
 	 * @return false 
 	 */
 	bool isFillPolygon(std::vector<b2Vec2> vec, float range) {
-		return distance(vec.begin()->x, vec.begin()->y, vec.back().x, vec.back().y) < range;
+		return distance(vec.front().x, vec.front().y, vec.back().x, vec.back().y) < range;
 	}
 }
 

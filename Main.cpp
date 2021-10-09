@@ -202,16 +202,6 @@ class box2DTest {
 		return body;
 	}
 
-	// ジョイントでボディを繋げる
-	void weldJoint(b2Body* body1, b2Body* body2, b2Vec2 pos) {
-		// ジョイントの定義
-		b2WeldJointDef jointDef;
-		jointDef.Initialize(body1, body2, pos);
-		// ジョイントを作る
-		world->CreateJoint(&jointDef);
-		// ((b2WeldJoint *)world->CreateJoint(&jointDef))->SetStiffness(9999);
-	}
-
 	// 塗りつぶしを行わない手書き線を描く
 	void createHandWrittenLine(touch_t touch, float width) {
 		b2Vec2 lastLeft;
@@ -233,7 +223,7 @@ class box2DTest {
 
 			current = createHandPath(start, end, lastLeft, lastRight, currentLeft, currentRight);
 			if(i > 1) {
-				weldJoint(last, current, B2Vec2::halfWay(last->GetWorldCenter(), current->GetWorldCenter()));
+				B2Joint::weldJoint(world, last, current, B2Vec2::halfWay(last->GetWorldCenter(), current->GetWorldCenter()));
 			}
 			last = current;
 			lastLeft = currentLeft;
@@ -268,7 +258,7 @@ class box2DTest {
 			if(vertices.size() == max - 1) {
 				CREATE
 				if(last != NULL) {
-					weldJoint(current, last, b2Vec2(center.x / drawRate, center.y / drawRate));
+					B2Joint::weldJoint(world, current, last, b2Vec2(center.x / drawRate, center.y / drawRate));
 				}
 				last = current;
 
@@ -315,7 +305,7 @@ class box2DTest {
 		for(int i=0;i<5;i++) {
 			auto *body = create(touch.x, touch.y - ((float)i) * 40.0);
 			if (before != NULL) {
-				weldJoint(before, body, B2Vec2::halfWay(before->GetWorldCenter(), body->GetWorldCenter()));
+				B2Joint::weldJoint(world, before, body, B2Vec2::halfWay(before->GetWorldCenter(), body->GetWorldCenter()));
 			}
 			before = body;
 		}
