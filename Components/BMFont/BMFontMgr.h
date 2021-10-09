@@ -12,7 +12,7 @@
 #ifndef BMFONT_MGR_H
 #define BMFONT_MGR_H
 
-#include "bmfont_generated.h"
+#include "../OpenSource/flatbuffersObjects/bmfont_generated.h"
 #include <vector>
 
 // TODO: BMフォント構造体
