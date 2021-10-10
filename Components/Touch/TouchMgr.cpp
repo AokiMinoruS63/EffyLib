@@ -7,7 +7,7 @@
 TouchMgr::TouchMgr() {
     // vector初期化
     int i = 0;
-    for(int i=0;i<TOUCH_LOG_MAX;i++) {
+    for(int i=0;i<kTouchLogMax;i++) {
         touch_.input_log.push_back(false);
         touch_.pos_log_x.push_back(0);
         touch_.pos_log_y.push_back(0);
@@ -27,7 +27,7 @@ TouchMgr::~TouchMgr() {
  * 
  */
 void TouchMgr::updateLog() {
-    for (int i = TOUCH_LOG_MAX - 1; i > 0; i--)
+    for (int i = kTouchLogMax - 1; i > 0; i--)
     {
         touch_.input_log[i] = touch_.input_log[i - 1];
         touch_.pos_log_x[i] = touch_.pos_log_x[i - 1];
@@ -61,27 +61,27 @@ void TouchMgr::calc() {
     // ログ・タップステータス初期化
     touch_.pos_log_x[0] = touch_.x;
     touch_.pos_log_y[0] = touch_.y;
-    touch_.status = TouchStatus::NoTouch;
+    touch_.status = TouchStatus::kNoTouch;
     touch_.double_tap = false;
 	touch_.beginIndex = 0;
 
     // タップステータス更新
-    if (touch_.input_log[0] == true && touch_.input_log[1] == false)touch_.status = TouchStatus::JustTouch;// 押した瞬間
-    else if (touch_.input_log[0] == false && touch_.input_log[1] == true)touch_.status = TouchStatus::JustRelease;// 離した瞬間
+    if (touch_.input_log[0] == true && touch_.input_log[1] == false)touch_.status = TouchStatus::kJustTouch;// 押した瞬間
+    else if (touch_.input_log[0] == false && touch_.input_log[1] == true)touch_.status = TouchStatus::kJustRelease;// 離した瞬間
     else if (touch_.input_log[0] == true && touch_.input_log[1] == true) //キーリピート処理 
     {
-        touch_.status = TouchStatus::Repeating;
-        for (int i = 2; i < TOUCH_REPEAT_TIME; i++)
+        touch_.status = TouchStatus::kRepeating;
+        for (int i = 2; i < kTouchRepeatTime; i++)
         {
             if (touch_.input_log[i] == false) { 
-				touch_.status = TouchStatus::NotRepeating;
+				touch_.status = TouchStatus::kNotRepeating;
 				 break; 
 			}
         }
     }
 	// タッチ開始が何フレーム前か調査
-	if(touch_.status != TouchStatus::NoTouch) {
-		for (int i = 2; i < TOUCH_LOG_MAX; i++)
+	if(touch_.status != TouchStatus::kNoTouch) {
+		for (int i = 2; i < kTouchLogMax; i++)
 		{
 			if (touch_.input_log[i] == false) { 
 				touch_.beginIndex = i - 1;
@@ -90,7 +90,7 @@ void TouchMgr::calc() {
 		}
 	}
     // ダブルタップ更新 
-    for (int i = 2; i < DOUBLE_TAP_INTERVAL; i++)
+    for (int i = 2; i < kDoubleTapInterval; i++)
     {
         if (!touch_.input_log[i])continue;
         touch_.double_tap = true;
@@ -122,7 +122,7 @@ touch_t TouchMgr::getGlobalTouch() {
     #else
     // Android,iOSは変換して返す
     screenSizeGenerator->setScreenPosToGlobal(&globalTouch.x,&globalTouch.y);
-    for(int i=0;i<TOUCH_LOG_MAX;i++) {
+    for(int i=0;i<kTouchLogMax;i++) {
         screenSizeGenerator->setScreenPosToGlobal(&globalTouch.pos_log_x[i]],&globalTouch.pos_log_y[i]);
     }
     #endif

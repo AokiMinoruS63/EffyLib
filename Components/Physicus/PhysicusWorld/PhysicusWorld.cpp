@@ -31,7 +31,7 @@ void PhysicusWorld::applySprite(Sprite* sprite) {
 // タッチによるオブジェクトの干渉（生成も含む）
 bool PhysicusWorld::touchCalc(touch_t touch, Physicus::Type type) {
 	bool generate = false;
-	if(touch.status == TouchStatus::JustTouch) {
+	if(touch.status == TouchStatus::kJustTouch) {
 		current_ = new Physicus::Object(touch, type, world_);
 		// Object(Type type, b2World* world, touch_t touch);
 		objects_.push_back(current_);

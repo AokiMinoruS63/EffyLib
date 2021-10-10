@@ -27,7 +27,7 @@ Object::~Object() {
 		world_->DestroyBody((*itr));
 		itr = bodies_.erase(itr);
 	}
-	color_ = Color::white;
+	color_ = Color::kWhite;
 	world_ = NULL;
 }
 
@@ -360,7 +360,7 @@ class box2DTest {
 	// 手書き線の作成
 	void createHandWritten(touch_t touch, float width) {
 		// タッチリリース直後でなければ処理を行わない
-		if(touch.status != TouchStatus::JustRelease) {
+		if(touch.status != TouchStatus::kJustRelease) {
 			return;
 		}
 
@@ -381,7 +381,7 @@ class box2DTest {
 
 	// 塔の作成
 	void createTower(touch_t touch) {
-		if(touch.status != TouchStatus::JustRelease) {
+		if(touch.status != TouchStatus::kJustRelease) {
 			return;
 		}
 		b2Body* before = NULL;

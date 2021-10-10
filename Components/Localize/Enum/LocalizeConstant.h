@@ -17,20 +17,20 @@
  * 
  */
 enum class Language {
-    None,           // 未設定
-    Japanese,       // 日本語
-    English,        // 英語
-    Korea,          // 韓国語　
-    Chinese,        // 中国語
-    Russian,        // ロシア語
-    Spanish,        // スペイン語
-    French,         // フランス語
-    German,         // ドイツ語
-    Italian,        // イタリア語
-    Portuguese,     // ポルトガル語
-    Dutch,          // オランダ語 
-    Icelandic,      // アイスランド語
-    Danish          // デンマーク語
+    kNone,           // 未設定
+    kJapanese,       // 日本語
+    kEnglish,        // 英語
+    kKorea,          // 韓国語　
+    kChinese,        // 中国語
+    kRussian,        // ロシア語
+    kSpanish,        // スペイン語
+    kFrench,         // フランス語
+    kGerman,         // ドイツ語
+    kItalian,        // イタリア語
+    kPortuguese,     // ポルトガル語
+    kDutch,          // オランダ語 
+    kIcelandic,      // アイスランド語
+    kDanish          // デンマーク語
 };
 
 #endif

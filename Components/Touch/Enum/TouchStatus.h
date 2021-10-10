@@ -13,11 +13,11 @@
 #define TOUCH_STATUS_H
 
 enum class TouchStatus {
-    NoTouch,
-    JustTouch,
-    NotRepeating,
-    Repeating,
-    JustRelease
+    kNoTouch,
+    kJustTouch,
+    kNotRepeating,
+    kRepeating,
+    kJustRelease
 };
 
 #endif

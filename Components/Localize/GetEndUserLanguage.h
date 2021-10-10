@@ -28,49 +28,49 @@
  */
 EM_JS(int, getEnduserLanguageEM, (), {
     
-    const None       = 0;   // 未設定
-    const Japanese   = 1;   // 日本語
-    const English    = 2;   // 英語
-    const Korea      = 3;   // 韓国語　
-    const Chinese    = 4;   // 中国語
-    const Russian    = 5;   // ロシア語
-    const Spanish    = 6;   // スペイン語
-    const French     = 7;   // フランス語
-    const German     = 8;   // ドイツ語
-    const Italian    = 9;   // イタリア語
-    const Portuguese = 10;  // ポルトガル語
-    const Dutch      = 11;  // オランダ語 
-    const Icelandic  = 12;  // アイスランド語
-    const Danish     = 13;  // デンマーク語
+    const kNone       = 0;   // 未設定
+    const kJapanese   = 1;   // 日本語
+    const kEnglish    = 2;   // 英語
+    const kKorea      = 3;   // 韓国語　
+    const kChinese    = 4;   // 中国語
+    const kRussian    = 5;   // ロシア語
+    const kSpanish    = 6;   // スペイン語
+    const kFrench     = 7;   // フランス語
+    const kGerman     = 8;   // ドイツ語
+    const kItalian    = 9;   // イタリア語
+    const kPortuguese = 10;  // ポルトガル語
+    const kDutch      = 11;  // オランダ語 
+    const kIcelandic  = 12;  // アイスランド語
+    const kDanish     = 13;  // デンマーク語
     var lang = (navigator.language) ? navigator.language : navigator.userLanguage;
     // ただし、どちらのプロパティにも対応していないブラウザではundefinedになる
 
     if(lang.toLowerCase().indexOf("ja") !== -1)
-        return Japanese;
+        return kJapanese;
     if(lang.toLowerCase().indexOf("en") !== -1)
-        return Japanese;
+        return kJapanese;
     if(lang.toLowerCase().indexOf("ko") !== -1)
-        return Korea;
+        return kKorea;
     if(lang.toLowerCase().indexOf("zh") !== -1)
-        return Chinese;
+        return kChinese;
     if(lang.toLowerCase().indexOf("ru") !== -1)
-        return Russian;
+        return kRussian;
     if(lang.toLowerCase().indexOf("es") !== -1)
-        return Spanish;
+        return kSpanish;
     if(lang.toLowerCase().indexOf("fr") !== -1)
-        return French;
+        return kFrench;
     if(lang.toLowerCase().indexOf("de") !== -1)
-        return German;
+        return kGerman;
     if(lang.toLowerCase().indexOf("it") !== -1)
-        return Italian;
+        return kItalian;
     if(lang.toLowerCase().indexOf("pt") !== -1)
-        return Portuguese;
+        return kPortuguese;
     if(lang.toLowerCase().indexOf("nl") !== -1)
-        return Dutch;
+        return kDutch;
     if(lang.toLowerCase().indexOf("is") !== -1)
-        return Icelandic;
+        return kIcelandic;
     if(lang.toLowerCase().indexOf("da") !== -1)
-        return Danish;
+        return kDanish;
 
     return None;
 });
@@ -81,7 +81,7 @@ Language getEndUserLanguage() {
     #ifdef EMSCRIPTEN
     return Language(getEnduserLanguageEM());
     #endif
-    return Language::None;
+    return Language::kNone;
 }
 
 /**

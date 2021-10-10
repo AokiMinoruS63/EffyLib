@@ -44,12 +44,12 @@ void MainContent::run() {
 	// タッチ計算
 	touchMgr_->calc();
 	// タッチを物理演算に適用
-	world_->touchCalc(touchMgr_->get(), Physicus::Type::LinksBoard);
+	world_->touchCalc(touchMgr_->get(), Physicus::Type::kLinksBoard);
 
 	// タッチ画像描画
 	{	
 		touch_t touch = touchMgr_->get();
-		int CircleColor = ( touch.status != TouchStatus::NoTouch && touch.status != TouchStatus::JustRelease) ? Color::yellow : Color::red;
+		int CircleColor = ( touch.status != TouchStatus::kNoTouch && touch.status != TouchStatus::kJustRelease) ? Color::kYellow : Color::kRed;
 		drawCircle(touch.x, touch.y, 5, CircleColor);
 	}
 
