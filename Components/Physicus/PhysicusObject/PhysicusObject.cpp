@@ -8,8 +8,9 @@
  * @copyright Copyright (c) 2021
  * 
  */
-
+/*
 #include "PhysicusObject.h"
+#include "../../Utility/TypeExtensions.h"
 using namespace Physicus;
 
 Object::Object(Type type, b2World* world, touch_t touch) {
@@ -22,6 +23,7 @@ Object::~Object() {
 		m_world->DestroyBody((*itr));
 		itr = m_bodies.erase(itr);
 	}
+	m_color = Color::white;
 	m_world = NULL;
 }
 
@@ -32,3 +34,4 @@ void Object::setLineWidth(float width) {
 Type Object::getType() {
 	return m_type;
 }
+*/

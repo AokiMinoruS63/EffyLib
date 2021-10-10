@@ -12,6 +12,7 @@
 #ifndef TYPE_EXTENSION_H
 #define TYPE_EXTENSION_H
 
+#include "TypeExtensions/Color+Extensions.h"
 #include "TypeExtensions/Float+Extensions.h"
 #include "TypeExtensions/B2Vec2+Extensions.h"
 #include "TypeExtensions/B2BodyDef+Extensions.h"

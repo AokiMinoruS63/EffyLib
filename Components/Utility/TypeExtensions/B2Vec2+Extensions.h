@@ -18,6 +18,9 @@
 #include <vector>
 
 namespace B2Vec2 {
+	// 頂点作成の追加が可能な最低限の距離。ジョイント繋がりの強さに直結する(70が一番安定する印象)
+	const float kCreateVertexDistance = 30.0;
+
 	/**
 	 * @brief 列の位置
 	 * 
@@ -188,7 +191,7 @@ namespace B2Vec2 {
 	 * @return false 
 	 */
 	bool checkCreatePos(b2Vec2 start, b2Vec2 end) {
-		return B2Vec2::distance(start, end) >= 5.0;
+		return B2Vec2::distance(start, end) >= kCreateVertexDistance;
 	}
 
 	/**
