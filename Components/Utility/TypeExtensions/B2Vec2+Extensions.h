@@ -19,7 +19,7 @@
 
 namespace B2Vec2 {
 	// 頂点作成の追加が可能な最低限の距離。ジョイント繋がりの強さに直結する(70が一番安定する印象)
-	const float kCreateVertexDistance = 30.0;
+	const static float kCreateVertexDistance = 30.0;
 
 	/**
 	 * @brief 列の位置
@@ -38,7 +38,7 @@ namespace B2Vec2 {
 	 * @param end 終点
 	 * @return b2Vec2 
 	 */
-	b2Vec2 halfWay(b2Vec2 start, b2Vec2 end) {
+	static b2Vec2 halfWay(b2Vec2 start, b2Vec2 end) {
 		return b2Vec2(Float::halfWay(start.x, end.x), Float::halfWay(start.y, end.y));
 	}
 
@@ -51,7 +51,7 @@ namespace B2Vec2 {
 	 * @param gy 
 	 * @return b2Vec2 
 	 */
-	b2Vec2 halfWay(float sx, float sy, float gx, float gy) {
+	static b2Vec2 halfWay(float sx, float sy, float gx, float gy) {
 		return b2Vec2(Float::halfWay(sx, gx), Float::halfWay(sy, gy));
 	}
 
@@ -64,7 +64,7 @@ namespace B2Vec2 {
 	 * @param gy 
 	 * @return float 
 	 */
-	float distance(float sx, float sy, float gx, float gy) {
+	static float distance(float sx, float sy, float gx, float gy) {
 		return sqrtf(powf(gx - sx, 2) + powf(gy - sy, 2));
 	}
 
@@ -75,7 +75,7 @@ namespace B2Vec2 {
 	 * @param end 終点
 	 * @return float 
 	 */
-	float distance(b2Vec2 start, b2Vec2 end) {
+	static float distance(b2Vec2 start, b2Vec2 end) {
 		return distance(start.x, start.y, end.x, end.y);
 	}
 
@@ -85,7 +85,7 @@ namespace B2Vec2 {
 	 * @param vec 座標
 	 * @param rate 縮小率
 	 */
-	void applyRate(b2Vec2 *vec, float rate) {
+	static void applyRate(b2Vec2 *vec, float rate) {
 		if(rate == 0) {
 			return;
 		}
@@ -99,7 +99,7 @@ namespace B2Vec2 {
 	 * @param vec ポリゴン
 	 * @param rate 縮小率
 	 */
-	void applyRate(std::vector<b2Vec2> vec, float rate) {
+	static void applyRate(std::vector<b2Vec2> vec, float rate) {
 		if(rate == 0) {
 			return;
 		}
@@ -116,7 +116,7 @@ namespace B2Vec2 {
 	 * @param target 変換する座標
 	 * @return b2Vec2 
 	 */
-	b2Vec2 relativePosition(b2Vec2 base, b2Vec2 target) {
+	static b2Vec2 relativePosition(b2Vec2 base, b2Vec2 target) {
 		return b2Vec2(target.x - base.x, target.y - base.y);
 	}
 
@@ -126,7 +126,7 @@ namespace B2Vec2 {
 	 * @param base 基準座標
 	 * @param target 適用するポリゴン
 	 */
-	void setRelativePosition(b2Vec2 base, std::vector<b2Vec2> target) {
+	static void setRelativePosition(b2Vec2 base, std::vector<b2Vec2> target) {
 		for(auto& itr: target) {
 			itr = relativePosition(base, itr);
 		}
@@ -139,7 +139,7 @@ namespace B2Vec2 {
 	 * @param pos2 
 	 * @return b2Vec2 
 	 */
-	b2Vec2 add(b2Vec2 pos1, b2Vec2 pos2) {
+	static b2Vec2 add(b2Vec2 pos1, b2Vec2 pos2) {
 		return b2Vec2(pos1.x + pos2.x, pos1.y + pos2.y);
 	}
 
@@ -150,7 +150,7 @@ namespace B2Vec2 {
 	 * @param rate 
 	 * @return b2Vec2 
 	 */
-	b2Vec2 division(b2Vec2 pos, float rate) {
+	static b2Vec2 division(b2Vec2 pos, float rate) {
 		if(rate == 0) {
 			return pos;
 		}
@@ -163,7 +163,7 @@ namespace B2Vec2 {
 	 * @param vec std::vector<b2Vec2>
 	 * @return b2Vec2 
 	 */
-	b2Vec2 center(std::vector<b2Vec2> vec) {
+	static b2Vec2 center(std::vector<b2Vec2> vec) {
 		b2Vec2 pos = b2Vec2();
 		for(auto& itr: vec) {
 			pos = B2Vec2::add(pos, itr);
@@ -178,7 +178,7 @@ namespace B2Vec2 {
 	 * @param y 
 	 * @return b2Vec2 
 	 */
-	b2Vec2 fromIntPos(int x, int y) {
+	static b2Vec2 fromIntPos(int x, int y) {
 		return b2Vec2((float)x, (float)y);
 	}
 
@@ -190,7 +190,7 @@ namespace B2Vec2 {
 	 * @return true 
 	 * @return false 
 	 */
-	bool checkCreatePos(b2Vec2 start, b2Vec2 end) {
+	static bool checkCreatePos(b2Vec2 start, b2Vec2 end) {
 		return B2Vec2::distance(start, end) >= kCreateVertexDistance;
 	}
 
@@ -202,7 +202,7 @@ namespace B2Vec2 {
 	 * @param beginIndex タッチが開始されたインデックス
 	 * @return std::vector<b2Vec2> 
 	 */
-	std::vector<b2Vec2> locus(std::vector<int> xVec, std::vector<int> yVec, int beginIndex) {
+	static std::vector<b2Vec2> locus(std::vector<int> xVec, std::vector<int> yVec, int beginIndex) {
 		std::vector<b2Vec2> vertices;
 		int beforeIndex = beginIndex;
 		#define START fromIntPos(xVec[beforeIndex], yVec[beforeIndex])
@@ -231,7 +231,7 @@ namespace B2Vec2 {
 	 * @param horizon -90度、90度に回転させる時のみ使用
 	 * @return b2Vec2 
 	 */
-	b2Vec2 rotate(b2Vec2 pos, float radius, float radian, Horizon horizon = Center ) {
+	static b2Vec2 rotate(b2Vec2 pos, float radius, float radian, Horizon horizon = Center ) {
 		float adjustedAngle;
 		switch(horizon) {
 			case Leading:
@@ -255,7 +255,7 @@ namespace B2Vec2 {
 	 * @return true 
 	 * @return false 
 	 */
-	bool isFillPolygon(std::vector<b2Vec2> vec, float range) {
+	static bool isFillPolygon(std::vector<b2Vec2> vec, float range) {
 		return distance(vec.front().x, vec.front().y, vec.back().x, vec.back().y) < range;
 	}
 }

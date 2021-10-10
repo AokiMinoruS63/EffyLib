@@ -26,7 +26,7 @@ namespace B2Joint {
 	 * @param jointPosition 溶接する座標
 	 * @return b2Joint* 
 	 */
-	b2Joint* weldJoint(b2World* world, b2Body* body1, b2Body* body2, b2Vec2 jointPosition) {
+	static b2Joint* weldJoint(b2World* world, b2Body* body1, b2Body* body2, b2Vec2 jointPosition) {
 		// ジョイントの定義
 		b2WeldJointDef jointDef;
 		jointDef.Initialize(body1, body2, jointPosition);
@@ -44,7 +44,7 @@ namespace B2Joint {
 	 * @param length 距離
 	 * @return b2Joint* 
 	 */
-	b2Joint* distanceJoint(b2World* world, b2Body* body1, b2Body* body2, b2Vec2 jointPosition) {
+	static b2Joint* distanceJoint(b2World* world, b2Body* body1, b2Body* body2, b2Vec2 jointPosition) {
 		// ジョイントの定義
 		b2DistanceJointDef jointDef;
 		jointDef.Initialize(body1, body2, jointPosition, jointPosition);
@@ -64,7 +64,7 @@ namespace B2Joint {
 	 * @param jointPosition 連結する座標
 	 * @return b2Joint* 
 	 */
-	b2Joint* revoluteJoint(b2World* world, b2Body* body1, b2Body* body2, b2Vec2 jointPosition) {
+	static b2Joint* revoluteJoint(b2World* world, b2Body* body1, b2Body* body2, b2Vec2 jointPosition) {
 		// ジョイントの定義
 		b2RevoluteJointDef jointDef;
 		jointDef.Initialize(body1, body2, jointPosition);
@@ -82,7 +82,7 @@ namespace B2Joint {
 	 * @param axis 移動するベクトル
 	 * @return b2Joint* 
 	 */
-	b2Joint* prismaticJoint(b2World* world, b2Body* body1, b2Body* body2, b2Vec2 jointPosition, b2Vec2 axis = b2Vec2(1.0, 0)) {
+	static b2Joint* prismaticJoint(b2World* world, b2Body* body1, b2Body* body2, b2Vec2 jointPosition, b2Vec2 axis = b2Vec2(1.0, 0)) {
 		// ジョイントの定義
 		b2PrismaticJointDef jointDef;
 		jointDef.Initialize(body1, body2, jointPosition, axis);

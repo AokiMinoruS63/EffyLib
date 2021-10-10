@@ -12,7 +12,6 @@
 #ifndef PHYSICUS_H
 #define PHYSICUS_H
 
-#include "PhysicusObject/PhysicusObject.h"
 #include "PhysicusWorld/PhysicusWorld.h"
 
 #endif

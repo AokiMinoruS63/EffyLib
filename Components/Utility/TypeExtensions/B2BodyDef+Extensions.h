@@ -24,7 +24,7 @@ namespace B2BodyDef {
 	 * @param fixedRotation
 	 * @return b2BodyDef 
 	 */
-	b2BodyDef dynamic(float x, float y, float rate = 1.0, bool fixedRotation = false) {
+	static b2BodyDef dynamic(float x, float y, float rate = 1.0, bool fixedRotation = false) {
 		// 動体オブジェクトの参照値
 		b2BodyDef bodyDef;
 
@@ -43,7 +43,7 @@ namespace B2BodyDef {
 	 * @param fixedRotation
 	 * @return b2BodyDef 
 	 */
-	b2BodyDef dynamic(b2Vec2 vec, float rate = 1.0, bool fixedRotation = false) {
+	static b2BodyDef dynamic(b2Vec2 vec, float rate = 1.0, bool fixedRotation = false) {
 		return dynamic(vec.x, vec.y, rate, fixedRotation);
 	}
 
@@ -54,7 +54,7 @@ namespace B2BodyDef {
 	 * @param y 
 	 * @return b2BodyDef 
 	 */
-	b2BodyDef kinematic(float x, float y, float rate = 1.0) {
+	static b2BodyDef kinematic(float x, float y, float rate = 1.0) {
 		// 動体オブジェクトの参照値
 		b2BodyDef bodyDef;
 
@@ -72,7 +72,7 @@ namespace B2BodyDef {
 	 * @param vec 
 	 * @return b2BodyDef 
 	 */
-	b2BodyDef kinematic(b2Vec2 vec, float rate = 1.0) {
+	static b2BodyDef kinematic(b2Vec2 vec, float rate = 1.0) {
 		return kinematic(vec.x, vec.y, rate);
 	}
 }

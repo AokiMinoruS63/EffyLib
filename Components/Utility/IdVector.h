@@ -11,21 +11,13 @@
 
 #ifndef ID_MAP_H
 #define ID_MAP_H
-
+/*
 #include <vector>
 #include <utility>
 #include "Equatable.h"
 #include "TypeExtensions.h"
 
-/**
- * @brief append, remove
- * 
- */
 
-/**
- * @brief ID付きのVector
- * 
- */
 class IdVector: public std::vector<Equatable> {
 	public:
 	Equatable* first() {
@@ -105,7 +97,7 @@ class IdVector: public std::vector<Equatable> {
 	Filter(VecTest, [](Equatable &item){return item.id[0] == 'a';});
 	}
 };
-
+*/
 // TODO: map, reduce, filter
 	
 

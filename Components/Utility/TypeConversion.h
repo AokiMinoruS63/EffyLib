@@ -21,7 +21,7 @@
  * @param data 変換するUTF-8データ
  * @return int 変換後のUTF16の整数変換値
  */
-long utf8_to_long(const char* data) {
+static long utf8_to_long(const char* data) {
 	if ((data[0] & 0x80) == 0x00) {
 		return data[0];
 	} else if ((data[0] & 0xe0) == 0xc0) {
@@ -43,7 +43,7 @@ long utf8_to_long(const char* data) {
  * @param str 変換する文字列
  * @return std::vector<int> 変換したvector<int>
  */
-std::vector<int> stringToVectorInt(std::string str)
+static std::vector<int> stringToVectorInt(std::string str)
 {
     using namespace std;
 	vector<int> v={};

@@ -9,9 +9,19 @@
  * 
  */
 
+#include <EffyLib.h>
+
 class MainContent {
+	private:
+	TouchMgr* touchMgr;
+	BMFontMgr* bmFontMgr;
+	
 	public:
 	MainContent();
 	~MainContent();
+	/**
+	 * @brief 　メインループ
+	 * 
+	 */
 	void run();
 };

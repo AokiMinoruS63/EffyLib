@@ -13,6 +13,7 @@
 #define PHYSICUS_WORLD_H
 
 #include <vector>
+#include "../PhysicusObject/PhysicusObject.h"
 
 // 相互参照
 class Sprite;
@@ -26,6 +27,8 @@ class PhysicusWorld {
 
 	// 物理演算を行うSprite配列
 	std::vector<Sprite *> sprites;
+	// 物理演算を行うボディ配列
+	std::vector<Physicus::Object> objects;
 };
 
 #endif

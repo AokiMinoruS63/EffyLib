@@ -11,12 +11,13 @@
 
 #ifndef PHYSICUS_OBJECT_H
 #define PHYSICUS_OBJECT_H
-/*
+
 // TODO: include vector, Touch.h, box2d.h
 #include "../../OpenSource/Box2D/box2d/box2d.h"
 #include <vector>
 #include "../../Touch/TouchData.h"
 #include "PhysicusObjectType.h"
+#include "../../Utility/TypeExtensions.h"
 
 namespace Physicus {
 
@@ -53,5 +54,5 @@ namespace Physicus {
 		// TODO: 描画メソッド、頂点作成メソッドなどを作成する
 	};
 }
-*/
+
 #endif

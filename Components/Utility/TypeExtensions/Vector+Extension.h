@@ -25,7 +25,7 @@ namespace Vector {
 	 * @return false 
 	 */
 	template <typename T>
-	bool isEmpty(std::vector<T> vec) {
+	static bool isEmpty(std::vector<T> vec) {
 		return vec.empty();
 	}
 

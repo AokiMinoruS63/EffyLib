@@ -13,7 +13,7 @@
 #define FLOAT_EXTENSION_H
 
 namespace Float {
-	
+
 	/**
 	 * @brief 2つのfloatの中間地点を返す
 	 * 
@@ -21,7 +21,7 @@ namespace Float {
 	 * @param g 終点
 	 * @return float 
 	 */
-	float halfWay(float s, float g) {
+	static float halfWay(float s, float g) {
 		return s + (g - s) * 0.5;
 	}
 
@@ -32,7 +32,7 @@ namespace Float {
 	 * @param g 
 	 * @return float 
 	 */
-	float distance(float s, float g) {
+	static float distance(float s, float g) {
 		return g - s < 0 ? s - g : g - s;
 	}
 
@@ -42,7 +42,7 @@ namespace Float {
 	 * @param value 
 	 * @return float 
 	 */
-	float absolute(float value) {
+	static float absolute(float value) {
 		return value < 0 ? -value : value;
 	}
 }

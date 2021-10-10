@@ -66,8 +66,8 @@
 				"build/b2_revolute_joint.o",
 				"build/b2_weld_joint.o",
 				"build/b2_wheel_joint.o",
-                "build/PhysicusObject.o", "build/ScreenSizeGenerator.o", "build/DxLibWrap.o", "build/BMFontMgr.o", "build/TouchMgr.o", "build/PhysicusWorld.o", "build/Sprite.o",
-				"build/Main.o", "build/MainContent.o", 
+                "build/PhysicusObject.o", "build/ScreenSizeGenerator.o", "build/DxLibWrap.o", "build/BMFontMgr.o",  "build/TouchMgr.o", "build/PhysicusWorld.o", "build/Sprite.o",
+				"build/MainContent.o", "build/Main.o", 
 
                 // Output
                 "-o", "index.html",
@@ -161,7 +161,7 @@
 				"build/b2_weld_joint.o",
 				"build/b2_wheel_joint.o",
                 "build/PhysicusObject.o", "build/ScreenSizeGenerator.o", "build/DxLibWrap.o", "build/BMFontMgr.o",  "build/TouchMgr.o", "build/PhysicusWorld.o", "build/Sprite.o",
-				"build/Main.o", "build/MainContent.o", 
+				"build/MainContent.o", "build/Main.o", 
 
                 // Output
                 "-o", "index.html",
