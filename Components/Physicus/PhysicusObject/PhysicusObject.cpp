@@ -13,10 +13,14 @@
 
 using namespace Physicus;
 
-Object::Object(Type type, b2World* world, touch_t touch) {
-
+// コンストラクタ
+Object::Object(touch_t touch, Type type, b2World* world) {
+	world_ = world;
+	type_ = type;
+	locus_.push_back(b2Vec2((float)touch.x, (float)touch.y));
 }
 
+// デストラクタ
 Object::~Object() {
 	auto itr = bodies_.begin();
 	while(itr != bodies_.end()) {
@@ -27,13 +31,40 @@ Object::~Object() {
 	world_ = NULL;
 }
 
-void Object::setLineWidth(float width) {
-	lineWidth_ = width;
+// MARK: - Getter, Setter
+
+// 線の太さを取得する
+float Object::getLineWidth() {
+	return line_width_;
 }
 
+// 線の太さをセットする
+void Object::setLineWidth(float width) {
+	line_width_ = width;
+}
+
+// 線の画像を取得する
+int* Object::getLineImg() {
+	return line_img_;
+}
+
+// 線の画像をセットする
+void Object::setLineImg(int img[k_line_img_num]) {
+	for(int i = 0; i < k_line_img_num; i++) {
+		line_img_[i] = img[i];
+	}
+}
+
+// オブジェクトの種類を取得する
 Type Object::getType() {
 	return type_;
 }
+
+// オブジェクトの生成（ボディの追加など）
+void Object::generation(touch_t touch) {
+
+}
+
 
 
 /*
@@ -334,7 +365,7 @@ class box2DTest {
 		}
 
 		// 軌跡を作成する
-		locus = B2Vec2::locus(touch.posLogX, touch.posLogY, touch.beginIndex);
+		locus = B2Vec2::locus(touch.pos_log_x, touch.pos_log_y, touch.beginIndex);
 		// 軌跡の制御点が３つ以上なければ作成しない
 		if(locus.size() < 3) {
 			return;

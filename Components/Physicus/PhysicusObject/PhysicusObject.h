@@ -23,28 +23,70 @@ namespace Physicus {
 
 	// オブジェクトの実体
 	class Object {
+		// MARK: - 変数
+
+		// 線に使用する画像
+		const static int k_line_img_num = 3;
 		// オブジェクトの中に入っているボディ
 		std::vector<b2Body *> bodies_;
 		// 演算を行うワールド
 		b2World* world_;
 		// 線の太さ
-		float lineWidth_;
+		float line_width_;
 		// 線の軌跡用の画像
-		int img_[3];
+		int line_img_[k_line_img_num];
 		// 線の色
 		int color_;
 		// オブジェクトのタイプ
 		Type type_;
+		// タッチの軌跡
+		std::vector<b2Vec2> locus_;
 
+		// MARK: - コンストラクタ・デストラクタ
 		public:
-		Object(Type type, b2World* world, touch_t touch);
+		Object(touch_t touch, Type type, b2World* world);
 		~Object();
 
+		// MARK: - Getter, Setter
+
+		/**
+		 * @brief 線の太さを取得する
+		 * 
+		 * @return float 
+		 */
+		float getLineWidth();
+
+		/**
+		 * @brief 線の太さをセットする
+		 * 
+		 * @param width 
+		 */
 		void setLineWidth(float width);
-		void setImg(int img[3]);
+
+		/**
+		 * @brief 線の画像を取得する
+		 * 
+		 * @return int* 
+		 */
+		int* getLineImg();
+		/**
+		 * @brief 線の画像をセットする
+		 * 
+		 * @param img 
+		 */
+		void setLineImg(int img[k_line_img_num]);
 
 		// オブジェクトのタイプを返す
 		Type getType();
+
+		// MARK: - オブジェクトの設定
+
+		/**
+		 * @brief オブジェクトの生成（ボディの追加など）
+		 * 
+		 * @param touch 
+		 */
+		void generation(touch_t touch);
 
 		// TODO: マウスドラッグ中でもボディが生成されるようにする（ただし、ドラッグ中は演算を行わないでリリースされた時に演算を開始させる）
 		// TODO: この仕様も相まって前回のボディと前回のボディの終点座標と終点右と終点左の座標が必要

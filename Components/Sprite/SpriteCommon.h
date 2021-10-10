@@ -14,13 +14,13 @@
 
 typedef struct {
 	/* 画像のマップ、ハンドル */
-	int imgHandle;
+	int img_handle;
 	// テクスチャの座標
-	float su,sv,gu,gv;
+	float su, sv, gu, gv;
 	// 描画・回転の中心となるオフセット値
-	float offsetU,offsetV;
+	float offset_u, offset_v;
 	// 総フレーム数
-	int endFrame;
+	int end_frame;
 	// 現在のフレーム
 	int frame;
 	// ループするなら**true**
@@ -28,7 +28,7 @@ typedef struct {
 	// ストップしているなら**true**
 	bool stop;
 	// カーブの尖り具合(0〜1.0。0で半分からカーブ、１で先端)
-	float edgeRate;
+	float edge_rate;
 }sprite_common_t;
 
 #endif

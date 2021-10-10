@@ -22,9 +22,9 @@
  */
 typedef struct {
     // アトラスデータが入ったバイナリデータ（参照も直接できる）
-    const BMFont::bmFont_t *bmFont;
+    const BMFont::bmFont_t *bm_font;
     // 参照する画像ファイル(128x128,256x256,512x512...などちょうどの大きさにする必要あり)
-    int graphHandle;
+    int graph_handle;
 }BMFont_t;
 
 class BMFontMgr {

@@ -19,9 +19,9 @@ int frame;
 // 所持している数値
 float num;
 // モーションの開始時の補完タイプ
-int startType;
+int start_type;
 // モーションの終了時の補完タイプ
-int endType;
+int end_type;
 }sprite_timeline_item_t;
 
 #endif

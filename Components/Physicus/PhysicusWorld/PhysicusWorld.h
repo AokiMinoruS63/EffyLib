@@ -19,23 +19,27 @@
 class Sprite;
 
 class PhysicusWorld {
-	/* 変数 */
+	// MARK: - 変数
 
 	private:
+	// 物理演算を行うワールド
 	b2World* world_;
+	// ワールドの拡大率
+	float world_scale_;
 	// 物理演算を行うSprite配列
 	std::vector<Sprite *> sprites_;
 	// 物理演算を行うボディ配列
-	std::vector<Physicus::Object> objects_;
+	std::vector<Physicus::Object *> objects_;
 	// 現在生成・操作を行なっているボディ
 	Physicus::Object* current_;
 
-	/* コンストラクタ・デストラクタ */
+	// MARK: - コンストラクタ・デストラクタ
+
 	public:
-	PhysicusWorld(b2Vec2 gravity);
+	PhysicusWorld(b2Vec2 gravity, float scale);
 	~PhysicusWorld();
 
-	/* 関数 */
+	// MARK: - 関数
 
 	public:
 
@@ -51,8 +55,10 @@ class PhysicusWorld {
 	 * 
 	 * @param touch 
 	 * @param type 
+	 * @return true オブジェクトが生成
+	 * @return false オブジェクトが未生成
 	 */
-	void touchCalc(touch_t touch, Physicus::Type type);
+	bool touchCalc(touch_t touch, Physicus::Type type);
 };
 
 #endif
