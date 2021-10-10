@@ -18,21 +18,21 @@ Object::Object(Type type, b2World* world, touch_t touch) {
 }
 
 Object::~Object() {
-	auto itr = m_bodies.begin();
-	while(itr != m_bodies.end()) {
-		m_world->DestroyBody((*itr));
-		itr = m_bodies.erase(itr);
+	auto itr = bodies_.begin();
+	while(itr != bodies_.end()) {
+		world_->DestroyBody((*itr));
+		itr = bodies_.erase(itr);
 	}
-	m_color = Color::white;
-	m_world = NULL;
+	color_ = Color::white;
+	world_ = NULL;
 }
 
 void Object::setLineWidth(float width) {
-	m_lineWidth = width;
+	lineWidth_ = width;
 }
 
 Type Object::getType() {
-	return m_type;
+	return type_;
 }
 
 

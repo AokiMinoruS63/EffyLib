@@ -16,19 +16,18 @@
 #include <emscripten.h>
 #endif
 
-TouchMgr *touchMgr;
-
 
 MainContent::MainContent() {
 	SetGraphMode(1136, 852, 32);
     if (DxLib_Init() == -1) {
 		return ;
     }
-	touchMgr = new TouchMgr();
-	bmFontMgr = new BMFontMgr();
-	bmFontMgr->load("GameFont_Blue");
-	bmFontMgr->load("GameFont_Orange");
-	bmFontMgr->load("GameFont_White");
+	touchMgr_ = new TouchMgr();
+	bmFontMgr_ = new BMFontMgr();
+	world_ = new PhysicusWorld(b2Vec2(0, 10.0));
+	bmFontMgr_->load("GameFont_Blue");
+	bmFontMgr_->load("GameFont_Orange");
+	bmFontMgr_->load("GameFont_White");
 	//test = new box2DTest();
 	
 
@@ -53,12 +52,14 @@ void MainContent::run() {
 	//test->draw();
 
 	// タッチ計算
-	touchMgr->calc();
+	touchMgr_->calc();
+	// タッチを物理演算に適用
+	world_->touchCalc(touchMgr_->get(), Physicus::Type::LinksBoard);
 
 	// タッチ画像描画
 	{	
-		touch_t touch = touchMgr->get();
-		int CircleColor = ( touch.status != TouchStatus::NoTouch && touch.status != TouchStatus::JustRelease) ? GetColor(255, 255, 0) : GetColor(255, 0, 0);
+		touch_t touch = touchMgr_->get();
+		int CircleColor = ( touch.status != TouchStatus::NoTouch && touch.status != TouchStatus::JustRelease) ? Color::yellow : Color::red;
 		//drawCircle(touch.x, touch.y, 64, CircleColor);
 
 		if (touch.status == TouchStatus::JustTouch) {

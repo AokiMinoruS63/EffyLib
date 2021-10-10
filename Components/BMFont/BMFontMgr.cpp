@@ -13,7 +13,7 @@ BMFontMgr::~BMFontMgr() {
 }
 
 BMFont_t BMFontMgr::get() {
-    return bmfonts.at(0);
+    return bmfonts_.at(0);
 }
 
 void BMFontMgr::load(const char* fileName) {
@@ -27,7 +27,7 @@ void BMFontMgr::load(const char* fileName) {
     filePath += fileName;
     binaryPath = filePath + ".bin";
     imgPath = filePath + ".png";
-    bmfonts.push_back((BMFont_t){
+    bmfonts_.push_back((BMFont_t){
         // バイナリデータの読込
         BMFont::GetbmFont_t(loadToBuffer(binaryPath.c_str())),
         // 画像の読込

@@ -12,10 +12,40 @@
 #include "PhysicusWorld.h"
 #include "../../Sprite/Sprite.h"
 
-PhysicusWorld::PhysicusWorld(){}
+PhysicusWorld::PhysicusWorld(b2Vec2 gravity){
+	// 物理演算世界を初期化する
+	world_ = new b2World(gravity);
+	// NULL代入する
+	current_ = NULL;
+}
 
 PhysicusWorld::~PhysicusWorld(){}
 
-void PhysicusWorld::append(Sprite* sprite) {
-	sprites.push_back(sprite);
+// スプライトに物理演算を適用する
+void PhysicusWorld::applySprite(Sprite* sprite) {
+	sprites_.push_back(sprite);
+}
+
+// タッチによるオブジェクトの干渉（生成も含む）
+void PhysicusWorld::touchCalc(touch_t touch, Physicus::Type type) {
+	if(touch.status == TouchStatus::JustTouch) {
+		current_ = new Physicus::Object(type, world_, touch);
+		// Object(Type type, b2World* world, touch_t touch);
+	}
+	/*
+	// 多角形 リリース生成
+	Polygon,
+	// 塗りつぶし多角形　 リリース生成
+	FillPolygon,
+	// 中身がスカスカな多角形　タッチ
+	LinksBoard,
+	// 円
+	Circle,
+	// 塗りつぶし多角形
+	FillCircle,
+	// 四角形
+	Rectangle,
+	// 塗りつぶし四角形
+	FillRectangle
+	*/
 }

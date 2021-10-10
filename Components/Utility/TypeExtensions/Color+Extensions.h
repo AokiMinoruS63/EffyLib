@@ -20,6 +20,8 @@ namespace Color {
 	const static int red = GetColor(255, 0, 0);
 	const static int green = GetColor(0, 255, 0);
 	const static int blue = GetColor(0, 0, 255);
+	const static int yellow = GetColor(255, 255, 0);
+	const static int purple = GetColor(0, 255, 255);
 }
 
 #endif

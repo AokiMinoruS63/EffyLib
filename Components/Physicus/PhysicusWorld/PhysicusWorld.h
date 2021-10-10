@@ -19,16 +19,40 @@
 class Sprite;
 
 class PhysicusWorld {
+	/* 変数 */
+
+	private:
+	b2World* world_;
+	// 物理演算を行うSprite配列
+	std::vector<Sprite *> sprites_;
+	// 物理演算を行うボディ配列
+	std::vector<Physicus::Object> objects_;
+	// 現在生成・操作を行なっているボディ
+	Physicus::Object* current_;
+
+	/* コンストラクタ・デストラクタ */
 	public:
-	PhysicusWorld();
+	PhysicusWorld(b2Vec2 gravity);
 	~PhysicusWorld();
 
-	void append(Sprite* sprite);
+	/* 関数 */
 
-	// 物理演算を行うSprite配列
-	std::vector<Sprite *> sprites;
-	// 物理演算を行うボディ配列
-	std::vector<Physicus::Object> objects;
+	public:
+
+	/**
+	 * @brief スプライトに物理演算を適用する
+	 * 
+	 * @param sprite 適用するスプライト
+	 */
+	void applySprite(Sprite* sprite);
+
+	/**
+	 * @brief タッチによるオブジェクトの干渉（生成も含む）
+	 * 
+	 * @param touch 
+	 * @param type 
+	 */
+	void touchCalc(touch_t touch, Physicus::Type type);
 };
 
 #endif

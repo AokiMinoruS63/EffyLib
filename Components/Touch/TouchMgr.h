@@ -29,7 +29,7 @@ class TouchMgr {
 
     /* 変数 */
     // タッチ情報
-    touch_t touch;
+    touch_t touch_;
 
     /* コンストラクタ・デストラクタ */
     public:

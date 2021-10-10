@@ -6,11 +6,11 @@
 // ループフラグも作る。カウント変数も作る
 
 Sprite::Sprite() {
-	this->common = defaultCommon;
-	parametersInit(&local);
-	parametersInit(&global);
-	timelineInit(&localTimeline);
-	timelineInit(&globalTimeline);
+	this->common_ = defaultCommon;
+	parametersInit(&local_);
+	parametersInit(&global_);
+	timelineInit(&localTimeline_);
+	timelineInit(&globalTimeline_);
 }
 
 Sprite::~Sprite() {

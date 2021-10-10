@@ -43,18 +43,18 @@ class PhysicsWorld;
 class Sprite {
 	private:
 	/* 共通情報 */
-	sprite_common_t common;
+	sprite_common_t common_;
 
 	/* 基本情報 */
 
 	// グローバルのタイムライン
-	sprite_timeline_t globalTimeline;
+	sprite_timeline_t globalTimeline_;
 	// グローバルの現在のパラメータ
-	sprite_parameters_t global;
+	sprite_parameters_t global_;
 	// ローカルのタイムライン
-	sprite_timeline_t localTimeline;
+	sprite_timeline_t localTimeline_;
 	// ローカルの現在のパラメータ
-	sprite_parameters_t local;
+	sprite_parameters_t local_;
 
 	// MARK: function
 

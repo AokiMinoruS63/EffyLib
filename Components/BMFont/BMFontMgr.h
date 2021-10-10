@@ -30,7 +30,7 @@ typedef struct {
 class BMFontMgr {
     private:
     // 読み込んだBMフォント
-    std::vector<BMFont_t> bmfonts;
+    std::vector<BMFont_t> bmfonts_;
 
     public:
     BMFontMgr();

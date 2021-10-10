@@ -8,9 +8,9 @@ TouchMgr::TouchMgr() {
     // vector初期化
     int i = 0;
     for(int i=0;i<TOUCH_LOG_MAX;i++) {
-        touch.inputLog.push_back(false);
-        touch.posLogX.push_back(0);
-        touch.posLogY.push_back(0);
+        touch_.inputLog.push_back(false);
+        touch_.posLogX.push_back(0);
+        touch_.posLogY.push_back(0);
     }
 }
 
@@ -29,9 +29,9 @@ TouchMgr::~TouchMgr() {
 void TouchMgr::updateLog() {
     for (int i = TOUCH_LOG_MAX - 1; i > 0; i--)
     {
-        touch.inputLog[i] = touch.inputLog[i - 1];
-        touch.posLogX[i] = touch.posLogX[i - 1];
-        touch.posLogY[i] = touch.posLogY[i - 1];
+        touch_.inputLog[i] = touch_.inputLog[i - 1];
+        touch_.posLogX[i] = touch_.posLogX[i - 1];
+        touch_.posLogY[i] = touch_.posLogY[i - 1];
     }
 }
 
@@ -44,8 +44,8 @@ void TouchMgr::calc() {
     
     /* 座標・タップ情報取得 */
     #ifdef EMSCRIPTEN
-    getMousePoint(&touch.x, &touch.y);
-    touch.inputLog[0] = GetMouseInput()& MOUSE_INPUT_LEFT ? true:false;
+    getMousePoint(&touch_.x, &touch_.y);
+    touch_.inputLog[0] = GetMouseInput()& MOUSE_INPUT_LEFT ? true:false;
     #else
     if (GetTouchInputNum() > 0)
     {
@@ -59,32 +59,32 @@ void TouchMgr::calc() {
     #endif
 
     // ログ・タップステータス初期化
-    touch.posLogX[0] = touch.x;
-    touch.posLogY[0] = touch.y;
-    touch.status = TouchStatus::NoTouch;
-    touch.doubleTap = false;
-	touch.beginIndex = 0;
+    touch_.posLogX[0] = touch_.x;
+    touch_.posLogY[0] = touch_.y;
+    touch_.status = TouchStatus::NoTouch;
+    touch_.doubleTap = false;
+	touch_.beginIndex = 0;
 
     // タップステータス更新
-    if (touch.inputLog[0] == true && touch.inputLog[1] == false)touch.status = TouchStatus::JustTouch;// 押した瞬間
-    else if (touch.inputLog[0] == false && touch.inputLog[1] == true)touch.status = TouchStatus::JustRelease;// 離した瞬間
-    else if (touch.inputLog[0] == true && touch.inputLog[1] == true) //キーリピート処理 
+    if (touch_.inputLog[0] == true && touch_.inputLog[1] == false)touch_.status = TouchStatus::JustTouch;// 押した瞬間
+    else if (touch_.inputLog[0] == false && touch_.inputLog[1] == true)touch_.status = TouchStatus::JustRelease;// 離した瞬間
+    else if (touch_.inputLog[0] == true && touch_.inputLog[1] == true) //キーリピート処理 
     {
-        touch.status = TouchStatus::Repeating;
+        touch_.status = TouchStatus::Repeating;
         for (int i = 2; i < TOUCH_REPEAT_TIME; i++)
         {
-            if (touch.inputLog[i] == false) { 
-				touch.status = TouchStatus::NotRepeating;
+            if (touch_.inputLog[i] == false) { 
+				touch_.status = TouchStatus::NotRepeating;
 				 break; 
 			}
         }
     }
 	// タッチ開始が何フレーム前か調査
-	if(touch.status != TouchStatus::NoTouch) {
+	if(touch_.status != TouchStatus::NoTouch) {
 		for (int i = 2; i < TOUCH_LOG_MAX; i++)
 		{
-			if (touch.inputLog[i] == false) { 
-				touch.beginIndex = i - 1;
+			if (touch_.inputLog[i] == false) { 
+				touch_.beginIndex = i - 1;
 					break; 
 			}
 		}
@@ -92,8 +92,8 @@ void TouchMgr::calc() {
     // ダブルタップ更新 
     for (int i = 2; i < DOUBLE_TAP_INTERVAL; i++)
     {
-        if (!touch.inputLog[i])continue;
-        touch.doubleTap = true;
+        if (!touch_.inputLog[i])continue;
+        touch_.doubleTap = true;
         break;
     } 
 
@@ -107,7 +107,7 @@ void TouchMgr::calc() {
  * @return touch_t 現在のローカル座標のタップ情報
  */
 touch_t TouchMgr::get() {
-    return touch;
+    return touch_;
 }
 
 /**
@@ -116,7 +116,7 @@ touch_t TouchMgr::get() {
  * @return touch_t 現在のパーティションを考慮したタップ情報を返す
  */
 touch_t TouchMgr::getGlobalTouch() {
-    touch_t globalTouch = touch;
+    touch_t globalTouch = touch_;
     #ifdef EMSCRIPTEN
     setScreenPosToGlobal(&globalTouch.x, &globalTouch.y);
     #else
@@ -126,5 +126,5 @@ touch_t TouchMgr::getGlobalTouch() {
         screenSizeGenerator->setScreenPosToGlobal(&globalTouch.posLogX[i]],&globalTouch.posLogY[i]);
     }
     #endif
-    return touch;
+    return touch_;
 }

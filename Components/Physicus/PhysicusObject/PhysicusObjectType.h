@@ -20,8 +20,6 @@ namespace Physicus {
 		FillPolygon,
 		// 中身がスカスカな多角形
 		LinksBoard,
-		// 回転しない線
-		LinksBoardNoRotate,
 		// 円
 		Circle,
 		// 塗りつぶし多角形

@@ -24,17 +24,17 @@ namespace Physicus {
 	// オブジェクトの実体
 	class Object {
 		// オブジェクトの中に入っているボディ
-		std::vector<b2Body *> m_bodies;
+		std::vector<b2Body *> bodies_;
 		// 演算を行うワールド
-		b2World* m_world;
+		b2World* world_;
 		// 線の太さ
-		float m_lineWidth;
+		float lineWidth_;
 		// 線の軌跡用の画像
-		int m_img[3];
+		int img_[3];
 		// 線の色
-		int m_color;
+		int color_;
 		// オブジェクトのタイプ
-		Type m_type;
+		Type type_;
 
 		public:
 		Object(Type type, b2World* world, touch_t touch);

@@ -12,13 +12,19 @@
 #include <EffyLib.h>
 
 class MainContent {
+	/* インスタンス */
 	private:
-	TouchMgr* touchMgr;
-	BMFontMgr* bmFontMgr;
+	TouchMgr* touchMgr_;
+	BMFontMgr* bmFontMgr_;
+	PhysicusWorld* world_;
 	
+	/* コンストラクタ・デストラクタ */
 	public:
 	MainContent();
 	~MainContent();
+
+	/* 関数 */
+
 	/**
 	 * @brief 　メインループ
 	 * 
