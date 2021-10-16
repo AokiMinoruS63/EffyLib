@@ -144,4 +144,17 @@ int wordToNum = Reduce<std::string, int>(word, [](char &chr, int &memo){ return 
 
 */
 
+
+/**
+ * @brief std::vectorの要素が空なら**true**
+ * 
+ * @param vector 
+ * @return true 
+ * @return false 
+ */
+template <typename T>
+bool IsEmpty(std::vector<T> vector) {
+	return vector.size() == 0;
+}
+
 #endif
