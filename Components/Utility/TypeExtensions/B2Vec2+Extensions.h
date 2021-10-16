@@ -14,6 +14,7 @@
 
 #include "Float+Extensions.h"
 #include "../../OpenSource/Box2D/box2d/b2_math.h"
+#include "../../Touch/TouchData.h"
 #include <cmath>
 #include <vector>
 
@@ -26,9 +27,9 @@ namespace B2Vec2 {
 	 * 
 	 */
 	enum Horizon {
-		Center,
-		Leading,
-		Trailing
+		kCenter,
+		kLeading,
+		kTrailing
 	};
 
 	/**
@@ -80,17 +81,40 @@ namespace B2Vec2 {
 	}
 
 	/**
+	 * @brief 座標に拡大率を適用する
+	 * 
+	 * @param vec 座標
+	 * @param scale 拡大率
+	 */
+	static void applyScale(b2Vec2 *vec, float scale) {
+		vec->x *= scale;
+		vec->y *= scale;
+	}
+
+	/**
+	 * @brief ポリゴンに拡大率を適用する
+	 * 
+	 * @param vec ポリゴン
+	 * @param scale 拡大率
+	 */
+	static void applyScale(std::vector<b2Vec2> vec, float scale) {
+		if(scale == 0) {
+			return;
+		}
+		for(auto& itr: vec) {
+			itr.x *= scale;
+			itr.y *= scale;
+		}
+	}
+
+	/**
 	 * @brief 座標に縮小率を適用する
 	 * 
 	 * @param vec 座標
 	 * @param rate 縮小率
 	 */
 	static void applyRate(b2Vec2 *vec, float rate) {
-		if(rate == 0) {
-			return;
-		}
-		vec->x /= rate;
-		vec->y /= rate;
+		applyScale(vec, 1.0 / rate);
 	}
 
 	/**
@@ -100,13 +124,7 @@ namespace B2Vec2 {
 	 * @param rate 縮小率
 	 */
 	static void applyRate(std::vector<b2Vec2> vec, float rate) {
-		if(rate == 0) {
-			return;
-		}
-		for(auto& itr: vec) {
-			itr.x /= rate;
-			itr.y /= rate;
-		}
+		applyScale(vec, 1.0 / rate);
 	}
 
 	/**
@@ -144,6 +162,17 @@ namespace B2Vec2 {
 	}
 
 	/**
+	 * @brief 始点を終点で引いた数を返す
+	 * 
+	 * @param pos1 
+	 * @param pos2 
+	 * @return b2Vec2 
+	 */
+	static b2Vec2 sub(b2Vec2 pos1, b2Vec2 pos2) {
+		return b2Vec2(pos1.x - pos2.x, pos1.y - pos2.y);
+	}
+
+	/**
 	 * @brief ベクトルをfloatで割る
 	 * 
 	 * @param pos 
@@ -172,7 +201,7 @@ namespace B2Vec2 {
 	}
 
 	/**
-	 * @brief int型の座標からfloat型の座標に変換する
+	 * @brief int型の座標からb2Vec2型の座標に変換する
 	 * 
 	 * @param x 
 	 * @param y 
@@ -180,6 +209,17 @@ namespace B2Vec2 {
 	 */
 	static b2Vec2 fromIntPos(int x, int y) {
 		return b2Vec2((float)x, (float)y);
+	}
+
+	/**
+	 * @brief touch_t型の座標からb2Vec2型の座標に変換する
+	 * 
+	 * @param touch 
+	 * @param scale 
+	 * @return b2Vec2 
+	 */
+	static b2Vec2 fromTouch(touch_t touch, float scale = 1.0) {
+		return b2Vec2(((float)touch.x) * scale, ((float)touch.y) * scale);
 	}
 
 	/**
@@ -223,6 +263,20 @@ namespace B2Vec2 {
 	}
 
 	/**
+	 * @brief 直近の軌跡を返す
+	 * 
+	 * @param locusList 軌跡
+	 * @param current 現在の座標
+	 * @param last 1つ前の座標
+	 * @param lastLast 2つ前の座標
+	 */
+	static void recentLocus(std::vector<b2Vec2> locusList, b2Vec2* current, b2Vec2* last, b2Vec2* lastLast) {
+		*current = locusList.back();
+		*last = locusList.size() < 2 ? *current : locusList.at(locusList.size() - 2);
+		*lastLast = locusList.size() < 3 ? sub(*current, *last) : locusList.at(locusList.size() - 3);
+	}
+
+	/**
 	 * @brief ベース座標から半径分回転させる
 	 * 
 	 * @param pos ベース座標
@@ -231,15 +285,16 @@ namespace B2Vec2 {
 	 * @param horizon -90度、90度に回転させる時のみ使用
 	 * @return b2Vec2 
 	 */
-	static b2Vec2 rotate(b2Vec2 pos, float radius, float radian, Horizon horizon = Center ) {
+	static b2Vec2 rotate(b2Vec2 pos, float radius, float radian, Horizon horizon = kCenter ) {
 		float adjustedAngle;
 		switch(horizon) {
-			case Leading:
+			case kLeading:
 			adjustedAngle = - DX_PI_F / 2.0;
 			break;
-			case Trailing:
+			case kTrailing:
 			adjustedAngle = DX_PI_F / 2.0;
 			break;
+			adjustedAngle = 0;
 			default:break;
 		}
 		const float x = pos.x + radius * cos( radian + adjustedAngle);
@@ -248,15 +303,26 @@ namespace B2Vec2 {
 	}
 
 	/**
-	 * @brief 始点と終点が指定距離内で塗りつぶしポリゴンになり得るなら**true**
+	 * @brief 数珠繋ぎに出来る距離なら**true**
 	 * 
 	 * @param vec 
 	 * @param range 判定する距離
 	 * @return true 
 	 * @return false 
 	 */
-	static bool isFillPolygon(std::vector<b2Vec2> vec, float range) {
+	static bool isTieLoop(std::vector<b2Vec2> vec, float range) {
 		return distance(vec.front().x, vec.front().y, vec.back().x, vec.back().y) < range;
+	}
+
+	/**
+	 * @brief 角度を返す
+	 * 
+	 * @param start 始点
+	 * @param end 終点
+	 * @return float 
+	 */
+	static float angle(b2Vec2 start, b2Vec2 end) {
+		return atan2(start.y - end.y, start.x - end.x);
 	}
 }
 

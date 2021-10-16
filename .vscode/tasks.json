@@ -71,6 +71,7 @@
 				"build/b2_wheel_joint.o",
 				// Component of EffyLib
                 "build/PhysicusObject.o",
+				"build/PhysicusLinkBoard.o",
 				"build/PhysicusWorld.o", 
 				"build/ScreenSizeGenerator.o", 
 				"build/DxLibWrap.o", 
@@ -176,6 +177,7 @@
 				"build/b2_wheel_joint.o",
 				// Component of EffyLib
                 "build/PhysicusObject.o",
+				"build/PhysicusLinkBoard.o",
 				"build/PhysicusWorld.o", "build/PhysicusWorld+touch.o", "build/PhysicusWorld+sprite.o", 
 				"build/ScreenSizeGenerator.o", 
 				"build/DxLibWrap.o", 

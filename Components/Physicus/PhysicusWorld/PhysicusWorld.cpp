@@ -12,16 +12,48 @@
 #include "PhysicusWorld.h"
 #include "../../Sprite/Sprite.h"
 
-PhysicusWorld::PhysicusWorld(b2Vec2 gravity, float scale){
+// コンストラクタ
+PhysicusWorld::PhysicusWorld(b2Vec2 gravity, float scale, Physicus::Frame alive_area, float tie_loop_range){
 	// 物理演算世界を初期化する
 	world_ = new b2World(gravity);
 	// 拡大率適用
 	world_scale_ = scale;
+	// オブジェクト生存エリア適用
+	alive_area.applyScale(world_scale_);
+	alive_area_ = alive_area;
+	// 数珠繋ぎにする距離
+	tie_loop_range_ = tie_loop_range;
 	// NULL代入する
 	current_ = NULL;
 }
 
-PhysicusWorld::~PhysicusWorld(){}
+// デストラクタ
+PhysicusWorld::~PhysicusWorld(){
+	ForEach(objects_, [this](Physicus::Object *item) { delete item; });
+	delete world_;
+}
+
+// 時間を進める
+void PhysicusWorld::timeCalc() {
+	// 時間経過メソッド
+	const float timeStep = 1.0f / 10.0f;
+	const int velocityIterations = 6;
+	const int positionIterations = 2;
+	// 時間を進める
+	world_->Step(timeStep, velocityIterations, positionIterations);
+	// 生存可能エリアからオブジェクトが出ていたら消滅させる
+	std::vector<Physicus::Object*> removeList;
+	ForEach(objects_, [this, &removeList](Physicus::Object* item) { if(item->judgeAreaOut(alive_area_)){ removeList.push_back(item);} });
+	auto itr = objects_.begin();
+	while(itr != objects_.end()) {
+		const int size = Filter(removeList, [&removeList, itr](Physicus::Object* item){ return item == (*itr); }).size();
+		if(size > 0) {
+			itr = objects_.erase(itr);
+		} else {
+			++itr;
+		}
+	}
+}
 
 // スプライトに物理演算を適用する
 void PhysicusWorld::applySprite(Sprite* sprite) {
@@ -29,34 +61,49 @@ void PhysicusWorld::applySprite(Sprite* sprite) {
 }
 
 // タッチによるオブジェクトの干渉（生成も含む）
-bool PhysicusWorld::touchCalc(touch_t touch, Physicus::Type type) {
+bool PhysicusWorld::touchCalc(touch_t touch, Physicus::Type type, float line_width) {
+	// スケール適用
+	line_width *= world_scale_;
 	bool generate = false;
-	if(touch.status == TouchStatus::kJustTouch) {
-		current_ = new Physicus::Object(touch, type, world_);
-		// Object(Type type, b2World* world, touch_t touch);
+	// 生成開始
+	if(touch.status == TouchStatus::kJustTouch && current_ == NULL) {
+		current_ = new Physicus::Object(touch, type, world_, world_scale_, line_width);
 		objects_.push_back(current_);
 		generate = true;
 	}
 
 	if(current_ != NULL) {
-		current_->generation(touch);
+		// 生成中
+		if(current_->generation(touch, tie_loop_range_)) {
+			// 生成完了
+			current_->setAwake();
+			current_ = NULL;
+		}
 	}
 
 	return generate;
-	/*
-	// 多角形 リリース生成
-	Polygon,
-	// 塗りつぶし多角形　 リリース生成
-	FillPolygon,
-	// 中身がスカスカな多角形　タッチ生成
-	LinksBoard,
-	// 円
-	Circle,
-	// 塗りつぶし多角形
-	FillCircle,
-	// 四角形
-	Rectangle,
-	// 塗りつぶし四角形
-	FillRectangle
-	*/
+}
+
+
+// オブジェクトを描画する
+void PhysicusWorld::draw() {
+	for(auto& itr: objects_) {
+		if(itr != current_) {
+			itr->draw();
+		}
+	}
+	current_->drawOverlay();
+}
+
+
+// オブジェクトのフレームを描画する
+void PhysicusWorld::drawDebugFrame() {
+	for(auto& itr: objects_) {
+		if(itr != current_) {
+			itr->drawDebugFrame();
+		}
+	}
+	if(current_ != NULL) {
+		current_->drawDebugFrameOverlay();
+	}
 }

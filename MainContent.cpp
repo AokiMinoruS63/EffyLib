@@ -24,7 +24,7 @@ MainContent::MainContent() {
     }
 	touchMgr_ = new TouchMgr();
 	bmFontMgr_ = new BMFontMgr();
-	world_ = new PhysicusWorld(b2Vec2(0, 10.0), 0.1);
+	world_ = new PhysicusWorld(b2Vec2(0, 10.0), 0.1, {b2Vec2(0, 0), b2Vec2(getScreenWidth(), getScreenHeight())});
 	bmFontMgr_->load("GameFont_Blue");
 	bmFontMgr_->load("GameFont_Orange");
 	bmFontMgr_->load("GameFont_White");
@@ -44,7 +44,9 @@ void MainContent::run() {
 	// タッチ計算
 	touchMgr_->calc();
 	// タッチを物理演算に適用
-	world_->touchCalc(touchMgr_->get(), Physicus::Type::kLinksBoard);
+	world_->touchCalc(touchMgr_->get(), Physicus::Type::kLinkBoard);
+	// 時間を進める
+	world_->timeCalc();
 
 	// タッチ画像描画
 	{	
@@ -52,6 +54,8 @@ void MainContent::run() {
 		int CircleColor = ( touch.status != TouchStatus::kNoTouch && touch.status != TouchStatus::kJustRelease) ? Color::kYellow : Color::kRed;
 		drawCircle(touch.x, touch.y, 5, CircleColor);
 	}
+	// ボーンの描画
+	world_->drawDebugFrame();
 
 	ScreenFlip();
 }

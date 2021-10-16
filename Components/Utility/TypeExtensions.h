@@ -16,8 +16,10 @@
 #include "TypeExtensions/Float+Extensions.h"
 #include "TypeExtensions/B2Vec2+Extensions.h"
 #include "TypeExtensions/B2BodyDef+Extensions.h"
+#include "TypeExtensions/B2Body+Extensions.h"
 #include "TypeExtensions/B2Joint+Extensions.h"
 #include "TypeExtensions/VectorOrArray+Extension.h"
 #include "TypeExtensions/Vector+Extension.h"
+#include "TypeExtensions/Array+Extensions.h"
 
 #endif

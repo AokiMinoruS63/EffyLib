@@ -14,6 +14,7 @@
 
 #include <vector>
 #include "../PhysicusObject/PhysicusObject.h"
+#include "Frame/PhysicusWorldFrame.h"
 
 // 相互参照
 class Sprite;
@@ -32,16 +33,39 @@ class PhysicusWorld {
 	std::vector<Physicus::Object *> objects_;
 	// 現在生成・操作を行なっているボディ
 	Physicus::Object* current_;
+	// オブジェクトが生存できるエリア
+	Physicus::Frame alive_area_;
+	// 数珠繋ぎにする距離
+	float tie_loop_range_;
 
 	// MARK: - コンストラクタ・デストラクタ
 
 	public:
-	PhysicusWorld(b2Vec2 gravity, float scale);
+
+	/**
+	 * @brief 演算ワールドクラスのコンストラクタ
+	 * 
+	 * @param gravity 重力
+	 * @param scale ワールドの拡大率
+	 * @param alive_area オブジェクトが生存可能なエリア
+	 */
+	PhysicusWorld(b2Vec2 gravity, float scale, Physicus::Frame alive_area, float tie_loop_range = Physicus::Constant::LinksBoardObject::kTieLoopRange);
+
+	/**
+	 * @brief 演算ワールドクラスのデストラクタ
+	 * 
+	 */
 	~PhysicusWorld();
 
 	// MARK: - 関数
 
 	public:
+
+	/**
+	 * @brief 時間を進める
+	 * 
+	 */
+	void timeCalc();
 
 	/**
 	 * @brief スプライトに物理演算を適用する
@@ -55,10 +79,23 @@ class PhysicusWorld {
 	 * 
 	 * @param touch 
 	 * @param type 
+	 * @param line_width 
 	 * @return true オブジェクトが生成
 	 * @return false オブジェクトが未生成
 	 */
-	bool touchCalc(touch_t touch, Physicus::Type type);
+	bool touchCalc(touch_t touch, Physicus::Type type, float line_width = Physicus::Object::kDefaultLineWidth);
+
+	/**
+	 * @brief オブジェクトを描画する
+	 * 
+	 */
+	void draw();
+
+	/**
+	 * @brief オブジェクトのフレームを描画する
+	 * 
+	 */
+	void drawDebugFrame();
 };
 
 #endif

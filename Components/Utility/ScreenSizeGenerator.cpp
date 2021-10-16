@@ -10,15 +10,15 @@
 /* 定数 */
 
 // パーティションを入れない幅（ローカル幅）
-static const int SCREEN_WIDTH = 1136;
+static const int kScreenWidth = 1136;
 // パーティションを入れない高さ(ローカル高さ)
-static const int SCREEN_HEIGHT = 852;
+static const int kScreenHeight = 852;
 
 #ifdef EMSCRIPTEN
 // ブラウザのパーティションの幅
-static const int BROWSER_PERTISION_WIDTH = 0;
+static const int kBrowserPertisionWidth = 0;
 // ブラウザのパーティションの片面の幅
-static const int BROWSER_PERTISION_WIDTH_HALF = 0;
+static const int kBrowserPertisionWidthHalf = 0;
 
 // 伸び縮みしているブラウザの幅の現在の比率を返す
 float getBrowserCanvasWidthRate();
@@ -28,7 +28,7 @@ float getBrowserCanvasHeightRate();
 #endif
 
 int getScreenWidth() {
-    return SCREEN_WIDTH;
+    return kScreenWidth;
 }
 
 /**
@@ -37,7 +37,7 @@ int getScreenWidth() {
  * @return int パーティションを除いた画面の高さ
  */
 int getScreenHeight() {
-    return SCREEN_HEIGHT;
+    return kScreenHeight;
 }
 
 /**
@@ -47,11 +47,11 @@ int getScreenHeight() {
  */
 int getScreenWidthWithPartition() {
     #ifdef EMSCRIPTEN
-    return SCREEN_WIDTH + BROWSER_PERTISION_WIDTH;
+    return kScreenWidth + kBrowserPertisionWidth;
     #else
     // TODO: Android,iOSはパーティションがある場合がある
     #endif
-    return SCREEN_WIDTH;
+    return kScreenWidth;
 }
 
 /**
@@ -62,18 +62,18 @@ int getScreenWidthWithPartition() {
 int getScreenHeightWithPartition() {
     #ifdef EMSCRIPTEN
     // Emscriptenにはパーティションはない
-    return SCREEN_HEIGHT;
+    return kScreenHeight;
     #else
     // TODO: Android,iOSはパーティションがある場合がある
     #endif
-    return SCREEN_HEIGHT;
+    return kScreenHeight;
 }
 
 // パーティションの入ったグローバルポジションからローカルポジションへの変換
 void setScreenPosToLocal(int *x, int *y) {
     #ifdef EMSCRIPTEN
     // 幅のパーティション分減算
-    *x -= BROWSER_PERTISION_WIDTH_HALF;
+    *x -= kBrowserPertisionWidthHalf;
     // ブラウザの伸び縮みの計算
     #else
     // TODO: Android,iOSはパーティションがある場合がある
@@ -84,7 +84,7 @@ void setScreenPosToLocal(int *x, int *y) {
 void setScreenPosToGlobal(int *x, int *y) {
     #ifdef EMSCRIPTEN
     // 幅のパーティションのみ加算
-    *x += BROWSER_PERTISION_WIDTH_HALF;
+    *x += kBrowserPertisionWidthHalf;
     #else
     // TODO: Android,iOSはパーティションがある場合がある
     #endif

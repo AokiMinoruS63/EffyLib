@@ -14,20 +14,20 @@
 
 namespace Physicus {
 	enum Type {
+		// 四角形
+		kRectangle,
+		// 塗りつぶし四角形
+		kFillRectangle,
+		// 円
+		kCircle,
+		// 塗りつぶし多角形
+		kFillCircle,
 		// 多角形
 		kPolygon,
 		// 塗りつぶし多角形
 		kFillPolygon,
 		// 中身がスカスカな多角形
-		kLinksBoard,
-		// 円
-		kCircle,
-		// 塗りつぶし多角形
-		kFillCircle,
-		// 四角形
-		kRectangle,
-		// 塗りつぶし四角形
-		kFillRectangle
+		kLinkBoard,
 	};
 }
 

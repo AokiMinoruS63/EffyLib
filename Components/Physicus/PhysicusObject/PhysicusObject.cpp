@@ -10,28 +10,43 @@
  */
 
 #include "PhysicusObject.h"
+#include "LinkBoard/PhysicusLinkBoard.h"
 
 using namespace Physicus;
 
 // コンストラクタ
-Object::Object(touch_t touch, Type type, b2World* world) {
+Object::Object(touch_t touch, Type type, b2World* world, float scale, float line_width) {
 	world_ = world;
 	type_ = type;
-	locus_.push_back(b2Vec2((float)touch.x, (float)touch.y));
+	b2Vec2 vec = B2Vec2::fromTouch(touch, scale);
+	world_scale_ = scale;
+	line_width_ = line_width;
+	color_ = Color::kWhite;
+	locus_.push_back(vec);
 }
 
 // デストラクタ
 Object::~Object() {
-	auto itr = bodies_.begin();
-	while(itr != bodies_.end()) {
-		world_->DestroyBody((*itr));
-		itr = bodies_.erase(itr);
-	}
-	color_ = Color::kWhite;
+	bodiesDestroy();
 	world_ = NULL;
 }
 
 // MARK: - Getter, Setter
+
+// 物理演算のBody群を取得する
+std::vector<b2Body*>& Object::getBodies() {
+	return bodies_;
+}
+
+// 演算を行うワールドを取得する
+b2World* Object::getWorld() {
+	return world_;
+}
+
+//軌跡を取得する
+std::vector<b2Vec2> Object::getLocus() {
+	return locus_;
+}
 
 // 線の太さを取得する
 float Object::getLineWidth() {
@@ -49,9 +64,37 @@ int* Object::getLineImg() {
 }
 
 // 線の画像をセットする
-void Object::setLineImg(int img[k_line_img_num]) {
-	for(int i = 0; i < k_line_img_num; i++) {
+void Object::setLineImg(int img[kLineImgNum]) {
+	for(int i = 0; i < kLineImgNum; i++) {
 		line_img_[i] = img[i];
+	}
+}
+
+// オブジェクトの回転がロックされているかどうかを取得する
+bool Object::getRotateFix() {
+	return rotate_fix_;
+}
+
+// オブジェクトの回転のロックを設定する
+void Object::setRotateFix(bool fix) {
+	rotate_fix_ = fix;
+}
+
+// 演算がされている状態かチェックする
+bool Object::getAwake(int index) {
+	if(IsEmpty(bodies_)) {
+		return false;
+	}
+	return bodies_.at(index)->IsAwake();
+}
+
+void Object::setAwake(bool awake, int index) {
+	if(index == Array::kUnspecified) {
+		for(auto& itr: bodies_) {
+			itr->SetAwake(awake);
+		}
+	} else {
+		bodies_.at(index)->SetAwake(awake);
 	}
 }
 
@@ -61,8 +104,143 @@ Type Object::getType() {
 }
 
 // オブジェクトの生成（ボディの追加など）
-void Object::generation(touch_t touch) {
+bool Object::generation(touch_t touch, float tie_loop_range) {
+	const b2Vec2 start = locus_.front();
+	const b2Vec2 last = locus_.back();
+	const b2Vec2 current = B2Vec2::fromTouch(touch, world_scale_);
+	
+	switch(type_) {
+		case kRectangle: 
+		case kFillRectangle:
+		case kCircle:
+		case kFillCircle:
+		if(B2Vec2::checkCreatePos(last, current)) {
+			if(locus_.size() == 1) {
+				locus_.push_back(current);
+			} else {
+				locus_.back() = current;
+			}
+		}
+		break;
+		case kPolygon:
+		case kFillPolygon: 
+		if(B2Vec2::checkCreatePos(last, current)) {
+			locus_.push_back(current);
+		}
+		 break;
+		case kLinkBoard:
+		if(B2Vec2::checkCreatePos(last, current)) {
+			locus_.push_back(current);
+			// TODO: その都度Bodyを生成するが演算は行わない
+			createLinkBoardBody(this);
 
+		}
+		 break;
+		default:break;
+	}
+
+	if(touch.status != TouchStatus::kJustRelease) {
+		return false;
+	}
+	// TODO: オブジェクトを作成する
+	switch(type_) {
+		case kRectangle: 
+		case kFillRectangle:
+		// startが始点、endが終点
+		break;
+		case kCircle:
+		case kFillCircle:
+		// startが円の中心、endで半径を決定する
+		break;
+		case kPolygon:
+		case kFillPolygon: 
+		// 先にセンターを作成する。その後に８角形以下の図形を繋げて作成する
+		break;
+		case kLinkBoard:
+		// 距離が近ければ数珠繋ぎにする
+		if(B2Vec2::isTieLoop(locus_, tie_loop_range)) {
+			B2Joint::weldJointTieLoop(world_, bodies_);
+		}
+		//B2Vec2::
+		// static b2Joint* weldJointTieLoop(b2World* world, std::vector<b2Body*> bodies) {
+		 break;
+		default:break;
+	}
+	return true;
+}
+
+// オブジェクトが生存可能エリアを出たらオブジェクトを消滅させる
+bool Object::judgeAreaOut(Frame alive_area) {
+	if(IsEmpty(bodies_)) {
+		return false;
+	}
+	// 全てのボディの頂点を判定して全てがエリア外に出ていたら消去＆return true
+	for(auto& itr: bodies_) {
+		if(!B2Body::areaOut(itr, alive_area)) {
+			return false;
+		}
+	}
+	bodiesDestroy();
+	return true;
+}
+
+// 演算を行うボディを全て削除する
+void Object::bodiesDestroy() {
+	auto itr = bodies_.begin();
+	while(itr != bodies_.end()) {
+		world_->DestroyBody((*itr));
+		itr = bodies_.erase(itr);
+	}
+}
+
+// ボディを追加する
+void Object::append(b2Body *body) {
+	bodies_.push_back(body);
+}
+
+// 直近のボディをジョイントで繋げる
+void Object::linkCurrent(B2Joint::Type type) {
+	// TODO: ジョイントタイプ別に処理を行う
+	B2Joint::weldJointCurrent(world_, bodies_);
+}
+
+// 現在生成しているオブジェクトを描画する
+void Object::drawOverlay() {
+
+}
+
+// オブジェクトの描画
+void Object::draw() {
+
+}
+
+// オブジェクトのフレームの描画
+void Object::drawDebugFrame() {
+	ForEach(bodies_, [this](b2Body *item) { B2Body::drawFrame(item, world_scale_, color_); });
+}
+
+// 現在生成しているオブジェクトのフレームを描画する
+void Object::drawDebugFrameOverlay() {
+	switch(type_) {
+		case kRectangle: 
+		case kFillRectangle:
+		// startが始点、endが終点
+		break;
+		case kCircle:
+		case kFillCircle:
+		// startが円の中心、endで半径を決定する
+		break;
+		case kPolygon:
+		case kFillPolygon: 
+		// 先にセンターを作成する。その後に８角形以下の図形を繋げて作成する
+		break;
+		case kLinkBoard:
+		ForEach(bodies_, [this](b2Body *item) { B2Body::drawFrame(item, world_scale_, color_); });
+		 break;
+		default:
+
+		break;
+	}
 }
 
 

@@ -16,9 +16,20 @@
 #include "Float+Extensions.h"
 
 namespace B2Joint {
+	// ジョイントのタイプ
+	enum Type {
+		// 溶接ジョイント
+		kWeld = 0,
+		// 回転ジョイント
+		kRevolute = 1,
+		// 距離固定ジョイント
+		kDistance = 2,
+		// 滑車ジョイント
+		kPrismatic = 3
+	};
 
 	/**
-	 * @brief 溶接ジョイントを作成する（溶接ジョイントは回転を抑制出来ないため、回転させない場合はrevoluteJointを使用）
+	 * @brief 溶接ジョイントを作成する
 	 * 
 	 * @param world 物理演算を行うワールド
 	 * @param body1 溶接するボディ１
@@ -32,6 +43,40 @@ namespace B2Joint {
 		jointDef.Initialize(body1, body2, jointPosition);
 		// ジョイントを作る
 		return world->CreateJoint(&jointDef);
+	}
+
+	/**
+	 * @brief 一番手前のボディとその一つ前のボディとの間に溶接ジョイントを作成する
+	 * 
+	 * @param world 物理演算を行うワールド
+	 * @param bodies bodyVector
+	 * @return b2Joint* 
+	 */
+	static b2Joint* weldJointCurrent(b2World* world, std::vector<b2Body*> bodies) {
+		// ボディが一つなら処理しない
+		if(bodies.size() < 2) {
+			return NULL;
+		}
+		const auto current = bodies.back();
+		const auto last = bodies.at(bodies.size() - 2);
+		return weldJoint(world, last, current, B2Vec2::halfWay(last->GetWorldCenter(), current->GetWorldCenter()));
+	}
+
+	/**
+	 * @brief ボディを数珠繋ぎにする
+	 * 
+	 * @param world 
+	 * @param bodies 
+	 * @return b2Joint* 
+	 */
+	static b2Joint* weldJointTieLoop(b2World* world, std::vector<b2Body*> bodies) {
+		// ボディが一つなら処理しない
+		if(bodies.size() < 2) {
+			return NULL;
+		}
+		const auto current = bodies.back();
+		const auto start = bodies.front();
+		return weldJoint(world, current, start, B2Vec2::halfWay(current->GetWorldCenter(), start->GetWorldCenter()));
 	}
 
 	/**
