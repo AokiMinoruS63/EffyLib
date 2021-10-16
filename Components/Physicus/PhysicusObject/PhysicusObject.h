@@ -26,7 +26,7 @@ namespace Physicus {
 		// MARK: - 変数
 
 		// 線に使用する画像
-		const static int k_line_img_num = 3;
+		static const int kLineImgNum = 3;
 		// オブジェクトの中に入っているボディ
 		std::vector<b2Body *> bodies_;
 		// 演算を行うワールド

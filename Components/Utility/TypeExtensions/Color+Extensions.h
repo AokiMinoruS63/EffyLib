@@ -15,13 +15,13 @@
 #include "../../../DxLibForHTML5/include/DxLib.h"
 
 namespace Color {
-	const static int kWhite = GetColor(255, 255, 255);
-	const static int kBlack = GetColor(0, 0, 0);
-	const static int kRed = GetColor(255, 0, 0);
-	const static int kGreen = GetColor(0, 255, 0);
-	const static int kBlue = GetColor(0, 0, 255);
-	const static int kYellow = GetColor(255, 255, 0);
-	const static int kPurple = GetColor(0, 255, 255);
+	static const int kWhite = GetColor(255, 255, 255);
+	static const int kBlack = GetColor(0, 0, 0);
+	static const int kRed = GetColor(255, 0, 0);
+	static const int kGreen = GetColor(0, 255, 0);
+	static const int kBlue = GetColor(0, 0, 255);
+	static const int kYellow = GetColor(255, 255, 0);
+	static const int kPurple = GetColor(0, 255, 255);
 }
 
 #endif

@@ -21,11 +21,11 @@ class TouchMgr {
     /* 定数 */
 
     // タッチログを何フレーム保存するか
-    const static int kTouchLogMax = 60;
+    static const int kTouchLogMax = 60;
 	// 何フレームまで押し続ければリピートになるか
-	const static int kTouchRepeatTime = 20;
+	static const int kTouchRepeatTime = 20;
     // 何フレーム目までに２回タップすればダブルタップになるか
-    const static int kDoubleTapInterval = 5;
+    static const int kDoubleTapInterval = 5;
 
     /* 変数 */
     // タッチ情報
