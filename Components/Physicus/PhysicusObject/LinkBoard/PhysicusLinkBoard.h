@@ -1,7 +1,7 @@
 /**
  * @file PhysicusLinkBoard.h
  * @author AokiMinoru (personal-git@aokiminoru.work)
- * @brief スカスカの多角形関係のメソッドを記述
+ * @brief リンクボード関係のメソッドを記述
  * @version 0.1
  * @date 2021-10-12
  * 
@@ -17,9 +17,21 @@ namespace Physicus {
 };
 
 /**
- * @brief スカスカの多角形のボディを作成する
+ * @brief リンクボードオブジェクトを作成する
  * 
  */
 void createLinkBoardBody(Physicus::Object*);
+
+/**
+ * @brief リンクボードオブジェクトを描画する
+ * 
+ */
+void drawLinkBoard(Physicus::Object*);
+
+/**
+ * @brief 編集中のリンクボードオブジェクトを描画する
+ * 
+ */
+void drawEditingLinkBoard(Physicus::Object*);
 
 #endif

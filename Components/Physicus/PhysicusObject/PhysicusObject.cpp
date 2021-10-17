@@ -15,13 +15,11 @@
 using namespace Physicus;
 
 // コンストラクタ
-Object::Object(touch_t touch, Type type, b2World* world, float scale, float line_width) {
+Object::Object(touch_t touch, Type type, b2World* world, float scale, ObjectSetting setting) {
 	world_ = world;
-	type_ = type;
 	b2Vec2 vec = B2Vec2::fromTouch(touch, scale);
 	world_scale_ = scale;
-	line_width_ = line_width;
-	color_ = Color::kWhite;
+	setting_ = setting;
 	locus_.push_back(vec);
 }
 
@@ -32,6 +30,11 @@ Object::~Object() {
 }
 
 // MARK: - Getter, Setter
+
+// 演算ワールドのスケールを取得する
+float Object::getWorldScale() {
+	return world_scale_;
+}
 
 // 物理演算のBody群を取得する
 std::vector<b2Body*>& Object::getBodies() {
@@ -48,36 +51,67 @@ std::vector<b2Vec2> Object::getLocus() {
 	return locus_;
 }
 
+// ボディvectorのBox2D頂点挿入時の頂点の順番変更フラグを返す
+std::vector<B2Body::VerticesChange> Object::getBodiesVerticesChange() {
+	return bodies_vertices_change_;
+}
+
+// ボディvectorのBox2D頂点挿入時の頂点の順番変更フラグを追加する
+void Object::appendBodiesVerticesChange(B2Body::VerticesChange bodies_vertices_change) {
+	bodies_vertices_change_.push_back(bodies_vertices_change);
+}
+
+// オブジェクトの設定を取得する
+ObjectSetting Object::getSetting() {
+	return setting_;
+}
+
 // 線の太さを取得する
 float Object::getLineWidth() {
-	return line_width_;
+	return setting_.line_width;
 }
 
 // 線の太さをセットする
 void Object::setLineWidth(float width) {
-	line_width_ = width;
+	setting_.line_width = width;
+}
+
+// 線の色を取得する
+int Object::getColor() {
+	return setting_.color;
+}
+
+// 線の色を設定する
+void Object::setColor(int color) {
+	setting_.color = color;
 }
 
 // 線の画像を取得する
-int* Object::getLineImg() {
-	return line_img_;
+std::vector<int> Object::getLineImages() {
+	return setting_.line_images;
 }
 
-// 線の画像をセットする
-void Object::setLineImg(int img[kLineImgNum]) {
-	for(int i = 0; i < kLineImgNum; i++) {
-		line_img_[i] = img[i];
+// std::vectorから線の画像をセットする
+void Object::setLineImages(std::vector<int> images) {
+	setting_.line_images = images;
+}
+
+// int配列から線の画像をセットする
+void Object::setLineImages(int* images, int size) {
+	setting_.line_images.clear();
+	for(int i = 0; i < size; i++) {
+		setting_.line_images.push_back(images[i]);
 	}
 }
 
 // オブジェクトの回転がロックされているかどうかを取得する
 bool Object::getRotateFix() {
-	return rotate_fix_;
+	return setting_.rotate_fix;
 }
 
 // オブジェクトの回転のロックを設定する
 void Object::setRotateFix(bool fix) {
-	rotate_fix_ = fix;
+	setting_.rotate_fix = fix;
 }
 
 // 演算がされている状態かチェックする
@@ -100,7 +134,7 @@ void Object::setAwake(bool awake, int index) {
 
 // オブジェクトの種類を取得する
 Type Object::getType() {
-	return type_;
+	return setting_.type;
 }
 
 // オブジェクトの生成（ボディの追加など）
@@ -109,7 +143,7 @@ bool Object::generation(touch_t touch, float tie_loop_range) {
 	const b2Vec2 last = locus_.back();
 	const b2Vec2 current = B2Vec2::fromTouch(touch, world_scale_);
 	
-	switch(type_) {
+	switch(setting_.type) {
 		case kRectangle: 
 		case kFillRectangle:
 		case kCircle:
@@ -126,12 +160,12 @@ bool Object::generation(touch_t touch, float tie_loop_range) {
 		case kFillPolygon: 
 		if(B2Vec2::checkCreatePos(last, current)) {
 			locus_.push_back(current);
+			// TODO: 多角形の作成
 		}
 		 break;
 		case kLinkBoard:
 		if(B2Vec2::checkCreatePos(last, current)) {
 			locus_.push_back(current);
-			// TODO: その都度Bodyを生成するが演算は行わない
 			createLinkBoardBody(this);
 
 		}
@@ -143,7 +177,7 @@ bool Object::generation(touch_t touch, float tie_loop_range) {
 		return false;
 	}
 	// TODO: オブジェクトを作成する
-	switch(type_) {
+	switch(setting_.type) {
 		case kRectangle: 
 		case kFillRectangle:
 		// startが始点、endが終点
@@ -161,8 +195,6 @@ bool Object::generation(touch_t touch, float tie_loop_range) {
 		if(B2Vec2::isTieLoop(locus_, tie_loop_range)) {
 			B2Joint::weldJointTieLoop(world_, bodies_);
 		}
-		//B2Vec2::
-		// static b2Joint* weldJointTieLoop(b2World* world, std::vector<b2Body*> bodies) {
 		 break;
 		default:break;
 	}
@@ -171,10 +203,11 @@ bool Object::generation(touch_t touch, float tie_loop_range) {
 
 // オブジェクトが生存可能エリアを出たらオブジェクトを消滅させる
 bool Object::judgeAreaOut(Frame alive_area) {
-	if(IsEmpty(bodies_)) {
+	// ボディが存在しないか、エリア外でも生存させるなら処理しない
+	if(IsEmpty(bodies_) || setting_.area_out_alive) {
 		return false;
 	}
-	// 全てのボディの頂点を判定して全てがエリア外に出ていたら消去＆return true
+	// 全てのボディの頂点を判定して全てがエリア外に出ていたら消去
 	for(auto& itr: bodies_) {
 		if(!B2Body::areaOut(itr, alive_area)) {
 			return false;
@@ -204,24 +237,9 @@ void Object::linkCurrent(B2Joint::Type type) {
 	B2Joint::weldJointCurrent(world_, bodies_);
 }
 
-// 現在生成しているオブジェクトを描画する
-void Object::drawOverlay() {
-
-}
-
 // オブジェクトの描画
 void Object::draw() {
-
-}
-
-// オブジェクトのフレームの描画
-void Object::drawDebugFrame() {
-	ForEach(bodies_, [this](b2Body *item) { B2Body::drawFrame(item, world_scale_, color_); });
-}
-
-// 現在生成しているオブジェクトのフレームを描画する
-void Object::drawDebugFrameOverlay() {
-	switch(type_) {
+	switch(setting_.type) {
 		case kRectangle: 
 		case kFillRectangle:
 		// startが始点、endが終点
@@ -235,7 +253,60 @@ void Object::drawDebugFrameOverlay() {
 		// 先にセンターを作成する。その後に８角形以下の図形を繋げて作成する
 		break;
 		case kLinkBoard:
-		ForEach(bodies_, [this](b2Body *item) { B2Body::drawFrame(item, world_scale_, color_); });
+		drawLinkBoard(this);
+		 break;
+		default:
+
+		break;
+	}
+}
+
+// 現在生成しているオブジェクトを描画する
+void Object::drawEditing() {
+	switch(setting_.type) {
+		case kRectangle: 
+		case kFillRectangle:
+		// startが始点、endが終点
+		break;
+		case kCircle:
+		case kFillCircle:
+		// startが円の中心、endで半径を決定する
+		break;
+		case kPolygon:
+		case kFillPolygon: 
+		// 先にセンターを作成する。その後に８角形以下の図形を繋げて作成する
+		break;
+		case kLinkBoard:
+		drawEditingLinkBoard(this);
+		 break;
+		default:
+
+		break;
+	}
+}
+
+// オブジェクトのフレームの描画
+void Object::drawDebugFrame() {
+	ForEach(bodies_, [this](b2Body *item) { B2Body::drawFrame(item, world_scale_, setting_.color); });
+}
+
+// 現在生成しているオブジェクトのフレームを描画する
+void Object::drawEditingDebugFrame() {
+	switch(setting_.type) {
+		case kRectangle: 
+		case kFillRectangle:
+		// startが始点、endが終点
+		break;
+		case kCircle:
+		case kFillCircle:
+		// startが円の中心、endで半径を決定する
+		break;
+		case kPolygon:
+		case kFillPolygon: 
+		// 先にセンターを作成する。その後に８角形以下の図形を繋げて作成する
+		break;
+		case kLinkBoard:
+		ForEach(bodies_, [this](b2Body *item) { B2Body::drawFrame(item, world_scale_, setting_.color); });
 		 break;
 		default:
 

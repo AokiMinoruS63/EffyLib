@@ -33,6 +33,8 @@ class PhysicusWorld {
 	std::vector<Physicus::Object *> objects_;
 	// 現在生成・操作を行なっているボディ
 	Physicus::Object* current_;
+	// オブジェクトの設定
+	Physicus::ObjectSetting current_setting_;
 	// オブジェクトが生存できるエリア
 	Physicus::Frame alive_area_;
 	// 数珠繋ぎにする距離
@@ -79,11 +81,10 @@ class PhysicusWorld {
 	 * 
 	 * @param touch 
 	 * @param type 
-	 * @param line_width 
 	 * @return true オブジェクトが生成
 	 * @return false オブジェクトが未生成
 	 */
-	bool touchCalc(touch_t touch, Physicus::Type type, float line_width = Physicus::Object::kDefaultLineWidth);
+	bool touchCalc(touch_t touch, Physicus::Type type);
 
 	/**
 	 * @brief オブジェクトを描画する

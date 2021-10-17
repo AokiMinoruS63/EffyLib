@@ -14,6 +14,7 @@
 
 #include "../../../OpenSource/Box2D/box2d/box2d.h"
 #include "../../../Utility/TypeExtensions/B2Vec2+Extensions.h"
+#include <vector>
 
 namespace Physicus {
 	// 演算処理に使用する矩形エリア
@@ -64,6 +65,23 @@ namespace Physicus {
 		 */
 		static Frame fromCircle(b2Vec2 center, float radius) {
 			return { b2Vec2(center.x - radius, center.y - radius), b2Vec2(center.x + radius, center.y + radius) };
+		}
+
+		/**
+		 * @brief 円から矩形の各頂点をstd::vectorで返す
+		 * 
+		 * @param center 
+		 * @param radius 
+		 * @return std::vector<b2Vec2> 
+		 */
+		static std::vector<b2Vec2> verticesFromCircle(b2Vec2 center, float radius) {
+			std::vector<b2Vec2> vertices;
+			const auto frame = fromCircle(center, radius);
+			vertices.push_back(b2Vec2(frame.start.x, frame.start.y));
+			vertices.push_back(b2Vec2(frame.end.x, frame.start.y));
+			vertices.push_back(b2Vec2(frame.start.x, frame.end.y));
+			vertices.push_back(b2Vec2(frame.end.x, frame.end.y));
+			return vertices;
 		}
 	};
 }

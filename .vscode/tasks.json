@@ -70,6 +70,7 @@
 				"build/b2_weld_joint.o",
 				"build/b2_wheel_joint.o",
 				// Component of EffyLib
+				"build/ComponentAssets.o",
                 "build/PhysicusObject.o",
 				"build/PhysicusLinkBoard.o",
 				"build/PhysicusWorld.o", 
@@ -176,6 +177,7 @@
 				"build/b2_weld_joint.o",
 				"build/b2_wheel_joint.o",
 				// Component of EffyLib
+				"build/ComponentAssets.o",
                 "build/PhysicusObject.o",
 				"build/PhysicusLinkBoard.o",
 				"build/PhysicusWorld.o", "build/PhysicusWorld+touch.o", "build/PhysicusWorld+sprite.o", 

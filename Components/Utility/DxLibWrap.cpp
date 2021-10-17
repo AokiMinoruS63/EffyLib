@@ -191,6 +191,17 @@ int drawModiGraph( int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y
     return DrawModiGraph(x1, y1, x2, y2, x3, y3, x4, y4, GrHandle, TransFlag);
 }
 
+// メモリに読みこんだグラフィックの自由変形描画(float)
+int drawModiGraphF( float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4, int GrHandle , int TransFlag, int GlobalPos) {
+	if (GlobalPos == FALSE) {
+        setScreenPosToGlobal(&x1, &y1);
+        setScreenPosToGlobal(&x2, &y2);
+        setScreenPosToGlobal(&x3, &y3);
+        setScreenPosToGlobal(&x4, &y4);
+    }
+    return DrawModiGraphF(x1, y1, x2, y2, x3, y3, x4, y4, GrHandle, TransFlag);
+}
+
 // グラフィックの指定矩形部分のみを描画
 int drawRectGraph( int DestX, int DestY, int SrcX, int SrcY, int Width, int Height, 
                     int GraphHandle, int TransFlag, int TurnFlag, int GlobalPos, 

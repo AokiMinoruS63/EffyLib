@@ -342,6 +342,25 @@ int drawModiGraph( int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y
                     int GrHandle , int TransFlag, int GlobalPos = FALSE);
 
 /**
+ * @brief メモリに読みこんだグラフィックの自由変形描画
+ * 
+ * @param x1 左上の頂点のX座標
+ * @param y1 左上の頂点のY座標
+ * @param x2 右上の頂点のX座標
+ * @param y2 右上の頂点のY座標
+ * @param x3 右下の頂点のX座標
+ * @param y3 右下の頂点のY座標
+ * @param x4 左下の頂点のX座標
+ * @param y4 左下の頂点のY座標
+ * @param GrHandle 描画するグラフィックのハンドル
+ * @param TransFlag 画像の透明度を有効にするかどうか( TRUE：有効にする　FALSE：無効にする )
+ * @param GlobalPos パーティションを考慮したグローバル座標で描画するか、のフラグ。TRUEでグローバル座標描画
+ * @return int 0: 成功、-1: エラー発生
+ */
+int drawModiGraphF( float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4, 
+                    int GrHandle , int TransFlag, int GlobalPos = FALSE);
+
+/**
  * @brief グラフィックの指定矩形部分のみを描画
  * 
  * @param DestX グラフィックを描画するX座標
@@ -372,6 +391,6 @@ int drawRectGraph( int DestX, int DestY, int SrcX, int SrcY, int Width, int Heig
  * @param GlobalPos パーティションを考慮したグローバル座標で描画するか、のフラグ。TRUEでグローバル座標描画
  * @return int 0: 成功、-1: エラー発生
  */
-int drawPolygon2D(DxLib::VERTEX2D *VertexArray, int PolygonNum, int GrHandle, int TransFlag, int GlobalPos = FALSE);
+int drawPolygon2D(DxLib::VERTEX2D* VertexArray, int PolygonNum, int GrHandle, int TransFlag, int GlobalPos = FALSE);
 
 #endif

@@ -13,7 +13,9 @@
 #define B2VEC2_EXTENSION_H
 
 #include "Float+Extensions.h"
+#include "Array+Extensions.h"
 #include "../../OpenSource/Box2D/box2d/b2_math.h"
+#include "../../Utility/DxLibWrap.h"
 #include "../../Touch/TouchData.h"
 #include <cmath>
 #include <vector>
@@ -323,6 +325,70 @@ namespace B2Vec2 {
 	 */
 	static float angle(b2Vec2 start, b2Vec2 end) {
 		return atan2(start.y - end.y, start.x - end.x);
+	}
+
+	/**
+	 * @brief DxLib::VECTORに変換
+	 * 
+	 * @param vec 
+	 * @return DxLib::VECTOR 
+	 */
+	static DxLib::VECTOR toDxLibVector(b2Vec2 vec) {
+		DxLib::VECTOR vector;
+		vector.x = vec.x;
+		vector.y = vec.y;
+		vector.z = 0.0;
+		return vector;
+	}
+
+	/**
+	 * @brief DxLibの矩形の頂点に変換する
+	 * 
+	 * @param vertices 
+	 * @param color 
+	 * @return std::vector<DxLib::VERTEX2D> 
+	 */
+	static std::vector<DxLib::VERTEX2D> toDxLibRectVertices(std::vector<b2Vec2> vertices, int color) {
+		const int max = 6;
+		DxLib::VERTEX2D vecs[max];
+		int r, g, b;
+		DxLib::GetColor2(color, &r, &g, &b);
+		// UV
+		vecs[0].u = 0.0;
+		vecs[0].v = 0.0;
+		vecs[1].u = 1.0;
+		vecs[1].v = 0.0;
+		vecs[2].u = 0.0;
+		vecs[2].v = 1.0;
+		vecs[3].u = 1.0;
+		vecs[3].v = 1.0;
+		vecs[4].u = 0.0;
+		vecs[4].v = 1.0;
+		vecs[5].u = 1.0;
+		vecs[5].v = 0.0;
+		// rhw
+		vecs[0].rhw = 1.0;
+		vecs[1].rhw = 1.0;
+		vecs[2].rhw = 1.0;
+		vecs[3].rhw = 1.0;
+		vecs[4].rhw = 1.0;
+		vecs[5].rhw = 1.0;
+		// dif
+		for(int i = 0; i < max; i++) {
+			vecs[i].dif.r = r;
+			vecs[i].dif.g = g;
+			vecs[i].dif.b = b;
+			vecs[i].dif.a = 1.0;
+		}
+		// pos
+		vecs[0].pos = toDxLibVector(vertices.at(0));
+		vecs[1].pos = toDxLibVector(vertices.at(1));
+		vecs[2].pos = toDxLibVector(vertices.at(2));
+		vecs[3].pos = toDxLibVector(vertices.at(3));
+		vecs[4].pos = toDxLibVector(vertices.at(2));
+		vecs[5].pos = toDxLibVector(vertices.at(1));
+		
+		return Array::toVector(vecs, 6);
 	}
 }
 

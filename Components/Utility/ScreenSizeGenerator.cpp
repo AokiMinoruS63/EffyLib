@@ -90,6 +90,16 @@ void setScreenPosToGlobal(int *x, int *y) {
     #endif
 }
 
+// ローカルポジションからパーティションの入ったグローバルポジションへの変換
+void setScreenPosToGlobal(float *x, float *y) {
+    #ifdef EMSCRIPTEN
+    // 幅のパーティションのみ加算
+    *x += (float)kBrowserPertisionWidthHalf;
+    #else
+    // TODO: Android,iOSはパーティションがある場合がある
+    #endif
+}
+
 #ifdef EMSCRIPTEN
 /**
  * @brief 伸び縮みしているブラウザの幅の現在の比率を返す

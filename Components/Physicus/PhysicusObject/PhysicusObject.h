@@ -20,6 +20,7 @@
 #include "../../Utility/TypeExtensions.h"
 #include "../PhysicusWorld/Frame/PhysicusWorldFrame.h"
 #include "Constant/PhysicusConstant.h"
+#include "Setting/PhysicusObjectSetting.h"
 
 namespace Physicus {
 
@@ -27,10 +28,6 @@ namespace Physicus {
 	class Object {
 		// MARK: - 定数
 		public:
-		// 線のデフォルトの幅
-		constexpr static float kDefaultLineWidth = 10.0;
-		// 線に使用する画像
-		static const int kLineImgNum = 3;
 
 		// MARK: - 変数
 		private:
@@ -38,22 +35,14 @@ namespace Physicus {
 		std::vector<b2Body *> bodies_;
 		// 演算を行うワールド
 		b2World* world_;
-		// 線の太さ
-		float line_width_;
-		// 線の軌跡用の画像
-		int line_img_[kLineImgNum];
-		// 線の色
-		int color_;
-		// 回転しないようにするなら**true**
-		bool rotate_fix_;
-		// オブジェクトのタイプ
-		Type type_;
-		// スケール
-		float world_scale_;
 		// タッチの軌跡
 		std::vector<b2Vec2> locus_;
-		// エリアアウトしても生存するなら**true**
-		bool area_out_alive_;
+		// 拡大率
+		float world_scale_;
+		// オブジェクトの設定
+		ObjectSetting setting_;
+		// ボディの頂点の順番変更フラグ（Box２D側で頂点の順番が調整されてしまうため、ここに保存）
+		std::vector<B2Body::VerticesChange> bodies_vertices_change_;
 
 		// MARK: - コンストラクタ・デストラクタ
 		public:
@@ -64,12 +53,19 @@ namespace Physicus {
 		 * @param type オブジェクトの種類
 		 * @param world 演算を行うワールド
 		 * @param scale ワールドの拡大率
-		 * @param line_width 線がある場合の線の幅
+		 * @param setting オブジェクトの設定
 		 */
-		Object(touch_t touch, Type type, b2World* world, float scale, float line_width);
+		Object(touch_t touch, Type type, b2World* world, float scale, ObjectSetting setting);
 		~Object();
 
 		// MARK: - Getter, Setter
+
+		/**
+		 * @brief 演算ワールドのスケールを取得する
+		 * 
+		 * @return float 
+		 */
+		float getWorldScale();
 
 		/**
 		 * @brief 物理演算のBody配列を取得する
@@ -93,6 +89,27 @@ namespace Physicus {
 		std::vector<b2Vec2> getLocus();
 
 		/**
+		 * @brief ボディvectorの角度の変更フラグを返す
+		 * 
+		 * @return std::vector<bool> 
+		 */
+		std::vector<B2Body::VerticesChange> getBodiesVerticesChange();
+
+		/**
+		 * @brief ボディvectorのBox2D頂点挿入時の頂点の順番変更フラグを追加する
+		 * 
+		 * @param bodies_vertices_change
+		 */
+		void appendBodiesVerticesChange(B2Body::VerticesChange bodies_vertices_change);
+
+		/**
+		 * @brief ボディvectorのBox2D頂点挿入時の頂点の順番変更フラグを取得する
+		 * 
+		 * @return ObjectSetting 
+		 */
+		ObjectSetting getSetting();
+
+		/**
 		 * @brief 線の太さを取得する
 		 * 
 		 * @return float 
@@ -107,17 +124,40 @@ namespace Physicus {
 		void setLineWidth(float width);
 
 		/**
+		 * @brief 線の色を取得する
+		 * 
+		 * @return int 
+		 */
+		int getColor();
+
+		/**
+		 * @brief 線の色を設定する
+		 * 
+		 * @param color 
+		 */
+		void setColor(int color);
+
+		/**
 		 * @brief 線の画像を取得する
 		 * 
-		 * @return int* 
+		 * @return std::vector<int> 
 		 */
-		int* getLineImg();
+		std::vector<int> getLineImages();
+
 		/**
-		 * @brief 線の画像をセットする
+		 * @brief std::vectorから線の画像をセットする
 		 * 
-		 * @param img 
+		 * @param images 画像ハンドル
 		 */
-		void setLineImg(int img[kLineImgNum]);
+		void setLineImages(std::vector<int> images);
+
+		/**
+		 * @brief int配列から線の画像をセットする
+		 * 
+		 * @param images 画像ハンドル
+		 * @param size 配列の要素数
+		 */
+		void setLineImages(int* images, int size);
 
 		/**
 		 * @brief オブジェクトの回転がロックされているかどうかを取得する
@@ -201,7 +241,7 @@ namespace Physicus {
 		 * @brief 現在生成しているオブジェクトのボーンを描画する
 		 * 
 		 */
-		void drawOverlay();
+		void drawEditing();
 
 		/**
 		 * @brief オブジェクトの描画
@@ -219,7 +259,7 @@ namespace Physicus {
 		 * @brief 現在生成しているオブジェクトのフレームを描画する
 		 * 
 		 */
-		void drawDebugFrameOverlay();
+		void drawEditingDebugFrame();
 
 		// TODO: マウスドラッグ中でもボディが生成されるようにする（ただし、ドラッグ中は演算を行わないでリリースされた時に演算を開始させる）
 		// TODO: この仕様も相まって前回のボディと前回のボディの終点座標と終点右と終点左の座標が必要

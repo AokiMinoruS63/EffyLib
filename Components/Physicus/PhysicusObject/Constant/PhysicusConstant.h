@@ -13,11 +13,15 @@
 #define PHYSICUS_CONSTANT_H
 
 namespace Physicus {
-	/**
-	 * @brief 物理演算の定数
-	 * 
-	 */
 	namespace Constant {
+		/**
+		 * @brief オブジェクト共通の定数
+		 * 
+		 */
+		namespace Object {
+			// 線のデフォルトの幅
+			constexpr static float kDefaultLineWidth = 10.0;
+		}
 		/**
 		 * @brief 数珠繋ぎのオブジェクトの定数
 		 * 

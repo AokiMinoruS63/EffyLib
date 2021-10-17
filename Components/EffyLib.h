@@ -12,6 +12,7 @@
 #ifndef EFFY_LIB_H
 #define EFFY_LIB_H
 
+#include "Assets/ComponentAssets.h"
 #include "BMFont/BMFontMgr.h"
 #include "Physicus/Physicus.h"
 #include "Sprite/Sprite.h"

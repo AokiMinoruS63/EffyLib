@@ -54,6 +54,8 @@ void MainContent::run() {
 		int CircleColor = ( touch.status != TouchStatus::kNoTouch && touch.status != TouchStatus::kJustRelease) ? Color::kYellow : Color::kRed;
 		drawCircle(touch.x, touch.y, 5, CircleColor);
 	}
+	// オブジェクトの描画
+	world_->draw();
 	// ボーンの描画
 	world_->drawDebugFrame();
 
