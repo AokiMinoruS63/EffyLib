@@ -57,7 +57,7 @@ void MainContent::run() {
 	// オブジェクトの描画
 	world_->draw();
 	// ボーンの描画
-	world_->drawDebugFrame();
+	//world_->drawDebugFrame();
 
 	ScreenFlip();
 }

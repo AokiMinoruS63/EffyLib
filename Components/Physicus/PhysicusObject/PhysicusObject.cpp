@@ -237,6 +237,26 @@ void Object::linkCurrent(B2Joint::Type type) {
 	B2Joint::weldJointCurrent(world_, bodies_);
 }
 
+// 軌跡のフレームを追加する
+void Object::appendLocusFrame(Physicus::Frame frame) {
+	locus_frame_log_.push_back(frame);
+}
+
+// 軌跡のフレームの末尾を削除する
+void Object::removeLocusFrame() {
+	if(!IsEmpty(locus_frame_log_)) {
+		locus_frame_log_.pop_back();
+	}
+}
+/**
+ * @brief 軌跡のフレームを取得する
+ * 
+ * @return std::vector<Physicus::Frame> 
+ */
+std::vector<Physicus::Frame> Object::getLocusFrames() {
+	return locus_frame_log_;
+}
+
 // オブジェクトの描画
 void Object::draw() {
 	switch(setting_.type) {

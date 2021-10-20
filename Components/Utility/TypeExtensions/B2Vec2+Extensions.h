@@ -23,6 +23,8 @@
 namespace B2Vec2 {
 	// 頂点作成の追加が可能な最低限の距離。ジョイント繋がりの強さに直結する
 	static const float kCreateVertexDistance = 3.0;
+	// 半分
+	static const b2Vec2 kHalf = b2Vec2(0.5, 0.5);
 
 	/**
 	 * @brief 列の位置
@@ -33,6 +35,30 @@ namespace B2Vec2 {
 		kLeading,
 		kTrailing
 	};
+
+	/**
+	 * @brief 交点があるかどうか
+	 * 
+	 */
+	enum class Intersect {
+		// 平行なため計算が出来ない
+		kImpossibleCalc,
+		// 交点が存在する
+		kIntersection,
+		// 交点が存在しない
+		kNoIntersection
+	};
+
+	/**
+	 * @brief 内積を求める
+	 * 
+	 * @param vl 
+	 * @param vr 
+	 * @return float 
+	 */
+	static float innerProduct(b2Vec2& vl, b2Vec2& vr) {
+		return vl.x * vr.x + vl.y * vr.y;
+	}
 
 	/**
 	 * @brief ２つのB2Vecの中間地点を返す
@@ -175,6 +201,17 @@ namespace B2Vec2 {
 	}
 
 	/**
+	 * @brief ２つの頂点に掛け算をした結果を返す
+	 * 
+	 * @param pos1 
+	 * @param pos2 
+	 * @return b2Vec2 
+	 */
+	static b2Vec2 multiplication(b2Vec2 pos1, b2Vec2 pos2) {
+		return b2Vec2(pos1.x * pos2.x, pos1.y * pos2.y);
+	}
+
+	/**
 	 * @brief ベクトルをfloatで割る
 	 * 
 	 * @param pos 
@@ -275,6 +312,7 @@ namespace B2Vec2 {
 	static void recentLocus(std::vector<b2Vec2> locusList, b2Vec2* current, b2Vec2* last, b2Vec2* lastLast) {
 		*current = locusList.back();
 		*last = locusList.size() < 2 ? *current : locusList.at(locusList.size() - 2);
+		// TODO: lastLastの座標が折り返した時におかしくなるので要修正
 		*lastLast = locusList.size() < 3 ? sub(*current, *last) : locusList.at(locusList.size() - 3);
 	}
 
@@ -325,6 +363,80 @@ namespace B2Vec2 {
 	 */
 	static float angle(b2Vec2 start, b2Vec2 end) {
 		return atan2(start.y - end.y, start.x - end.x);
+	}
+
+	/**
+	 * @brief 単位ベクトルを返す
+	 * 
+	 * @param vec 
+	 * @return b2Vec2 
+	 */
+	static b2Vec2 unitVector(b2Vec2 vec) {
+		float length = powf((vec.x * vec.x) + (vec.y + vec.y), 0.5);
+		if(length == 0) {
+			return vec;
+		}
+		return division(vec, length);
+	}
+
+	/**
+	 * @brief 交差の大きさを得る
+	 * 
+	 * @param posA 
+	 * @param posB 
+	 * @return float 
+	 */
+	static float crossValue(b2Vec2 posA, b2Vec2 posB) {
+		return posA.x * posB.y - posA.y * posB.x;
+	}
+
+	/**
+	 * @brief 二つの直線が交差するか判定する
+	 * 
+	 * @param result 交差する頂点
+	 * @param posA 線分１の始点
+	 * @param posB 線分１の終点
+	 * @param posC 線分２の始点
+	 * @param posD 線分２の終点
+	 * @return Intersect 
+	 */
+	static Intersect intersectLines(b2Vec2* result, b2Vec2 posA, b2Vec2 posB, b2Vec2 posC, b2Vec2 posD) {
+		const b2Vec2 v = sub(posC, posA);
+		b2Vec2 v1 = sub(posB, posA);
+		const b2Vec2 v2 = sub(posD, posC);
+		const float cp = crossValue(v1, v2);
+		if(cp == 0) {
+			return Intersect::kImpossibleCalc;
+		}
+		const float cp1 = crossValue(v, v1);
+		const float cp2 = crossValue(v, v2);
+		float t1 = cp2 / cp;
+		const float t2 = cp1 / cp;
+		const float s = 0.00001;
+		if(t1 + s < 0 || t1 - s > 1.0 || t2 + s < 0 || t2 - s > 1) {
+			return Intersect::kNoIntersection;
+		}
+		applyScale(&v1, t1);
+		if(result != NULL) {
+			*result =  add(posA, v1);
+		}
+		return Intersect::kIntersection;
+	}
+
+	/**
+	 * @brief ３つの制御点のベジェの座標を取得する
+	 * 
+	 * @param pos 制御点
+	 * @param t 進行率(0.0 〜 1.0)
+	 * @return b2Vec2 
+	 */
+	static b2Vec2 bezieValue(b2Vec2 pos[3], float t) {
+		const float x[3] = { pos[0].x, pos[1].x, pos[2].x };
+		const float y[3] = { pos[0].y, pos[1].y, pos[2].y };
+		return b2Vec2(
+			Float::bezieValue(x, t),
+			Float::bezieValue(y, t)
+		);
 	}
 
 	/**

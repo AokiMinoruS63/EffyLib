@@ -31,6 +31,7 @@
 #endif
 #include <cstdlib>
 #include <utility>
+#include "../OpenSource/Box2D/box2d/box2d.h"
 
 /* 読み込み、マウス、タッチ系 */
 
@@ -359,6 +360,35 @@ int drawModiGraph( int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y
  */
 int drawModiGraphF( float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4, 
                     int GrHandle , int TransFlag, int GlobalPos = FALSE);
+
+/**
+ * @brief メモリに読みこんだグラフィックの自由変形描画
+ * 
+ * @param pos1 
+ * @param pos2 
+ * @param pos3 
+ * @param pos4 
+ * @param GrHandle 描画するグラフィックのハンドル
+ * @param TransFlag 画像の透明度を有効にするかどうか( TRUE：有効にする　FALSE：無効にする )
+ * @param GlobalPos パーティションを考慮したグローバル座標で描画するか、のフラグ。TRUEでグローバル座標描画
+ * @return int 0: 成功、-1: エラー発生
+ */
+int drawModiGraphF( b2Vec2 pos1, b2Vec2 pos2, b2Vec2 pos3, b2Vec2 pos4, 
+					int GrHandle , int TransFlag, int GlobalPos = FALSE);
+
+/**
+ * @brief 制御点が３つのベジェ曲線を画像で描画する
+ * 
+ * @param left 左側の制御点
+ * @param right 右側の制御点
+ * @param roughness 粒度（1.0が最大）
+ * @param images 描画に使用する画像
+ * @param loop ループさせるなら**true**
+ * @param edgeDraw imagesの最初の画像と最後の画像を使用しないなら**true**
+ * @param GlobalPos パーティションを考慮したグローバル座標で描画するか、のフラグ。TRUEでグローバル座標描画
+ * @return int 
+ */
+int drawBezie(b2Vec2 left[3], b2Vec2 right[3], float roughness, std::vector<int> images, bool loop, bool edgeDraw, int GlobalPos = FALSE);
 
 /**
  * @brief グラフィックの指定矩形部分のみを描画

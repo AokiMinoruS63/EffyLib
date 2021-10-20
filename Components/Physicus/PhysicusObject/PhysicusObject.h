@@ -21,6 +21,7 @@
 #include "../PhysicusWorld/Frame/PhysicusWorldFrame.h"
 #include "Constant/PhysicusConstant.h"
 #include "Setting/PhysicusObjectSetting.h"
+#include "../PhysicusWorld/Frame/PhysicusWorldFrame.h"
 
 namespace Physicus {
 
@@ -37,6 +38,8 @@ namespace Physicus {
 		b2World* world_;
 		// タッチの軌跡
 		std::vector<b2Vec2> locus_;
+		// 軌跡の線のログ
+		std::vector<Physicus::Frame> locus_frame_log_;
 		// 拡大率
 		float world_scale_;
 		// オブジェクトの設定
@@ -234,6 +237,27 @@ namespace Physicus {
 		 * @param type ジョイントのタイプ
 		 */
 		void linkCurrent(B2Joint::Type type);
+
+		// MARK: - 軌跡フレームログ操作
+
+		/**
+		 * @brief 軌跡のフレームを追加する
+		 * 
+		 * @param frame 
+		 */
+		void appendLocusFrame(Physicus::Frame frame);
+
+		/**
+		 * @brief 軌跡のフレームの後ろを削除する
+		 * 
+		 */
+		void removeLocusFrame();
+		/**
+		 * @brief 軌跡のフレームを取得する
+		 * 
+		 * @return std::vector<Physicus::Frame> 
+		 */
+		std::vector<Physicus::Frame> getLocusFrames();
 
 		// MARK: - オブジェクトの描画
 

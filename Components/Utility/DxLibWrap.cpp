@@ -1,4 +1,20 @@
+/**
+ * @file DxLibWrap.cpp
+ * @author AokiMinoru (personal-git@aokiminoru.work)
+ * @brief 
+ * @version 0.1
+ * @date 2021-10-20
+ * 
+ * @copyright Copyright (c) 2021
+ * 
+ */
+
 #include "DxLibWrap.h"
+#include <vector>
+#include "TypeExtensions/Int+Extensions.h"
+#include "TypeExtensions/Float+Extensions.h"
+#include "TypeExtensions/B2Vec2+Extensions.h"
+#include "TypeExtensions/VectorOrArray+Extension.h"
 
 // バイナリをバッファに丸ごと読み込む
 void* loadToBuffer(const char* filePath) {
@@ -200,6 +216,53 @@ int drawModiGraphF( float x1, float y1, float x2, float y2, float x3, float y3, 
         setScreenPosToGlobal(&x4, &y4);
     }
     return DrawModiGraphF(x1, y1, x2, y2, x3, y3, x4, y4, GrHandle, TransFlag);
+}
+
+// メモリに読みこんだグラフィックの自由変形描画(float,引数がb2Vec2)
+int drawModiGraphF( b2Vec2 pos1, b2Vec2 pos2, b2Vec2 pos3, b2Vec2 pos4, int GrHandle , int TransFlag, int GlobalPos) {
+	return drawModiGraphF(pos1.x, pos1.y, pos2.x, pos2.y, pos3.x, pos3.y, pos4.x, pos4.y, GrHandle, TransFlag, GlobalPos);
+}
+
+// 制御点が３つのベジェ曲線を画像で描画する
+int drawBezie(b2Vec2 left[3], b2Vec2 right[3], float roughness, std::vector<int> images, bool loop, bool edgeDraw, int GlobalPos) {
+	float t = loop ? 0.0 : 1.0 - roughness;
+	const int imgCountMin = edgeDraw || IsEmpty(images) ? 0 : 1;
+	const int imgCountMax = Int::clamp(edgeDraw ? images.size() - 1 : images.size() - 2, 0, images.size());
+	int imgCount = loop ? imgCountMin : imgCountMax;
+	float next;
+	// 左の始点、終点、右の始点、終点
+	b2Vec2 sl, gl, sr, gr;
+	roughness = Float::clamp(roughness, 0.0, 1.0);
+	next = loop ? Float::clamp(t + roughness, 0.0, 1.0) : 1.0;
+	int returnNum = 0;
+	clsDx();
+	while(t > 0.0 - Float::kMinima && next < 1.0 + Float::kMinima) {
+		sl = B2Vec2::bezieValue(left, t);
+		sr = B2Vec2::bezieValue(right, t);
+		gl = B2Vec2::bezieValue(left, next);
+		gr = B2Vec2::bezieValue(right, next);
+		
+		returnNum = drawModiGraphF(sl, sr, gr, gl, images.at(1), TRUE, GlobalPos);
+		// ループならカウントして描画
+		if(loop) {
+			imgCount++;
+			t += roughness;
+			Float::clamp(t, 0.0, 1.0);
+			next += roughness;
+			if(imgCount > imgCountMax) {
+				imgCount = imgCountMin;
+			}
+		} else {
+			// ループでなければ逆側から描画するのでカウントを減らす
+			imgCount--;
+			t -= roughness;
+			next -= roughness;
+			if(imgCount < imgCountMin) {
+				break;
+			}
+		}
+	}
+	return returnNum;
 }
 
 // グラフィックの指定矩形部分のみを描画
