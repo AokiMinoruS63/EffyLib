@@ -62,7 +62,7 @@ namespace B2Body {
 			{
 				b2PolygonShape* shape = (b2PolygonShape*)fixture->GetShape();
 				for(int i = 0; i < shape->m_count; i++) {
-					b2Vec2 pos = B2Vec2::add(position, shape->m_vertices[i]);
+					b2Vec2 pos = B2Vec2::add(position, B2Vec2::rotate(shape->m_vertices[i], body->GetAngle()));
 					B2Vec2::applyScale(&pos, scale);
 					vertices.push_back(pos);
 				}
