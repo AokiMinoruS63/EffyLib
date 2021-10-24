@@ -18,6 +18,43 @@ namespace Float {
 
 	// floatの極小値
 	static const float kMinima = FLT_MIN;
+	// 最小値
+	static const float kMin = 0.0;
+	// 中間値
+	static const float kHalf = 0.5;
+	// 最大値
+	static const float kMax = 1.0;
+
+	namespace Angle {
+		// 左上角度
+		static const float kLeftTop = DX_PI_F / 3.0;
+		// 上角度
+		static const float kTop = DX_PI_F / 2.0;
+		// 右上角度
+		static const float kRightTop = DX_PI_F * 2.0 / 3.0;
+		// 左角度
+		static const float kLeft = 0.0;
+		// 右角度
+		static const float kRight = DX_PI_F;
+		// 左下角度
+		static const float kLeftBottom = -DX_PI_F / 3.0;
+		// 下角度
+		static const float kBottom = -DX_PI_F / 2.0;
+		// 右下角度
+		static const float kRightBottom = -DX_PI_F * 2.0  / 3.0;
+	}
+
+	/**
+	 * @brief ２つのfloatの間の進行度に応じた値を返す
+	 * 
+	 * @param s 始点
+	 * @param g 終点
+	 * @param rate 
+	 * @return float 
+	 */
+	static float between(float s, float g, float rate) {
+		return s + (g - s) * rate;
+	}
 
 	/**
 	 * @brief 2つのfloatの中間地点を返す
@@ -27,7 +64,7 @@ namespace Float {
 	 * @return float 
 	 */
 	static float halfWay(float s, float g) {
-		return s + (g - s) * 0.5;
+		return between(s, g, kHalf);
 	}
 
 	/**
@@ -59,9 +96,9 @@ namespace Float {
 	 * @return float 
 	 */
 	static float angleDifference(float angleA, float angleB) {
-		if(angleA < DX_PI_F * -0.5 && angleB > DX_PI_F * 0.5) {
+		if(angleA < DX_PI_F * -kHalf && angleB > DX_PI_F * kHalf) {
 			angleA += DX_PI_F * 2.0;
-		} else if(angleB < DX_PI_F * -0.5 && angleA > DX_PI_F * 0.5) {
+		} else if(angleB < DX_PI_F * -kHalf && angleA > DX_PI_F * kHalf) {
 			angleB += DX_PI_F * 2.0;
 		}
 		float dif = angleB - angleA;
@@ -93,9 +130,21 @@ namespace Float {
 	 * @return float 
 	 */
 	static float bezieValue(const float value[3], float t) {
-		t = clamp(t, 0.0, 1.0);
-		const float tt = (1.0 - t);
+		t = clamp(t, kMin, kMax);
+		const float tt = (kMax - t);
 		return value[0] * tt * tt + value[1] * 2.0 * t * tt +  value[2] * t * t;
+	}
+
+	/**
+	 * @brief ２つの値を交換する
+	 * 
+	 * @param val1 
+	 * @param val2 
+	 */
+	static void swap(float* val1, float* val2) {
+		const float tmp = *val1;
+		*val1 = *val2;
+		*val2 = tmp;
 	}
 }
 

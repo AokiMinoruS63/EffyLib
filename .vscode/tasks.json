@@ -72,6 +72,7 @@
 				// Component of EffyLib
 				"build/ComponentAssets.o",
                 "build/PhysicusObject.o",
+				"build/PhysicusRectangle.o",
 				"build/PhysicusLinkBoard.o",
 				"build/PhysicusWorld.o", 
 				"build/ScreenSizeGenerator.o", 
@@ -179,6 +180,7 @@
 				// Component of EffyLib
 				"build/ComponentAssets.o",
                 "build/PhysicusObject.o",
+				"build/PhysicusRectangle.o",
 				"build/PhysicusLinkBoard.o",
 				"build/PhysicusWorld.o", "build/PhysicusWorld+touch.o", "build/PhysicusWorld+sprite.o", 
 				"build/ScreenSizeGenerator.o", 

@@ -21,6 +21,8 @@ namespace Physicus {
 		namespace Object {
 			// 線のデフォルトの幅
 			constexpr static float kDefaultLineWidth = 10.0;
+			// ベジェ曲線の補完係数の初期値(0に近いほど多く行う)
+			constexpr static float kBezieRoughness = 0.2;
 		}
 		/**
 		 * @brief 数珠繋ぎのオブジェクトの定数

@@ -78,6 +78,12 @@ do
 em++ "${file}" -c -o "../../../../build/${file%.*}.o" -O0 -std=c++17 -g4 -IDxLibForHTML5/include -IComponents -IComponents/Box2D/box2d
 done
 
+cd ../Rectangle
+for file in *.cpp
+do
+em++ "${file}" -c -o "../../../../build/${file%.*}.o" -O0 -std=c++17 -g4 -IDxLibForHTML5/include -IComponents -IComponents/Box2D/box2d
+done
+
 cd ../../../
 cd Sprite
 for file in *.cpp

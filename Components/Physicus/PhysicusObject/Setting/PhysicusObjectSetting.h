@@ -30,6 +30,10 @@ namespace Physicus {
 		bool rotate_fix;
 		// エリアアウトしても生存するなら**true**
 		bool area_out_alive;
+		// 角の尖り具合(1.0でそのまま、０で辺の中心から次の辺の中心までベジェ曲線で描画する)
+		float sharpness;
+		// ベジェの補完をどれだけ行うかの係数(0に近いほど多く行う。1が最大)
+		float roughness;
 
 		/**
 		 * @brief 初期化
@@ -41,11 +45,13 @@ namespace Physicus {
 		 * @param color 
 		 * @param rotate_fix 
 		 * @param area_out_alive 
+		 * @param sharp 
+		 * @param rough 
 		 * @return ObjectSetting 
 		 */
-		static ObjectSetting init(float world_scale, Type type, std::vector<int> line_images, float line_width = Constant::Object::kDefaultLineWidth, int color = Color::kWhite, bool rotate_fix = false, bool area_out_alive = false) {
+		static ObjectSetting init(float world_scale, Type type, std::vector<int> line_images, float line_width = Constant::Object::kDefaultLineWidth, int color = Color::kWhite, bool rotate_fix = false, bool area_out_alive = false, float sharp = Float::kMax, float rough = Constant::Object::kBezieRoughness) {
 			line_width *= world_scale;
-			return {type, line_width, line_images, color, rotate_fix, area_out_alive};
+			return {type, line_width, line_images, color, rotate_fix, area_out_alive, sharp, rough};
 		}
 
 		/**
@@ -59,15 +65,17 @@ namespace Physicus {
 		 * @param color 
 		 * @param rotate_fix 
 		 * @param area_out_alive 
+		 * @param sharp 
+		 * @param rough 
 		 * @return ObjectSetting 
 		 */
-		static ObjectSetting init(float world_scale, Type type, int* line_images, int line_images_size, float line_width = Constant::Object::kDefaultLineWidth, int color = Color::kWhite, bool rotate_fix = false, bool area_out_alive = false) {
+		static ObjectSetting init(float world_scale, Type type, int* line_images, int line_images_size, float line_width = Constant::Object::kDefaultLineWidth, int color = Color::kWhite, bool rotate_fix = false, bool area_out_alive = false, float sharp = Float::kMax, float rough = Constant::Object::kBezieRoughness) {
 			line_width *= world_scale;
 			std::vector<int> images;
 			for(int i = 0; i < line_images_size; i++) {
 				images.push_back(line_images[i]);
 			}
-			return {type, line_width, images, color, rotate_fix, area_out_alive};
+			return {type, line_width, images, color, rotate_fix, area_out_alive, sharp, rough};
 		}
 	};
 }

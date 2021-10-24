@@ -223,46 +223,75 @@ int drawModiGraphF( b2Vec2 pos1, b2Vec2 pos2, b2Vec2 pos3, b2Vec2 pos4, int GrHa
 	return drawModiGraphF(pos1.x, pos1.y, pos2.x, pos2.y, pos3.x, pos3.y, pos4.x, pos4.y, GrHandle, TransFlag, GlobalPos);
 }
 
+// 画像を連続して描画する時の画像ハンドルを返す
+int nextImageIndex(std::vector<int> images, int nowIndex, bool loop, bool edgeDraw) {
+	const int countMin = edgeDraw || IsEmpty(images) ? 0 : 1;
+	const int countMax = Int::clamp(edgeDraw ? images.size() - 1 : images.size() - 2, 0, images.size());
+	int index;
+	// 初期値
+	if(nowIndex == Array::kUnspecified) {
+		index = loop ? countMin : countMax;
+	} else {
+		index = Int::clamp(nowIndex, countMin, countMax);
+		if(loop) {
+			index++;
+			if(index > countMax) {
+				index = countMin;
+			}
+		} else {
+			index--;
+			if(index < 0) {
+				return -1;
+			}
+		}
+	}
+	return index;
+}
+
+// ベジェ曲線の次の進行率を返す
+float nextBezieAdvance(float nowAdvance, float roughness, bool loop, bool init) {
+	roughness = Float::clamp(roughness, 0.0, 1.0);
+	if(init) {
+		return loop ? 0.0 : 1.0 - roughness;
+	}
+	float t = loop ? nowAdvance + roughness : nowAdvance - roughness ;
+	return Float::clamp(t, 0.0, 1.0);
+}
+
 // 制御点が３つのベジェ曲線を画像で描画する
-int drawBezie(b2Vec2 left[3], b2Vec2 right[3], float roughness, std::vector<int> images, bool loop, bool edgeDraw, int GlobalPos) {
-	float t = loop ? 0.0 : 1.0 - roughness;
+int drawBezie(b2Vec2 left[3], b2Vec2 right[3], float roughness, std::vector<int> images, bool loop, bool edgeDraw, int firstIndex, int GlobalPos) {
+	float t = nextBezieAdvance(0.0, roughness, loop, true);
 	const int imgCountMin = edgeDraw || IsEmpty(images) ? 0 : 1;
 	const int imgCountMax = Int::clamp(edgeDraw ? images.size() - 1 : images.size() - 2, 0, images.size());
-	int imgCount = loop ? imgCountMin : imgCountMax;
+	int imgIndex = firstIndex == Array::kUnspecified ? nextImageIndex(images, Array::kUnspecified, loop, edgeDraw) : firstIndex;
 	float next;
+	bool end = false;
 	// 左の始点、終点、右の始点、終点
 	b2Vec2 sl, gl, sr, gr;
 	roughness = Float::clamp(roughness, 0.0, 1.0);
 	next = loop ? Float::clamp(t + roughness, 0.0, 1.0) : 1.0;
-	int returnNum = 0;
-	clsDx();
-	while(t > 0.0 - Float::kMinima && next < 1.0 + Float::kMinima) {
+	while(!end) {
 		sl = B2Vec2::bezieValue(left, t);
 		sr = B2Vec2::bezieValue(right, t);
 		gl = B2Vec2::bezieValue(left, next);
 		gr = B2Vec2::bezieValue(right, next);
 		
-		returnNum = drawModiGraphF(sl, sr, gr, gl, images.at(1), TRUE, GlobalPos);
-		// ループならカウントして描画
-		if(loop) {
-			imgCount++;
-			t += roughness;
-			Float::clamp(t, 0.0, 1.0);
-			next += roughness;
-			if(imgCount > imgCountMax) {
-				imgCount = imgCountMin;
-			}
-		} else {
-			// ループでなければ逆側から描画するのでカウントを減らす
-			imgCount--;
-			t -= roughness;
-			next -= roughness;
-			if(imgCount < imgCountMin) {
-				break;
-			}
+		drawModiGraphF(sl, sr, gr, gl, images.at(imgIndex), TRUE, GlobalPos);
+		// 次の画像ハンドルを決める
+		imgIndex = nextImageIndex(images, imgIndex, loop, edgeDraw);
+		// 根本まで来ていたら描画しない
+		if(!loop && imgIndex < imgCountMin) {
+			break;
 		}
+		// 最後まで描画したら終了する
+		if(t <= 0.0 - Float::kMinima || next >= 1.0 + Float::kMinima) {
+			end = true;
+		}
+		// 進行率を決める
+		t = nextBezieAdvance(t, roughness, loop);
+		next = nextBezieAdvance(t, roughness, loop);
 	}
-	return returnNum;
+	return imgIndex;
 }
 
 // グラフィックの指定矩形部分のみを描画

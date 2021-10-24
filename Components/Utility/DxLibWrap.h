@@ -377,6 +377,28 @@ int drawModiGraphF( b2Vec2 pos1, b2Vec2 pos2, b2Vec2 pos3, b2Vec2 pos4,
 					int GrHandle , int TransFlag, int GlobalPos = FALSE);
 
 /**
+ * @brief 画像を連続して描画する時の画像ハンドルを返す
+ * 
+ * @param images 
+ * @param nowIndex 
+ * @param loop 
+ * @param edgeDraw 
+ * @return int imageHandle
+ */
+int nextImageIndex(std::vector<int> images, int nowIndex, bool loop, bool edgeDraw);
+
+/**
+ * @brief ベジェ曲線の次の進行率を返す
+ * 
+ * @param nowAdvance 現在の進行率
+ * @param roughness どれだけ進行率動かすか
+ * @param loop ループなら**true**
+ * @param init 
+ * @return float 
+ */
+float nextBezieAdvance(float nowAdvance, float roughness, bool loop, bool init = false);
+
+/**
  * @brief 制御点が３つのベジェ曲線を画像で描画する
  * 
  * @param left 左側の制御点
@@ -385,10 +407,11 @@ int drawModiGraphF( b2Vec2 pos1, b2Vec2 pos2, b2Vec2 pos3, b2Vec2 pos4,
  * @param images 描画に使用する画像
  * @param loop ループさせるなら**true**
  * @param edgeDraw imagesの最初の画像と最後の画像を使用しないなら**true**
+ * @param firstIndex 最初のインデックス
  * @param GlobalPos パーティションを考慮したグローバル座標で描画するか、のフラグ。TRUEでグローバル座標描画
- * @return int 
+ * @return int 終了後のインデックス
  */
-int drawBezie(b2Vec2 left[3], b2Vec2 right[3], float roughness, std::vector<int> images, bool loop, bool edgeDraw, int GlobalPos = FALSE);
+int drawBezie(b2Vec2 left[3], b2Vec2 right[3], float roughness, std::vector<int> images, bool loop, bool edgeDraw, int firstIndex, int GlobalPos = FALSE);
 
 /**
  * @brief グラフィックの指定矩形部分のみを描画

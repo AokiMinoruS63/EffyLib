@@ -68,6 +68,7 @@ void PhysicusWorld::applySprite(Sprite* sprite) {
 // タッチによるオブジェクトの干渉（生成も含む）
 bool PhysicusWorld::touchCalc(touch_t touch, Type type) {
 	bool generate = false;
+	current_setting_.type = type;
 	// 生成開始
 	if(touch.status == TouchStatus::kJustTouch && current_ == NULL) {
 		current_ = new Object(touch, type, world_, world_scale_, current_setting_);

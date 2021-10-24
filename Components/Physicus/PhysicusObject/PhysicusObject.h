@@ -194,8 +194,72 @@ namespace Physicus {
 		 */
 		void setAwake(bool awake = true, int index = Array::kUnspecified);
 
-		// オブジェクトのタイプを返す
+		/**
+		 * @brief オブジェクトの角の尖り具合を取得する
+		 * 
+		 * @return float 
+		 */
+		float getSharpness();
+
+		/**
+		 * @brief オブジェクトの角の尖り具合をセットする
+		 * 
+		 * @param sharp 
+		 */
+		void setSharpness(float sharp);
+
+		/**
+		 * @brief ベジェ曲線の補完係数を取得する
+		 * 
+		 * @return float 
+		 */
+		float getRoughness();
+
+		/**
+		 * @brief ベジェ曲線の補完係数をセットする
+		 * 
+		 * @param roughness 
+		 */
+		void setRoughness(float roughness);
+
+		/**
+		 * @brief オブジェクトのタイプを返す
+		 * 
+		 * @return Type 
+		 */
 		Type getType();
+
+		/**
+		 * @brief オブジェクトのタイプが矩形なら**true**
+		 * 
+		 * @return true 
+		 * @return false 
+		 */
+		bool isRectangle();
+
+		/**
+		 * @brief オブジェクトのタイプが円なら**true**
+		 * 
+		 * @return true 
+		 * @return false 
+		 */
+		bool isCircle();
+
+		/**
+		 * @brief オブジェクトが多角形なら**true**
+		 * 
+		 * @return true 
+		 * @return false 
+		 */
+		bool isPolygon();
+
+		/**
+		 * @brief オブジェクトが連結している矩形なら**true**
+		 * 
+		 * @return true 
+		 * @return false 
+		 */
+		bool isLinkBoard();
 
 		// MARK: - オブジェクトの設定
 

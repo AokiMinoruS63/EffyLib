@@ -26,7 +26,7 @@ namespace Physicus {
 		kPolygon,
 		// 塗りつぶし多角形
 		kFillPolygon,
-		// 中身がスカスカな多角形
+		// 連結している矩形
 		kLinkBoard,
 	};
 }

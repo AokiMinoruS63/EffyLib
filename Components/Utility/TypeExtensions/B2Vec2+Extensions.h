@@ -85,6 +85,32 @@ namespace B2Vec2 {
 	}
 
 	/**
+	 * @brief ２つの座標の進行度に応じた座標を返す
+	 * 
+	 * @param sx 
+	 * @param sy 
+	 * @param gx 
+	 * @param gy 
+	 * @param rate 進行度
+	 * @return b2Vec2 
+	 */
+	static b2Vec2 between(float sx, float sy, float gx, float gy, float rate) {
+		return b2Vec2(Float::between(sx, gx, rate), Float::between(sy, gy, rate));
+	}
+
+	/**
+	 * @brief ２つの座標の進行度に応じた座標を返す
+	 * 
+	 * @param start 
+	 * @param end 
+	 * @param rate 進行度
+	 * @return b2Vec2 
+	 */
+	static b2Vec2 between(b2Vec2 start, b2Vec2 end, float rate) {
+		return between(start.x, start.y, end.x, end.y, rate);
+	}
+
+	/**
 	 * @brief ２つの座標の距離を返す
 	 * 
 	 * @param sx 
@@ -209,6 +235,17 @@ namespace B2Vec2 {
 	 */
 	static b2Vec2 multiplication(b2Vec2 pos1, b2Vec2 pos2) {
 		return b2Vec2(pos1.x * pos2.x, pos1.y * pos2.y);
+	}
+
+	/**
+	 * @brief 頂点に掛け算をした結果を返す
+	 * 
+	 * @param pos 
+	 * @param scale 
+	 * @return b2Vec2 
+	 */
+	static b2Vec2 multiplication(b2Vec2 pos, float scale) {
+		return b2Vec2(pos.x * scale, pos.y * scale);
 	}
 
 	/**
@@ -458,13 +495,13 @@ namespace B2Vec2 {
 	 * 
 	 * @param vertices 
 	 * @param color 
-	 * @return std::vector<DxLib::VERTEX2D> 
+	 * @return std::vector<VERTEX2D> 
 	 */
-	static std::vector<DxLib::VERTEX2D> toDxLibRectVertices(std::vector<b2Vec2> vertices, int color) {
+	static std::vector<VERTEX2D> toDxLibRectVertices(std::vector<b2Vec2> vertices, int color) {
 		const int max = 6;
-		DxLib::VERTEX2D vecs[max];
+		VERTEX2D vecs[max];
 		int r, g, b;
-		DxLib::GetColor2(color, &r, &g, &b);
+		GetColor2(color, &r, &g, &b);
 		// UV
 		vecs[0].u = 0.0;
 		vecs[0].v = 0.0;
@@ -501,6 +538,33 @@ namespace B2Vec2 {
 		vecs[5].pos = toDxLibVector(vertices.at(1));
 		
 		return Array::toVector(vecs, 6);
+	}
+
+	/**
+	 * @brief ２つの座標を交換する
+	 * 
+	 * @param pos1 
+	 * @param pos2 
+	 */
+	static void swap(b2Vec2* pos1, b2Vec2* pos2) {
+		const b2Vec2 tmp = *pos1;
+		*pos1 = *pos2;
+		*pos2 = tmp;
+	}
+
+	/**
+	 * @brief 矩形の始点と終点をセットする
+	 * 
+	 * @param start 
+	 * @param end 
+	 */
+	static void setStartEnd(b2Vec2* start, b2Vec2* end) {
+		if(start->x > end->x) {
+			Float::swap(&start->x, &end->x);
+		}
+		if(start->y > end->y) {
+			Float::swap(&start->y, &end->y);
+		}
 	}
 }
 

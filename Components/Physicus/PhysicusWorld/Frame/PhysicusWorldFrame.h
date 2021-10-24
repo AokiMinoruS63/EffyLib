@@ -75,13 +75,108 @@ namespace Physicus {
 		 * @return std::vector<b2Vec2> 
 		 */
 		static std::vector<b2Vec2> verticesFromCircle(b2Vec2 center, float radius) {
-			std::vector<b2Vec2> vertices;
+			std::vector<b2Vec2> vecs;
 			const auto frame = fromCircle(center, radius);
-			vertices.push_back(b2Vec2(frame.start.x, frame.start.y));
-			vertices.push_back(b2Vec2(frame.end.x, frame.start.y));
-			vertices.push_back(b2Vec2(frame.start.x, frame.end.y));
-			vertices.push_back(b2Vec2(frame.end.x, frame.end.y));
-			return vertices;
+			vecs.push_back(b2Vec2(frame.start.x, frame.start.y));
+			vecs.push_back(b2Vec2(frame.end.x, frame.start.y));
+			vecs.push_back(b2Vec2(frame.start.x, frame.end.y));
+			vecs.push_back(b2Vec2(frame.end.x, frame.end.y));
+			return vecs;
+		}
+
+		/**
+		 * @brief 左上座標
+		 * 
+		 * @return b2Vec2 
+		 */
+		b2Vec2 leftTop() {
+			return start;
+		}
+
+		/**
+		 * @brief 上座標
+		 * 
+		 * @return b2Vec2 
+		 */
+		b2Vec2 top() {
+			return b2Vec2(Float::halfWay(start.x, end.x), start.y);
+		}
+
+		/**
+		 * @brief 右上座標
+		 * 
+		 * @return b2Vec2 
+		 */
+		b2Vec2 rightTop() {
+			return b2Vec2(end.x, start.y);
+		}
+
+		/**
+		 * @brief 左座標
+		 * 
+		 * @return b2Vec2 
+		 */
+		b2Vec2 left() {
+			return b2Vec2(start.x, Float::halfWay(start.y, end.y));
+		}
+
+		/**
+		 * @brief 中央座標
+		 * 
+		 * @return b2Vec2 
+		 */
+		b2Vec2 center() {
+			return b2Vec2(Float::halfWay(start.x, end.x), Float::halfWay(start.y, end.y));
+		}
+
+		/**
+		 * @brief 右座標
+		 * 
+		 * @return b2Vec2 
+		 */
+		b2Vec2 right() {
+			return b2Vec2(end.x, Float::halfWay(start.y, end.y));
+		}
+
+		/**
+		 * @brief 左下座標
+		 * 
+		 * @return b2Vec2 
+		 */
+		b2Vec2 leftBottom() {
+			return b2Vec2(start.x, end.y);
+		}
+
+		/**
+		 * @brief 下座標
+		 * 
+		 * @return b2Vec2 
+		 */
+		b2Vec2 bottom() {
+			return b2Vec2(Float::halfWay(start.x, end.x), end.y);
+		}
+
+		/**
+		 * @brief 右下座標
+		 * 
+		 * @return b2Vec2 
+		 */
+		b2Vec2 rightBottom() {
+			return end;
+		}
+
+		/**
+		 * @brief 頂点を返す
+		 * 
+		 * @return std::vector<b2Vec2> 
+		 */
+		std::vector<b2Vec2> vertices() {
+			std::vector<b2Vec2> vecs;
+			vecs.push_back(leftTop());
+			vecs.push_back(rightTop());
+			vecs.push_back(leftBottom());
+			vecs.push_back(rightBottom());
+			return vecs;
 		}
 	};
 }

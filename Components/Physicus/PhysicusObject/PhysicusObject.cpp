@@ -11,6 +11,7 @@
 
 #include "PhysicusObject.h"
 #include "LinkBoard/PhysicusLinkBoard.h"
+#include "Rectangle/PhysicusRectangle.h"
 
 using namespace Physicus;
 
@@ -122,6 +123,7 @@ bool Object::getAwake(int index) {
 	return bodies_.at(index)->IsAwake();
 }
 
+// オブジェクトの演算をセットする
 void Object::setAwake(bool awake, int index) {
 	if(index == Array::kUnspecified) {
 		for(auto& itr: bodies_) {
@@ -132,9 +134,49 @@ void Object::setAwake(bool awake, int index) {
 	}
 }
 
+// オブジェクトの角の尖り具合を取得する
+float Object::getSharpness() {
+	return setting_.sharpness;
+}
+
+// オブジェクトの角の尖り具合をセットする
+void Object::setSharpness(float sharp) {
+	setting_.sharpness = sharp;
+}
+
+// ベジェ曲線の補完係数を取得する
+float Object::getRoughness() {
+	return setting_.roughness;
+}
+
+// オブジェクトの角の尖り具合をセットする
+void Object::setRoughness(float rough) {
+	setting_.roughness = rough;
+}
+
 // オブジェクトの種類を取得する
 Type Object::getType() {
 	return setting_.type;
+}
+
+// オブジェクトのタイプが矩形なら**true**
+bool Object::isRectangle() {
+	return setting_.type == Type::kRectangle || setting_.type == Type::kFillRectangle;
+}
+
+// オブジェクトのタイプが円なら**true**
+bool Object::isCircle() {
+	return setting_.type == Type::kCircle || setting_.type == Type::kFillCircle;
+}
+
+// オブジェクトが多角形なら**true**
+bool Object::isPolygon() {
+	return setting_.type == Type::kPolygon || setting_.type == Type::kFillPolygon;
+}
+
+// オブジェクトが連結している矩形なら**true**
+bool Object::isLinkBoard() {
+	return setting_.type == Type::kLinkBoard;
 }
 
 // オブジェクトの生成（ボディの追加など）
@@ -148,7 +190,7 @@ bool Object::generation(touch_t touch, float tie_loop_range) {
 		case kFillRectangle:
 		case kCircle:
 		case kFillCircle:
-		if(B2Vec2::checkCreatePos(last, current)) {
+		if(B2Vec2::checkCreatePos(start, current)) {
 			if(locus_.size() == 1) {
 				locus_.push_back(current);
 			} else {
@@ -167,7 +209,6 @@ bool Object::generation(touch_t touch, float tie_loop_range) {
 		if(B2Vec2::checkCreatePos(last, current)) {
 			locus_.push_back(current);
 			createLinkBoardBody(this);
-
 		}
 		 break;
 		default:break;
@@ -180,7 +221,9 @@ bool Object::generation(touch_t touch, float tie_loop_range) {
 	switch(setting_.type) {
 		case kRectangle: 
 		case kFillRectangle:
-		// startが始点、endが終点
+		if(!createRectangleBody(this)) {
+			return false;
+		}
 		break;
 		case kCircle:
 		case kFillCircle:
@@ -263,6 +306,7 @@ void Object::draw() {
 		case kRectangle: 
 		case kFillRectangle:
 		// startが始点、endが終点
+		drawRectangle(this);
 		break;
 		case kCircle:
 		case kFillCircle:
@@ -287,6 +331,7 @@ void Object::drawEditing() {
 		case kRectangle: 
 		case kFillRectangle:
 		// startが始点、endが終点
+		drawEditingRectangle(this);
 		break;
 		case kCircle:
 		case kFillCircle:
@@ -315,7 +360,7 @@ void Object::drawEditingDebugFrame() {
 	switch(setting_.type) {
 		case kRectangle: 
 		case kFillRectangle:
-		// startが始点、endが終点
+		drawEditingRectangleDebug(this);
 		break;
 		case kCircle:
 		case kFillCircle:

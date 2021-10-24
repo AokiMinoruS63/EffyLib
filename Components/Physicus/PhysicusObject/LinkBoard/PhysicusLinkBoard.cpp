@@ -65,18 +65,6 @@ void createLinkBoardBody(Object* obj) {
 		vertices[0] = B2Vec2::rotate(last, width, angle, B2Vec2::kLeading);
 		vertices[1] = B2Vec2::rotate(last, width, angle, B2Vec2::kTrailing);
 	}
-	/*
-	if(angleDifference > DX_PI_F * 0.5) {
-		auto tmp = vertices[0];
-		vertices[0] = vertices[1];
-		vertices[1] = tmp;
-	}
-	*/
-	// TODO: 逆向きかどうか判定する
-	// 左が０、時計回りで増える。右がPI, -PI
-	
-	
-	//printfDx("Angle current: %f, last %f\n", angle, lastAngle);
 	
 	for(int i = 0; i < 4; i++) {
 		vertices[i] = B2Vec2::relativePosition(center, vertices[i]);
@@ -147,6 +135,7 @@ void drawLinkBoard(Object* obj) {
 	int loopCount = 0;
 	b2Vec2 currentRect[4];
 	b2Vec2 lastRect[4], lastHalf[2];
+	const float roughness = obj->getRoughness();
 	for(auto& itr: bodies) {		
 		// 描画メソッド
 		const auto vertices = B2Body::vertices(itr, 1.0 / obj->getWorldScale());
@@ -175,7 +164,6 @@ void drawLinkBoard(Object* obj) {
 			const b2Vec2 halfRight = B2Vec2::halfWay(currentRect[1], currentRect[2]);
 
 			// ボディが一つだけならそのまま描画
-			//drawModiGraphF( vertices.at(indices[0]).x, vertices.at(indices[0]).y, vertices.at(indices[1]).x, vertices.at(indices[1]).y, vertices.at(indices[2]).x, vertices.at(indices[2]).y, vertices.at(indices[3]).x, vertices.at(indices[3]).y, imageHandle , TRUE);
 			if(bodies.size() == 1) {
 				drawModiGraphF( vertices.at(indices[0]), vertices.at(indices[1]), vertices.at(indices[2]), vertices.at(indices[3]), images.front() , TRUE);
 			} else {
@@ -187,7 +175,7 @@ void drawLinkBoard(Object* obj) {
 					// 前のボディの半分から現在のボディの半分までベジェ曲線を描く
 					b2Vec2 leftVec[3] = {lastHalf[0], B2Vec2::halfWay(lastRect[3], currentRect[0]), halfLeft};
 					b2Vec2 rightVec[3] = {lastHalf[1], B2Vec2::halfWay(lastRect[2], currentRect[1]), halfRight};
-					drawBezie(leftVec, rightVec, 0.33, images, true, false );
+					drawBezie(leftVec, rightVec, roughness, images, true, false, Array::kUnspecified );
 				}
 				// 最後なら半分から最後まで描く
 				if(itr == bodies.back()) {
