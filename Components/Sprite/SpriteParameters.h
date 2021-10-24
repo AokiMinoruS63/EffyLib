@@ -18,18 +18,18 @@ typedef struct {
 	float x;
 	float y;
 	float scale;
-	float colorR;
-	float colorG;
-	float colorB;
-	float colorA;
+	float color_r;
+	float color_g;
+	float color_b;
+	float color_a;
 	//COLOR_U8 color;
 	float angle;
-	float rotateU;
-	float rotateV;
-	float beforeScaleX;
-	float beforeScaleY;
-	float afterScaleX;
-	float afterScaleY;
+	float rotate_u;
+	float rotate_v;
+	float before_scale_x;
+	float before_scale_y;
+	float after_scale_x;
+	float after_scale_y;
 }sprite_parameters_t;
 
 #endif

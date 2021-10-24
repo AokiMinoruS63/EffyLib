@@ -15,7 +15,7 @@
 #include "Enum/LocalizeConstant.h"
 #include <string>
 #include <utility>
-#include "../Utility/nameof.hpp"
+#include "../OpenSource/nameof.hpp"
 
 #define TO_STRING(Variable) (#Variable)
 
@@ -25,6 +25,7 @@
 /**
  * @brief ※Emscripten専用。エンドユーザーの使用言語を返す
  *          (使用言語を追加した場合は双方に書き換えをすること！)
+ * 		    また、フォルダ名と直結しているため、命名規則に従わない事も注意(接頭辞にkが付かない)
  */
 EM_JS(int, getEnduserLanguageEM, (), {
     

@@ -12,7 +12,7 @@
 #ifndef BMFONT_MGR_H
 #define BMFONT_MGR_H
 
-#include "bmfont_generated.h"
+#include "../OpenSource/flatbuffersObjects/bmfont_generated.h"
 #include <vector>
 
 // TODO: BMフォント構造体
@@ -22,15 +22,15 @@
  */
 typedef struct {
     // アトラスデータが入ったバイナリデータ（参照も直接できる）
-    const BMFont::bmFont_t *bmFont;
+    const BMFont::bmFont_t *bm_font;
     // 参照する画像ファイル(128x128,256x256,512x512...などちょうどの大きさにする必要あり)
-    int graphHandle;
+    int graph_handle;
 }BMFont_t;
 
 class BMFontMgr {
     private:
     // 読み込んだBMフォント
-    std::vector<BMFont_t> bmfonts;
+    std::vector<BMFont_t> bmfonts_;
 
     public:
     BMFontMgr();

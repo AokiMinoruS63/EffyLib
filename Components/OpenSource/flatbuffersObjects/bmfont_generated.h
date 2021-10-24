@@ -4,7 +4,7 @@
 #ifndef FLATBUFFERS_GENERATED_BMFONT_BMFONT_H_
 #define FLATBUFFERS_GENERATED_BMFONT_BMFONT_H_
 
-#include "../Utility/flatbuffers/flatbuffers.h"
+#include "../flatbuffers/flatbuffers.h"
 
 namespace BMFont {
 

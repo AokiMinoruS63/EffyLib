@@ -1,4 +1,20 @@
+/**
+ * @file DxLibWrap.cpp
+ * @author AokiMinoru (personal-git@aokiminoru.work)
+ * @brief 
+ * @version 0.1
+ * @date 2021-10-20
+ * 
+ * @copyright Copyright (c) 2021
+ * 
+ */
+
 #include "DxLibWrap.h"
+#include <vector>
+#include "TypeExtensions/Int+Extensions.h"
+#include "TypeExtensions/Float+Extensions.h"
+#include "TypeExtensions/B2Vec2+Extensions.h"
+#include "TypeExtensions/VectorOrArray+Extension.h"
 
 // バイナリをバッファに丸ごと読み込む
 void* loadToBuffer(const char* filePath) {
@@ -189,6 +205,93 @@ int drawModiGraph( int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y
         setScreenPosToGlobal(&x4, &y4);
     }
     return DrawModiGraph(x1, y1, x2, y2, x3, y3, x4, y4, GrHandle, TransFlag);
+}
+
+// メモリに読みこんだグラフィックの自由変形描画(float)
+int drawModiGraphF( float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4, int GrHandle , int TransFlag, int GlobalPos) {
+	if (GlobalPos == FALSE) {
+        setScreenPosToGlobal(&x1, &y1);
+        setScreenPosToGlobal(&x2, &y2);
+        setScreenPosToGlobal(&x3, &y3);
+        setScreenPosToGlobal(&x4, &y4);
+    }
+    return DrawModiGraphF(x1, y1, x2, y2, x3, y3, x4, y4, GrHandle, TransFlag);
+}
+
+// メモリに読みこんだグラフィックの自由変形描画(float,引数がb2Vec2)
+int drawModiGraphF( b2Vec2 pos1, b2Vec2 pos2, b2Vec2 pos3, b2Vec2 pos4, int GrHandle , int TransFlag, int GlobalPos) {
+	return drawModiGraphF(pos1.x, pos1.y, pos2.x, pos2.y, pos3.x, pos3.y, pos4.x, pos4.y, GrHandle, TransFlag, GlobalPos);
+}
+
+// 画像を連続して描画する時の画像ハンドルを返す
+int nextImageIndex(std::vector<int> images, int nowIndex, bool loop, bool edgeDraw) {
+	const int countMin = edgeDraw || IsEmpty(images) ? 0 : 1;
+	const int countMax = Int::clamp(edgeDraw ? images.size() - 1 : images.size() - 2, 0, images.size());
+	int index;
+	// 初期値
+	if(nowIndex == Array::kUnspecified) {
+		index = loop ? countMin : countMax;
+	} else {
+		index = Int::clamp(nowIndex, countMin, countMax);
+		if(loop) {
+			index++;
+			if(index > countMax) {
+				index = countMin;
+			}
+		} else {
+			index--;
+			if(index < 0) {
+				return -1;
+			}
+		}
+	}
+	return index;
+}
+
+// ベジェ曲線の次の進行率を返す
+float nextBezieAdvance(float nowAdvance, float roughness, bool loop, bool init) {
+	roughness = Float::clamp(roughness, 0.0, 1.0);
+	if(init) {
+		return loop ? 0.0 : 1.0 - roughness;
+	}
+	float t = loop ? nowAdvance + roughness : nowAdvance - roughness ;
+	return Float::clamp(t, 0.0, 1.0);
+}
+
+// 制御点が３つのベジェ曲線を画像で描画する
+int drawBezie(b2Vec2 left[3], b2Vec2 right[3], float roughness, std::vector<int> images, bool loop, bool edgeDraw, int firstIndex, int GlobalPos) {
+	float t = nextBezieAdvance(0.0, roughness, loop, true);
+	const int imgCountMin = edgeDraw || IsEmpty(images) ? 0 : 1;
+	const int imgCountMax = Int::clamp(edgeDraw ? images.size() - 1 : images.size() - 2, 0, images.size());
+	int imgIndex = firstIndex == Array::kUnspecified ? nextImageIndex(images, Array::kUnspecified, loop, edgeDraw) : firstIndex;
+	float next;
+	bool end = false;
+	// 左の始点、終点、右の始点、終点
+	b2Vec2 sl, gl, sr, gr;
+	roughness = Float::clamp(roughness, 0.0, 1.0);
+	next = loop ? Float::clamp(t + roughness, 0.0, 1.0) : 1.0;
+	while(!end) {
+		sl = B2Vec2::bezieValue(left, t);
+		sr = B2Vec2::bezieValue(right, t);
+		gl = B2Vec2::bezieValue(left, next);
+		gr = B2Vec2::bezieValue(right, next);
+		
+		drawModiGraphF(sl, sr, gr, gl, images.at(imgIndex), TRUE, GlobalPos);
+		// 次の画像ハンドルを決める
+		imgIndex = nextImageIndex(images, imgIndex, loop, edgeDraw);
+		// 根本まで来ていたら描画しない
+		if(!loop && imgIndex < imgCountMin) {
+			break;
+		}
+		// 最後まで描画したら終了する
+		if(t <= 0.0 - Float::kMinima || next >= 1.0 + Float::kMinima) {
+			end = true;
+		}
+		// 進行率を決める
+		t = nextBezieAdvance(t, roughness, loop);
+		next = nextBezieAdvance(t, roughness, loop);
+	}
+	return imgIndex;
 }
 
 // グラフィックの指定矩形部分のみを描画

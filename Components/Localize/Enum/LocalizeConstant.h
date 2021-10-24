@@ -13,7 +13,7 @@
 #define LOCALIZE_CONSTANT_H
 
 /**
- * @brief 言語
+ * @brief 言語(フォルダ名と直結しているため、命名規則に従って接頭辞にkが付かない)
  * 
  */
 enum class Language {

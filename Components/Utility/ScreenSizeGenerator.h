@@ -24,6 +24,8 @@ int getScreenHeightWithPartition();
 void setScreenPosToLocal(int *x, int *y);
 // ローカルポジションからパーティションの入ったグローバルポジションへの変換
 void setScreenPosToGlobal(int *x, int *y);
+// ローカルポジションからパーティションの入ったグローバルポジションへの変換(float)
+void setScreenPosToGlobal(float *x, float *y);
 
 /* ブラウザ限定処理 */
 #ifdef EMSCRIPTEN

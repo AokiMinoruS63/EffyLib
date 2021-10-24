@@ -21,18 +21,18 @@ typedef struct {
 	std::vector<sprite_timeline_item_t> x;
 	std::vector<sprite_timeline_item_t> y;
 	std::vector<sprite_timeline_item_t> scale;
-	std::vector<sprite_timeline_item_t> colorR;
-	std::vector<sprite_timeline_item_t> colorG;
-	std::vector<sprite_timeline_item_t> colorB;
-	std::vector<sprite_timeline_item_t> colorA;
+	std::vector<sprite_timeline_item_t> color_r;
+	std::vector<sprite_timeline_item_t> color_g;
+	std::vector<sprite_timeline_item_t> color_b;
+	std::vector<sprite_timeline_item_t> color_a;
 	//COLOR_U8 color;
 	std::vector<sprite_timeline_item_t> angle;
-	std::vector<sprite_timeline_item_t> rotateU;
-	std::vector<sprite_timeline_item_t> rotateV;
-	std::vector<sprite_timeline_item_t> beforeScaleX;
-	std::vector<sprite_timeline_item_t> beforeScaleY;
-	std::vector<sprite_timeline_item_t> afterScaleX;
-	std::vector<sprite_timeline_item_t> afterScaleY;
+	std::vector<sprite_timeline_item_t> rotate_u;
+	std::vector<sprite_timeline_item_t> rotate_v;
+	std::vector<sprite_timeline_item_t> before_scale_x;
+	std::vector<sprite_timeline_item_t> before_scale_y;
+	std::vector<sprite_timeline_item_t> after_scale_x;
+	std::vector<sprite_timeline_item_t> after_scale_y;
 }sprite_timeline_t;
 
 #endif

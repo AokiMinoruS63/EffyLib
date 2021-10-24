@@ -16,12 +16,20 @@
 #include "Enum/TouchStatus.h"
 
 typedef struct {
+	// タッチの状態
     TouchStatus status;
+	// 座標
     int x, y;
-    std::vector<bool> inputLog;
-    std::vector<int>posLogX;
-    std::vector<int>posLogY;
-    bool doubleTap;
+	// タッチ履歴
+    std::vector<bool> input_log;
+	// X座標履歴
+    std::vector<int>pos_log_x;
+	// Y座標履歴
+    std::vector<int>pos_log_y;
+	// ダブルタップしているなら**true**
+    bool double_tap;
+	// タッチを開始したインデックス
+	int beginIndex;
 }touch_t;
 
 #endif

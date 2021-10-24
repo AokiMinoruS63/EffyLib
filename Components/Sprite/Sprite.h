@@ -37,23 +37,24 @@
 #endif
 */
 
-
+// 相互参照
+class PhysicsWorld;
 
 class Sprite {
 	private:
 	/* 共通情報 */
-	sprite_common_t common;
+	sprite_common_t common_;
 
 	/* 基本情報 */
 
 	// グローバルのタイムライン
-	sprite_timeline_t globalTimeline;
+	sprite_timeline_t global_timeline_;
 	// グローバルの現在のパラメータ
-	sprite_parameters_t global;
+	sprite_parameters_t global_;
 	// ローカルのタイムライン
-	sprite_timeline_t localTimeline;
+	sprite_timeline_t local_timeline_;
 	// ローカルの現在のパラメータ
-	sprite_parameters_t local;
+	sprite_parameters_t local_;
 
 	// MARK: function
 
@@ -74,18 +75,18 @@ class Sprite {
 	public:
 
 	const sprite_common_t defaultCommon = {
-		/* imgHandle */	-1,
+		/* img_handle*/	-1,
 		/* su 		 */	0.0,
 		/* sv 		 */	0.0,
 		/* gu 		 */	1.0,
 		/* gv 		 */	1.0,
-		/* offsetU 	 */	0.5,
-		/* offsetV 	 */	0.5,
-		/* endFrame  */	0,
+		/* offset_u  */	0.5,
+		/* offset_v  */	0.5,
+		/* end_frame */	0,
 		/* frame 	 */	0,
 		/* loop 	 */	true,
 		/* stop 	 */	false,
-		/* edgeRate  */ 0
+		/* edge_rate */ 0
 	};
 
 	Sprite();

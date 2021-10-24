@@ -1,15 +1,16 @@
 #include "Sprite.h"
 #include "SpriteTimelineItem.h"
+#include "../Physicus/PhysicusWorld/PhysicusWorld.h"
 
 // TODO: グローバル座標とローカル座標を作る
 // ループフラグも作る。カウント変数も作る
 
 Sprite::Sprite() {
-	this->common = defaultCommon;
-	parametersInit(&local);
-	parametersInit(&global);
-	timelineInit(&localTimeline);
-	timelineInit(&globalTimeline);
+	this->common_ = defaultCommon;
+	parametersInit(&local_);
+	parametersInit(&global_);
+	timelineInit(&local_timeline_);
+	timelineInit(&global_timeline_);
 }
 
 Sprite::~Sprite() {
@@ -32,24 +33,24 @@ static sprite_common_t Sprite::defaultCommon() {
 }*/
 
 void Sprite::timelineInit(sprite_timeline_t *line) {
-	const sprite_timeline_item_t zero = {/* frame */0, /* num */0.0,   /* startType */0, /* endType */0};
-	const sprite_timeline_item_t one =  {/* frame */0, /* num */1.0,	 /* startType */0, /* endType */0};
-	const sprite_timeline_item_t max =  {/* frame */0, /* num */255.0, /* startType */0, /* endType */0};
-	const sprite_timeline_item_t half = {/* frame */0, /* num */0.5,   /* startType */0, /* endType */0};
+	const sprite_timeline_item_t zero = {/* frame */0, /* num */0.0,   /* start_type */0, /* end_type */0};
+	const sprite_timeline_item_t one =  {/* frame */0, /* num */1.0,   /* start_type */0, /* end_type */0};
+	const sprite_timeline_item_t max =  {/* frame */0, /* num */255.0, /* start_type */0, /* end_type */0};
+	const sprite_timeline_item_t half = {/* frame */0, /* num */0.5,   /* start_type */0, /* end_type */0};
 	line->x.push_back(zero);
 	line->y.push_back(zero);
 	line->scale.push_back(one);
-	line->colorR.push_back(max);
-	line->colorG.push_back(max);
-	line->colorB.push_back(max);
-	line->colorA.push_back(max);
+	line->color_r.push_back(max);
+	line->color_g.push_back(max);
+	line->color_b.push_back(max);
+	line->color_a.push_back(max);
 	line->angle.push_back(zero);
-	line->rotateU.push_back(half);
-	line->rotateV.push_back(half);
-	line->beforeScaleX.push_back(one);
-	line->beforeScaleY.push_back(one);
-	line->afterScaleX.push_back(one);
-	line->afterScaleY.push_back(one);
+	line->rotate_u.push_back(half);
+	line->rotate_v.push_back(half);
+	line->before_scale_x.push_back(one);
+	line->before_scale_y.push_back(one);
+	line->after_scale_x.push_back(one);
+	line->after_scale_y.push_back(one);
 }
 
 void Sprite::parametersInit(sprite_parameters_t *parameter) {
@@ -60,17 +61,17 @@ void Sprite::parametersInit(sprite_parameters_t *parameter) {
 	parameter->x = zero;
 	parameter->y = zero;
 	parameter->scale = one;
-	parameter->colorR = max;
-	parameter->colorG = max;
-	parameter->colorB = max;
-	parameter->colorA = max;
+	parameter->color_r = max;
+	parameter->color_g = max;
+	parameter->color_b = max;
+	parameter->color_a = max;
 	parameter->angle = zero;
-	parameter->rotateU = half;
-	parameter->rotateV = half;
-	parameter->beforeScaleX = one;
-	parameter->beforeScaleY = one;
-	parameter->afterScaleX = one;
-	parameter->afterScaleY = one;
+	parameter->rotate_u = half;
+	parameter->rotate_v = half;
+	parameter->before_scale_x = one;
+	parameter->before_scale_y = one;
+	parameter->after_scale_x = one;
+	parameter->after_scale_y = one;
 }
 
 void Sprite::calc() {
