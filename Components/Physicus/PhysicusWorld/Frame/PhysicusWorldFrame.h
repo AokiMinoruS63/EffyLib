@@ -178,6 +178,20 @@ namespace Physicus {
 			vecs.push_back(rightBottom());
 			return vecs;
 		}
+
+		/**
+		 * @brief 左上からの時計回り順に頂点を返す
+		 * 
+		 * @return std::vector<b2Vec2> 
+		 */
+		std::vector<b2Vec2> verticesAround() {
+			std::vector<b2Vec2> vecs;
+			vecs.push_back(leftTop());
+			vecs.push_back(rightTop());
+			vecs.push_back(rightBottom());
+			vecs.push_back(leftBottom());
+			return vecs;
+		}
 	};
 }
 

@@ -36,24 +36,37 @@ void setDrawStartEnd(Object* obj, b2Vec2* start, b2Vec2* end) {
 /**
  * @brief 矩形の線を考慮した頂点を設定する
  * 
- * @param obj 
- * @param leftArray 
- * @param rightArray 
+ * @param obj 矩形オブジェクト
+ * @param vertices 頂点配列
+ * @param outside 外周
+ * @param inside 内周
  */
-void getVertices(Object* obj, b2Vec2 leftArray[8], b2Vec2 rightArray[8]) {
+void getVertices(Object* obj, std::vector<b2Vec2> vertices, b2Vec2 outside[4], b2Vec2 inside[4]) {
+	const float width = obj->getLineWidth() / obj->getWorldScale();
+
+	// 各頂点
+	outside[0] = B2Vec2::rotate(vertices.at(0), width, Float::Angle::kRightTop, B2Vec2::Horizon::kLeading);
+	inside[0] = B2Vec2::rotate(vertices.at(0), width, Float::Angle::kRightTop, B2Vec2::Horizon::kTrailing);
+	outside[1] = B2Vec2::rotate(vertices.at(1), width, Float::Angle::kRightBottom, B2Vec2::Horizon::kLeading);
+	inside[1] = B2Vec2::rotate(vertices.at(1), width, Float::Angle::kRightBottom, B2Vec2::Horizon::kTrailing);
+	outside[2] = B2Vec2::rotate(vertices.at(2), width, Float::Angle::kLeftBottom, B2Vec2::Horizon::kLeading);
+	inside[2] = B2Vec2::rotate(vertices.at(2), width, Float::Angle::kLeftBottom, B2Vec2::Horizon::kTrailing);
+	outside[3] = B2Vec2::rotate(vertices.at(3), width, Float::Angle::kLeftTop, B2Vec2::Horizon::kLeading);
+	inside[3] = B2Vec2::rotate(vertices.at(3), width, Float::Angle::kLeftTop, B2Vec2::Horizon::kTrailing);	
+}
+
+/**
+ * @brief 矩形の線を考慮した頂点を設定する
+ * 
+ * @param obj 矩形オブジェクト
+ * @param outside 外周
+ * @param inside 内周
+ */
+void getVertices(Object* obj, b2Vec2 outside[4], b2Vec2 inside[4]) {
 	b2Vec2 start, end;
 	setDrawStartEnd(obj, &start, &end);
 	Frame frame = {start, end};
-	const float width = obj->getLineWidth() / obj->getWorldScale();
-	// 各頂点
-	leftArray[0] = B2Vec2::rotate(frame.leftTop(), width, Float::Angle::kRightTop, B2Vec2::Horizon::kLeading);
-	rightArray[0] = B2Vec2::rotate(frame.leftTop(), width, Float::Angle::kRightTop, B2Vec2::Horizon::kTrailing);
-	leftArray[1] = B2Vec2::rotate(frame.rightTop(), width, Float::Angle::kRightBottom, B2Vec2::Horizon::kLeading);
-	rightArray[1] = B2Vec2::rotate(frame.rightTop(), width, Float::Angle::kRightBottom, B2Vec2::Horizon::kTrailing);
-	leftArray[2] = B2Vec2::rotate(frame.rightBottom(), width, Float::Angle::kLeftBottom, B2Vec2::Horizon::kLeading);
-	rightArray[2] = B2Vec2::rotate(frame.rightBottom(), width, Float::Angle::kLeftBottom, B2Vec2::Horizon::kTrailing);
-	leftArray[3] = B2Vec2::rotate(frame.leftBottom(), width, Float::Angle::kLeftTop, B2Vec2::Horizon::kLeading);
-	rightArray[3] = B2Vec2::rotate(frame.leftBottom(), width, Float::Angle::kLeftTop, B2Vec2::Horizon::kTrailing);	
+	getVertices(obj, frame.verticesAround(), outside, inside);
 }
 
 // 矩形オブジェクトを作成成功なら**true**
@@ -95,30 +108,30 @@ bool createRectangleBody(Object* obj) {
 	return true;
 }
 
-// 矩形オブジェクトを描画する
-void drawRectangle(Object* obj) {
-	// TODO: 矩形から枠を作成してそこを描画する
-}
-
-// 編集中の矩形オブジェクトを描画する
-void drawEditingRectangle(Object* obj) {
-	// ボディ自体は作成されていないが、シミュレーションとして表示させる
+/**
+ * @brief 矩形を描画する
+ * 
+ * @param obj 描画するオブジェクト
+ * @param outside 外側の頂点配列
+ * @param inside 内側の頂点配列
+ */
+void draw(Object* obj, b2Vec2 outside[4], b2Vec2 inside[4]) {
 	// 画像ハンドルがなければ処理しない
 	const auto images = obj->getLineImages();
 	if(IsEmpty(images)) {
 		return;
 	}
-	b2Vec2 left[8], right[8];
+	const int color = obj->getColor();
 	const float roughness = obj->getRoughness();
 	int imageIndex = nextImageIndex(images, Array::kUnspecified, true, false);
-	getVertices(obj, left, right);
 	// TODO: 角に丸みを持たせた場合の処理も行う
 	obj->setSharpness(0.5);
 	const float sharp = obj->getSharpness();
+
 	b2Vec2 last[2], start[2];
 	for(int i = 0; i < 4; i++) {
 		const int next = (i + 1) % 4;
-		b2Vec2 base[4] = { left[next], right[next], right[i], left[i] };
+		b2Vec2 base[4] = { outside[next], inside[next], inside[i], outside[i] };
 		b2Vec2 vertices[4];
 
 		vertices[0] = B2Vec2::between(base[0], B2Vec2::halfWay(base[0], base[3]), Float::kMax - sharp);
@@ -133,20 +146,48 @@ void drawEditingRectangle(Object* obj) {
 			start[1] = vertices[2];
 		} else {
 			// TODO: 前の座標とベジェ曲線で繋ぐ
-			b2Vec2 leftArray[3] = {last[0], base[3], vertices[3]};
-			b2Vec2 rightArray[3] = {last[1], base[2], vertices[2]};
-			imageIndex = drawBezie(leftArray, rightArray, roughness, images, true, false, imageIndex);
+			b2Vec2 outsideArray[3] = {last[0], base[3], vertices[3]};
+			b2Vec2 insideArray[3] = {last[1], base[2], vertices[2]};
+			imageIndex = drawBezie(outsideArray, insideArray, roughness, images, true, false, imageIndex);
 			imageIndex = nextImageIndex(images, imageIndex, true, false);
 			if(i == 3) {
-				b2Vec2 leftArrayEnd[3] = {vertices[0], base[0], start[0]};
-				b2Vec2 rightArrayEnd[3] = {vertices[1], base[1], start[1]};
-				drawBezie(leftArrayEnd, rightArrayEnd, roughness, images, true, false, imageIndex);
+				b2Vec2 outsideArrayEnd[3] = {vertices[0], base[0], start[0]};
+				b2Vec2 insideArrayEnd[3] = {vertices[1], base[1], start[1]};
+				drawBezie(outsideArrayEnd, insideArrayEnd, roughness, images, true, false, imageIndex);
 				imageIndex = nextImageIndex(images, imageIndex, true, false);
 			}
 		}
 		last[0] = vertices[0];
 		last[1] = vertices[1];
 	}
+}
+
+// 矩形オブジェクトを描画する
+void drawRectangle(Object* obj) {
+	// TODO: 矩形から枠を作成してそこを描画する
+	
+	const auto bodies = obj->getBodies();
+	if(IsEmpty(bodies)) {
+		return;
+	}
+	const auto body = bodies.front();
+	const auto vertices = B2Body::vertices(body, 1.0 / obj->getWorldScale());
+	b2Vec2 outside[4], inside[4];
+	getVertices(obj, vertices, outside, inside);
+	draw(obj, outside, inside);
+}
+
+// 編集中の矩形オブジェクトを描画する
+void drawEditingRectangle(Object* obj) {
+	// ボディ自体は作成されていないが、シミュレーションとして表示させる
+	// 画像ハンドルがなければ処理しない
+	const auto images = obj->getLineImages();
+	if(IsEmpty(images)) {
+		return;
+	}
+	b2Vec2 outside[4], inside[4];	
+	getVertices(obj, outside, inside);
+	draw(obj, outside, inside);
 }
 
 // 現在生成している矩形オブジェクトのフレームを描画する

@@ -380,6 +380,17 @@ namespace B2Vec2 {
 	}
 
 	/**
+	 * @brief 原点からの座標から回転後の座標を求める
+	 * 
+	 * @param pos 原点を０とした時の座標
+	 * @param radian 角度
+	 * @return b2Vec2 回転後の座標
+	 */
+	static b2Vec2 rotate(b2Vec2 pos, float radian) {
+		return b2Vec2(pos.x * cos(radian) - pos.y * sin(radian), pos.x * sin(radian) + pos.y * cos(radian));
+	}
+
+	/**
 	 * @brief 数珠繋ぎに出来る距離なら**true**
 	 * 
 	 * @param vec 
