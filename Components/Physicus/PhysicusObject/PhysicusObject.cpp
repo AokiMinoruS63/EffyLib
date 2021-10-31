@@ -12,6 +12,7 @@
 #include "PhysicusObject.h"
 #include "LinkBoard/PhysicusLinkBoard.h"
 #include "Rectangle/PhysicusRectangle.h"
+#include "Circle/PhysicusCircle.h"
 
 using namespace Physicus;
 
@@ -47,6 +48,19 @@ b2World* Object::getWorld() {
 	return world_;
 }
 
+// 座標を取得する
+b2Vec2 Object::getPosition(bool isDraw) {
+	if(IsEmpty(bodies_)) {
+		return B2Vec2::kZero;
+	}
+	const auto body = bodies_.front();
+	b2Vec2 pos = body->GetPosition();
+	if(isDraw) {
+		pos = B2Vec2::division(pos, world_scale_);
+	}
+	return pos;
+}
+
 //軌跡を取得する
 std::vector<b2Vec2> Object::getLocus() {
 	return locus_;
@@ -70,6 +84,21 @@ ObjectSetting Object::getSetting() {
 // 線の太さを取得する
 float Object::getLineWidth() {
 	return setting_.line_width;
+}
+
+// 線の半分の太さを取得する
+float Object::getLineHalfWidth() {
+	return setting_.line_width * Float::kHalf;
+}
+
+// 描画時の線の太さを取得する
+float Object::getDrawLineWidth() {
+	return getLineWidth() / world_scale_;
+}
+
+// 描画時の線の半分の太さを取得する
+float Object::getDrawLineHalfWidth() {
+	return getLineHalfWidth() / world_scale_;
 }
 
 // 線の太さをセットする
@@ -161,17 +190,17 @@ Type Object::getType() {
 
 // オブジェクトのタイプが矩形なら**true**
 bool Object::isRectangle() {
-	return setting_.type == Type::kRectangle || setting_.type == Type::kFillRectangle;
+	return setting_.type == Type::kRectangle;
 }
 
 // オブジェクトのタイプが円なら**true**
 bool Object::isCircle() {
-	return setting_.type == Type::kCircle || setting_.type == Type::kFillCircle;
+	return setting_.type == Type::kCircle;
 }
 
 // オブジェクトが多角形なら**true**
 bool Object::isPolygon() {
-	return setting_.type == Type::kPolygon || setting_.type == Type::kFillPolygon;
+	return setting_.type == Type::kPolygon;
 }
 
 // オブジェクトが連結している矩形なら**true**
@@ -187,9 +216,8 @@ bool Object::generation(touch_t touch, float tie_loop_range) {
 	
 	switch(setting_.type) {
 		case kRectangle: 
-		case kFillRectangle:
 		case kCircle:
-		case kFillCircle:
+		setting_.roughness = Constant::Object::kBezieRoughness;
 		if(B2Vec2::checkCreatePos(start, current)) {
 			if(locus_.size() == 1) {
 				locus_.push_back(current);
@@ -199,7 +227,6 @@ bool Object::generation(touch_t touch, float tie_loop_range) {
 		}
 		break;
 		case kPolygon:
-		case kFillPolygon: 
 		if(B2Vec2::checkCreatePos(last, current)) {
 			locus_.push_back(current);
 			// TODO: 多角形の作成
@@ -220,17 +247,17 @@ bool Object::generation(touch_t touch, float tie_loop_range) {
 	// TODO: オブジェクトを作成する
 	switch(setting_.type) {
 		case kRectangle: 
-		case kFillRectangle:
 		if(!createRectangleBody(this)) {
 			return false;
 		}
 		break;
 		case kCircle:
-		case kFillCircle:
 		// startが円の中心、endで半径を決定する
+		if(!createCircleBody(this)) {
+			return false;
+		}
 		break;
 		case kPolygon:
-		case kFillPolygon: 
 		// 先にセンターを作成する。その後に８角形以下の図形を繋げて作成する
 		break;
 		case kLinkBoard:
@@ -291,29 +318,49 @@ void Object::removeLocusFrame() {
 		locus_frame_log_.pop_back();
 	}
 }
-/**
- * @brief 軌跡のフレームを取得する
- * 
- * @return std::vector<Physicus::Frame> 
- */
+
+// 軌跡のフレームを取得する
 std::vector<Physicus::Frame> Object::getLocusFrames() {
 	return locus_frame_log_;
+}
+
+// 軌跡の線を追加する
+void Object::appendDrawLocusLine(b2Vec2 outside) {
+	locus_line_outside_.push_back(outside);
+	const b2Vec2 unit = B2Vec2::unitVector(outside);
+	const b2Vec2 linePos = B2Vec2::multiplication(unit, getDrawLineWidth());
+	const b2Vec2 inside = B2Vec2::sub(outside, linePos);
+	locus_line_inside_.push_back(inside);
+}
+
+// 軌跡の線を削除する
+void Object::removeLocusLines() {
+	locus_line_inside_.clear();
+	locus_line_outside_.clear();
+}
+
+// 軌跡の内側の線を取得する
+std::vector<b2Vec2> Object::getLocusInsideLines() {
+	return locus_line_inside_;
+}
+
+// 軌跡の外側の線を取得する
+std::vector<b2Vec2> Object::getLocusOutsideLines() {
+	return locus_line_outside_;
 }
 
 // オブジェクトの描画
 void Object::draw() {
 	switch(setting_.type) {
 		case kRectangle: 
-		case kFillRectangle:
 		// startが始点、endが終点
 		drawRectangle(this);
 		break;
 		case kCircle:
-		case kFillCircle:
 		// startが円の中心、endで半径を決定する
+		drawCircle(this);
 		break;
 		case kPolygon:
-		case kFillPolygon: 
 		// 先にセンターを作成する。その後に８角形以下の図形を繋げて作成する
 		break;
 		case kLinkBoard:
@@ -329,45 +376,52 @@ void Object::draw() {
 void Object::drawEditing() {
 	switch(setting_.type) {
 		case kRectangle: 
-		case kFillRectangle:
 		// startが始点、endが終点
 		drawEditingRectangle(this);
 		break;
 		case kCircle:
-		case kFillCircle:
 		// startが円の中心、endで半径を決定する
+		drawEditingCircle(this);
 		break;
 		case kPolygon:
-		case kFillPolygon: 
 		// 先にセンターを作成する。その後に８角形以下の図形を繋げて作成する
 		break;
 		case kLinkBoard:
 		drawEditingLinkBoard(this);
 		 break;
-		default:
-
-		break;
+		default:break;
 	}
 }
 
 // オブジェクトのフレームの描画
 void Object::drawDebugFrame() {
-	ForEach(bodies_, [this](b2Body *item) { B2Body::drawFrame(item, world_scale_, setting_.color); });
+	switch (setting_.type) {
+		case kRectangle: 
+		case kLinkBoard:
+		case kPolygon:
+		// 先にセンターを作成する。その後に８角形以下の図形を繋げて作成する
+		// startが始点、endが終点
+		ForEach(bodies_, [this](b2Body *item) { B2Body::drawFrame(item, world_scale_, setting_.color); });
+		break;
+		case kCircle:
+		// startが円の中心、endで半径を決定する
+		drawCircleDebug(this);
+		break;
+		default:break;
+	}
 }
 
 // 現在生成しているオブジェクトのフレームを描画する
 void Object::drawEditingDebugFrame() {
 	switch(setting_.type) {
 		case kRectangle: 
-		case kFillRectangle:
 		drawEditingRectangleDebug(this);
 		break;
 		case kCircle:
-		case kFillCircle:
 		// startが円の中心、endで半径を決定する
+		drawEditingCircleDebug(this);
 		break;
 		case kPolygon:
-		case kFillPolygon: 
 		// 先にセンターを作成する。その後に８角形以下の図形を繋げて作成する
 		break;
 		case kLinkBoard:

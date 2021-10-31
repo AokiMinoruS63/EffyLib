@@ -138,19 +138,36 @@ int drawBoxAA(int x1 , int y1 , int x2 , int y2 , unsigned int Color , int FillF
  */
 int drawCircle(int x, int y, int r, unsigned int Color, int GlobalPos = FALSE, int FillFlag = TRUE, int LineChickness = 1);
 
+
 /**
  * @brief 円の描画(アンチエイリアス付き)
  * 
  * @param x 描く円の中心X座標
  * @param y 描く円の中心Y座標
  * @param r 描く円の半径
+ * @param posnum 円を形成する頂点の数
  * @param Color 円の色
  * @param GlobalPos パーティションを考慮したグローバル座標で描画するか、のフラグ。TRUEでグローバル座標描画
  * @param FillFlag TRUE(1の意)で円の中身も塗りつぶし、FALSE(0の意)で輪郭のみ
  * @param LineChickness 縁の太さ
  * @return int 0: 成功、-1: エラー発生
  */
-int drawCircleAA(int x, int y, int r, unsigned int Color, int GlobalPos = FALSE, int FillFlag = TRUE, 
+int drawCircleAA(float x, float y, float r, int posnum, unsigned int Color, int GlobalPos = FALSE, int FillFlag = TRUE, 
+                    int LineChickness = 1);
+
+/**
+ * @brief 円の描画(アンチエイリアス付き)
+ * 
+ * @param center 描く円の中心座標
+ * @param r 描く円の半径
+ * @param posnum 円を形成する頂点の数
+ * @param Color 円の色
+ * @param GlobalPos パーティションを考慮したグローバル座標で描画するか、のフラグ。TRUEでグローバル座標描画
+ * @param FillFlag TRUE(1の意)で円の中身も塗りつぶし、FALSE(0の意)で輪郭のみ
+ * @param LineChickness 縁の太さ
+ * @return int 0: 成功、-1: エラー発生
+ */
+int drawCircleAA(b2Vec2 center, float r, int posnum, unsigned int Color, int GlobalPos = FALSE, int FillFlag = TRUE, 
                     int LineChickness = 1);
 
 /**

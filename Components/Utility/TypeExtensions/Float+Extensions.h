@@ -20,8 +20,12 @@ namespace Float {
 	static const float kMinima = FLT_MIN;
 	// 最小値
 	static const float kMin = 0.0;
+	// 4分の1
+	static const float kQuarter = 0.25;
 	// 中間値
 	static const float kHalf = 0.5;
+	// 4分の3
+	static const float kThreeQuarters = 0.75;
 	// 最大値
 	static const float kMax = 1.0;
 
@@ -42,7 +46,69 @@ namespace Float {
 		static const float kBottom = -DX_PI_F / 2.0;
 		// 右下角度
 		static const float kRightBottom = -DX_PI_F * 2.0  / 3.0;
+
+		// 0度
+		static const float kZeroDegree = 0.0;
+		// 90度
+		static const float kNinetyDegree = DX_PI_F * 0.5;
+		// 180度
+		static const float kOneEightyDegree = DX_PI_F;
+		// 270度
+		static const float kTwoSeventyDegree = DX_PI_F * 1.5;
+		// 360度
+		static const float kThreeSixtyDegree = DX_PI_F * 2.0;
+
+		/**
+		 * @brief レートから角度への変換
+		 * 
+		 * @param rate 1.0が最大
+		 * @return float 角度(radian)
+		 */
+		static float fromRate(float rate) {
+			return rate * DX_PI_F * 2.0;
+		}
 	}
+
+	// ベジェ曲線に使用する円の方向
+	namespace BezieCircle {
+		// 左上
+		const float kLeftUp = kMin;
+		// 右上
+		const float kRightUp = kQuarter;
+		// 右下
+		const float kRightBottom = kHalf;
+		// 左下
+		const float kLeftBottom = kThreeQuarters;
+
+		// ベジェの制御点が４つの時に使用する円の係数
+		static const float kBezieCircleRate = 0.55228;
+
+		// 円のベジェ曲線における進行率を取得する
+		static float bezieRate(float t) {
+			if(t < Float::kQuarter) {
+				return t * 4.0;
+			} else if (t < Float::kHalf) {
+				return (t - Float::kQuarter) * 4.0;
+			} else if (t < Float::kThreeQuarters) {
+				return (t - Float::kHalf) * 4.0;
+			} else {
+				return (t - Float::kThreeQuarters) * 4.0;
+			}
+		}
+
+		// 円のベジェ曲線における適用後の回転角度を取得する
+		static float plusAngle(float t) {
+			if(t < Float::kQuarter) {
+				return Angle::kZeroDegree;
+			} else if (t < Float::kHalf) {
+				return Angle::kNinetyDegree;
+			} else if (t < Float::kThreeQuarters) {
+				return Angle::kOneEightyDegree;
+			} else {
+				return Angle::kTwoSeventyDegree;
+			}
+		}
+	};
 
 	/**
 	 * @brief ２つのfloatの間の進行度に応じた値を返す
@@ -133,6 +199,19 @@ namespace Float {
 		t = clamp(t, kMin, kMax);
 		const float tt = (kMax - t);
 		return value[0] * tt * tt + value[1] * 2.0 * t * tt +  value[2] * t * t;
+	}
+
+	/**
+	 * @brief 4つの制御点のベジェの計算を行う
+	 * 
+	 * @param value 
+	 * @param t 
+	 * @return float 
+	 */
+	static float bezieFourValue(const float value[4], float t) {
+		t = clamp(t, kMin, kMax);
+		const float tt = (kMax - t);
+		return value[0] * tt * tt * tt + value[1] * 3 * t * tt * tt + value[2] * 3 * t * t * tt + value[3] * t * t * t;
 	}
 
 	/**

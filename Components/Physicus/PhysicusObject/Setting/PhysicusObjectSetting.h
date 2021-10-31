@@ -49,7 +49,7 @@ namespace Physicus {
 		 * @param rough 
 		 * @return ObjectSetting 
 		 */
-		static ObjectSetting init(float world_scale, Type type, std::vector<int> line_images, float line_width = Constant::Object::kDefaultLineWidth, int color = Color::kWhite, bool rotate_fix = false, bool area_out_alive = false, float sharp = Float::kMax, float rough = Constant::Object::kBezieRoughness) {
+		static ObjectSetting init(float world_scale, Type type, std::vector<int> line_images, float line_width = Constant::Object::kDefaultLineWidth, int color = Color::kWhite, bool rotate_fix = false, bool area_out_alive = false, float sharp = Constant::Object::kDefaultSharpness, float rough = Constant::Object::kBezieRoughness) {
 			line_width *= world_scale;
 			return {type, line_width, line_images, color, rotate_fix, area_out_alive, sharp, rough};
 		}

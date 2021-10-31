@@ -98,10 +98,17 @@ int drawCircle(int x, int y, int r, unsigned int Color, int GlobalPos, int FillF
 }
 
 // 円の描画(アンチエイリアス付き)
-int drawCircleAA(int x, int y, int r, unsigned int Color, int GlobalPos, int FillFlag, int LineChickness) {
+int drawCircleAA(float x, float y, float r, int posnum, unsigned int Color, int GlobalPos, int FillFlag, int LineChickness) {
     if (GlobalPos == FALSE)
         setScreenPosToGlobal(&x, &y);
     return DrawCircleAA(x, y, r, Color, FillFlag, LineChickness);
+}
+
+// 円の描画(アンチエイリアス付き)
+int drawCircleAA(b2Vec2 center, float r, int posnum, unsigned int Color, int GlobalPos, int FillFlag, int LineChickness) {
+    if (GlobalPos == FALSE)
+        setScreenPosToGlobal(&center.x, &center.y);
+    return drawCircleAA(center.x, center.y, r, posnum, Color, GlobalPos, FillFlag, LineChickness);
 }
 
 // 楕円を描く
@@ -261,22 +268,22 @@ float nextBezieAdvance(float nowAdvance, float roughness, bool loop, bool init) 
 // 制御点が３つのベジェ曲線を画像で描画する
 int drawBezie(b2Vec2 left[3], b2Vec2 right[3], float roughness, std::vector<int> images, bool loop, bool edgeDraw, int firstIndex, int GlobalPos) {
 	float t = nextBezieAdvance(0.0, roughness, loop, true);
-	const int imgCountMin = edgeDraw || IsEmpty(images) ? 0 : 1;
+	const int imgCountMin = edgeDraw || images.size() < 2 ? 0 : 1;
 	const int imgCountMax = Int::clamp(edgeDraw ? images.size() - 1 : images.size() - 2, 0, images.size());
 	int imgIndex = firstIndex == Array::kUnspecified ? nextImageIndex(images, Array::kUnspecified, loop, edgeDraw) : firstIndex;
 	float next;
 	bool end = false;
 	// 左の始点、終点、右の始点、終点
-	b2Vec2 sl, gl, sr, gr;
+	b2Vec2 so, si, go, gi;
 	roughness = Float::clamp(roughness, 0.0, 1.0);
 	next = loop ? Float::clamp(t + roughness, 0.0, 1.0) : 1.0;
 	while(!end) {
-		sl = B2Vec2::bezieValue(left, t);
-		sr = B2Vec2::bezieValue(right, t);
-		gl = B2Vec2::bezieValue(left, next);
-		gr = B2Vec2::bezieValue(right, next);
+		so = B2Vec2::bezieValue(left, t);
+		si = B2Vec2::bezieValue(right, t);
+		go = B2Vec2::bezieValue(left, next);
+		gi = B2Vec2::bezieValue(right, next);
 		
-		drawModiGraphF(sl, sr, gr, gl, images.at(imgIndex), TRUE, GlobalPos);
+		drawModiGraphF(so, si, gi, go, images.at(imgIndex), TRUE, GlobalPos);
 		// 次の画像ハンドルを決める
 		imgIndex = nextImageIndex(images, imgIndex, loop, edgeDraw);
 		// 根本まで来ていたら描画しない

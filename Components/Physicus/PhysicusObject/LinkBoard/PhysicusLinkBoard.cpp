@@ -28,7 +28,7 @@ void createLinkBoardBody(Object* obj) {
 	B2Vec2::recentLocus(locus, &current, &last, &lastLast);
 	
 	b2Vec2 center = B2Vec2::halfWay(last, current);
-	const float width = obj->getLineWidth();
+	const float width = obj->getLineHalfWidth();
 	const float angle = B2Vec2::angle(last, current);
 	std::vector<Frame> locus_frame = obj->getLocusFrames();
 	float lastAngle = locus.size() <= 2 ? angle :  B2Vec2::angle(lastLast, last);
@@ -71,7 +71,7 @@ void createLinkBoardBody(Object* obj) {
 	}
 	
 	// 動体オブジェクトの参照値
-	b2BodyDef bodyDef = B2BodyDef::dynamic(center, 1.0);
+	b2BodyDef bodyDef = B2BodyDef::dynamic(center);
 	// まだ物理演算を適用させない
 	bodyDef.awake = false;
 	// ボディの作成

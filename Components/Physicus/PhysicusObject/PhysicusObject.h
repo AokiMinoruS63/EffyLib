@@ -21,7 +21,6 @@
 #include "../PhysicusWorld/Frame/PhysicusWorldFrame.h"
 #include "Constant/PhysicusConstant.h"
 #include "Setting/PhysicusObjectSetting.h"
-#include "../PhysicusWorld/Frame/PhysicusWorldFrame.h"
 
 namespace Physicus {
 
@@ -38,6 +37,10 @@ namespace Physicus {
 		b2World* world_;
 		// タッチの軌跡
 		std::vector<b2Vec2> locus_;
+		// 軌跡の外側の線(回転は考慮しない座標)
+		std::vector<b2Vec2> locus_line_outside_;
+		// 軌跡の内側の線(回転は考慮しない座標)
+		std::vector<b2Vec2> locus_line_inside_;
 		// 軌跡の線のログ
 		std::vector<Physicus::Frame> locus_frame_log_;
 		// 拡大率
@@ -85,6 +88,14 @@ namespace Physicus {
 		b2World* getWorld();
 
 		/**
+		 * @brief 座標を取得する
+		 * 
+		 * @param isDraw 描画時の座標なら**true**
+		 * @return b2Vec2 
+		 */
+		b2Vec2 getPosition(bool isDraw);
+
+		/**
 		 * @brief 軌跡を取得する
 		 * 
 		 * @return std::vector<b2Vec2> 
@@ -118,6 +129,27 @@ namespace Physicus {
 		 * @return float 
 		 */
 		float getLineWidth();
+
+		/**
+		 * @brief 線の半分の太さを取得する
+		 * 
+		 * @return float 
+		 */
+		float getLineHalfWidth();
+
+		/**
+		 * @brief 描画時の線の太さを取得する
+		 * 
+		 * @return float 
+		 */
+		float getDrawLineWidth();
+
+		/**
+		 * @brief 描画時の線の半分の太さを取得する
+		 * 
+		 * @return float 
+		 */
+		float getDrawLineHalfWidth();
 
 		/**
 		 * @brief 線の太さをセットする
@@ -322,6 +354,33 @@ namespace Physicus {
 		 * @return std::vector<Physicus::Frame> 
 		 */
 		std::vector<Physicus::Frame> getLocusFrames();
+
+		/**
+		 * @brief 軌跡の線を追加する
+		 * 
+		 * @param outside 外側の線の頂点座標
+		 */
+		void appendDrawLocusLine(b2Vec2 outside);
+
+		/**
+		 * @brief 軌跡の線を削除する
+		 * 
+		 */
+		void removeLocusLines();
+
+		/**
+		 * @brief 軌跡の内側の線を取得する
+		 * 
+		 * @return std::vector<b2Vec2> 
+		 */
+		std::vector<b2Vec2> getLocusInsideLines(); 
+
+		/**
+		 * @brief 軌跡の外側の線を取得する
+		 * 
+		 * @return std::vector<b2Vec2> 
+		 */
+		std::vector<b2Vec2> getLocusOutsideLines(); 
 
 		// MARK: - オブジェクトの描画
 

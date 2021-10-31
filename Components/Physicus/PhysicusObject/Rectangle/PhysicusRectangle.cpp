@@ -11,49 +11,10 @@
 
 #include "PhysicusRectangle.h"
 #include "../PhysicusObject.h"
+#include "../Common/PhysicusObjectCommon.h"
 #include <vector>
 
 using namespace Physicus;
-
-/**
- * @brief 矩形の始点と終点をセットする
- * 
- * @param obj 矩形オブジェクト
- * @param start 始点
- * @param end 終点
- */
-void setDrawStartEnd(Object* obj, b2Vec2* start, b2Vec2* end) {
-	const std::vector<b2Vec2> locus = obj->getLocus();
-	if(locus.size() < 2 || !obj->isRectangle()) {
-		return;
-	}
-	const float scale = 1.0 / obj->getWorldScale();
-	*start = B2Vec2::multiplication(locus.front(), scale);
-	*end = B2Vec2::multiplication(locus.back(), scale);
-	B2Vec2::setStartEnd(start, end);
-}
-
-/**
- * @brief 矩形の線を考慮した頂点を設定する
- * 
- * @param obj 矩形オブジェクト
- * @param vertices 頂点配列
- * @param outside 外周
- * @param inside 内周
- */
-void getVertices(Object* obj, std::vector<b2Vec2> vertices, b2Vec2 outside[4], b2Vec2 inside[4]) {
-	const float width = obj->getLineWidth() / obj->getWorldScale();
-
-	// 各頂点
-	outside[0] = B2Vec2::rotate(vertices.at(0), width, Float::Angle::kRightTop, B2Vec2::Horizon::kLeading);
-	inside[0] = B2Vec2::rotate(vertices.at(0), width, Float::Angle::kRightTop, B2Vec2::Horizon::kTrailing);
-	outside[1] = B2Vec2::rotate(vertices.at(1), width, Float::Angle::kRightBottom, B2Vec2::Horizon::kLeading);
-	inside[1] = B2Vec2::rotate(vertices.at(1), width, Float::Angle::kRightBottom, B2Vec2::Horizon::kTrailing);
-	outside[2] = B2Vec2::rotate(vertices.at(2), width, Float::Angle::kLeftBottom, B2Vec2::Horizon::kLeading);
-	inside[2] = B2Vec2::rotate(vertices.at(2), width, Float::Angle::kLeftBottom, B2Vec2::Horizon::kTrailing);
-	outside[3] = B2Vec2::rotate(vertices.at(3), width, Float::Angle::kLeftTop, B2Vec2::Horizon::kLeading);
-	inside[3] = B2Vec2::rotate(vertices.at(3), width, Float::Angle::kLeftTop, B2Vec2::Horizon::kTrailing);	
-}
 
 /**
  * @brief 矩形の線を考慮した頂点を設定する
@@ -85,7 +46,7 @@ bool createRectangleBody(Object* obj) {
 	rect = B2Vec2::multiplication(B2Vec2::sub(end, start), Float::kHalf);
 
 	// 動体オブジェクトの参照値
-	b2BodyDef bodyDef = B2BodyDef::dynamic(center, 1.0);
+	b2BodyDef bodyDef = B2BodyDef::dynamic(center);
 	// ボディの作成
 	auto body = obj->getWorld()->CreateBody(&bodyDef);
 	obj->append(body);
@@ -124,8 +85,6 @@ void draw(Object* obj, b2Vec2 outside[4], b2Vec2 inside[4]) {
 	const int color = obj->getColor();
 	const float roughness = obj->getRoughness();
 	int imageIndex = nextImageIndex(images, Array::kUnspecified, true, false);
-	// TODO: 角に丸みを持たせた場合の処理も行う
-	obj->setSharpness(0.5);
 	const float sharp = obj->getSharpness();
 
 	b2Vec2 last[2], start[2];
