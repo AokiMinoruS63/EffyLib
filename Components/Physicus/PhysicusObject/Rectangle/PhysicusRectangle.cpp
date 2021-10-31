@@ -46,7 +46,7 @@ bool createRectangleBody(Object* obj) {
 	rect = B2Vec2::multiplication(B2Vec2::sub(end, start), Float::kHalf);
 
 	// 動体オブジェクトの参照値
-	b2BodyDef bodyDef = B2BodyDef::dynamic(center);
+	b2BodyDef bodyDef = B2BodyDef::generate(obj->getSetting().bodyType, center);
 	// ボディの作成
 	auto body = obj->getWorld()->CreateBody(&bodyDef);
 	obj->append(body);

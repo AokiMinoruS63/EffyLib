@@ -20,6 +20,8 @@ namespace Physicus {
 	struct ObjectSetting {
 		// オブジェクトのタイプ
 		Type type;
+		// ボディの演算タイプ（動くか止まったままかなど）
+		b2BodyType bodyType;
 		// 線の太さ
 		float line_width;
 		// 線の軌跡用の画像
@@ -40,6 +42,7 @@ namespace Physicus {
 		 * 
 		 * @param world_scale 
 		 * @param type 
+		 * @param bodyType 
 		 * @param line_images 
 		 * @param line_width 
 		 * @param color 
@@ -49,9 +52,9 @@ namespace Physicus {
 		 * @param rough 
 		 * @return ObjectSetting 
 		 */
-		static ObjectSetting init(float world_scale, Type type, std::vector<int> line_images, float line_width = Constant::Object::kDefaultLineWidth, int color = Color::kWhite, bool rotate_fix = false, bool area_out_alive = false, float sharp = Constant::Object::kDefaultSharpness, float rough = Constant::Object::kBezieRoughness) {
+		static ObjectSetting init(float world_scale, Type type, b2BodyType bodyType, std::vector<int> line_images, float line_width = Constant::Object::kDefaultLineWidth, int color = Color::kWhite, bool rotate_fix = false, bool area_out_alive = false, float sharp = Constant::Object::kDefaultSharpness, float rough = Constant::Object::kBezieRoughness) {
 			line_width *= world_scale;
-			return {type, line_width, line_images, color, rotate_fix, area_out_alive, sharp, rough};
+			return {type, bodyType, line_width, line_images, color, rotate_fix, area_out_alive, sharp, rough};
 		}
 
 		/**
@@ -59,6 +62,7 @@ namespace Physicus {
 		 * 
 		 * @param world_scale 
 		 * @param type 
+		 * @param bodyType 
 		 * @param line_images 
 		 * @param line_images_size 
 		 * @param line_width 
@@ -69,13 +73,13 @@ namespace Physicus {
 		 * @param rough 
 		 * @return ObjectSetting 
 		 */
-		static ObjectSetting init(float world_scale, Type type, int* line_images, int line_images_size, float line_width = Constant::Object::kDefaultLineWidth, int color = Color::kWhite, bool rotate_fix = false, bool area_out_alive = false, float sharp = Float::kMax, float rough = Constant::Object::kBezieRoughness) {
+		static ObjectSetting init(float world_scale, Type type, b2BodyType bodyType, int* line_images, int line_images_size, float line_width = Constant::Object::kDefaultLineWidth, int color = Color::kWhite, bool rotate_fix = false, bool area_out_alive = false, float sharp = Float::kMax, float rough = Constant::Object::kBezieRoughness) {
 			line_width *= world_scale;
 			std::vector<int> images;
 			for(int i = 0; i < line_images_size; i++) {
 				images.push_back(line_images[i]);
 			}
-			return {type, line_width, images, color, rotate_fix, area_out_alive, sharp, rough};
+			return {type, bodyType, line_width, images, color, rotate_fix, area_out_alive, sharp, rough};
 		}
 	};
 }

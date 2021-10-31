@@ -27,7 +27,7 @@ PhysicusWorld::PhysicusWorld(b2Vec2 gravity, float scale, Frame alive_area, floa
 	// 数珠繋ぎにする距離
 	tie_loop_range_ = tie_loop_range;
 	const std::vector<int> images = ComponentAssets::shared()->getImages().brush_crayon;
-	current_setting_ = ObjectSetting::init(world_scale_, Type::kLinkBoard, images);
+	current_setting_ = ObjectSetting::init(world_scale_, Type::kLinkBoard, b2_staticBody, images);
 	// NULL代入する
 	current_ = NULL;
 }

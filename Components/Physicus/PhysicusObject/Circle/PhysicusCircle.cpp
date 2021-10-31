@@ -122,19 +122,19 @@ bool createCircleBody(Physicus::Object* obj) {
 	radius = B2Vec2::xyShortDistance(start, end);
 
 	// 動体オブジェクトの参照値
-	b2BodyDef bodyDef = B2BodyDef::dynamic(start);
+	b2BodyDef bodyDef = B2BodyDef::generate(obj->getSetting().bodyType, start);
 	bodyDef.position = start;
 	// ボディの作成
 	auto body = obj->getWorld()->CreateBody(&bodyDef);
 	obj->append(body);
 
 	// 動体オブジェクトの形を定義する
-	b2CircleShape dynamicCircle;
-	dynamicCircle.m_radius = radius;
+	b2CircleShape shape;
+	shape.m_radius = radius;
 
 	// 動体オブジェクトの密度・摩擦の関連付け
 	b2FixtureDef fixtureDef;
-	fixtureDef.shape = &dynamicCircle;
+	fixtureDef.shape = &shape;
 	// 密度を設定
 	fixtureDef.density = 1.00f;
 	// 摩擦を設定

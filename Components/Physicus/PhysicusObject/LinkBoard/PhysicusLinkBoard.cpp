@@ -71,7 +71,7 @@ void createLinkBoardBody(Object* obj) {
 	}
 	
 	// 動体オブジェクトの参照値
-	b2BodyDef bodyDef = B2BodyDef::dynamic(center);
+	b2BodyDef bodyDef = B2BodyDef::generate(obj->getSetting().bodyType, center);
 	// まだ物理演算を適用させない
 	bodyDef.awake = false;
 	// ボディの作成
