@@ -43,6 +43,8 @@ namespace Physicus {
 		std::vector<b2Vec2> locus_line_inside_;
 		// 軌跡の線のログ
 		std::vector<Physicus::Frame> locus_frame_log_;
+		// 描画の進行率
+		float draw_advance_;
 		// 拡大率
 		float world_scale_;
 		// オブジェクトの設定
@@ -260,6 +262,20 @@ namespace Physicus {
 		 * @return Type 
 		 */
 		Type getType();
+
+		/**
+		 * @brief 描画の進行率を設定する
+		 * 
+		 * @param advance 0.0〜1.0。1.0で全て表示
+		 */
+		void setDrawAdvance(float advance);
+
+		/**
+		 * @brief 描画の進行率を取得する
+		 * 
+		 * @return float 0.0〜1.0。1.0で全て表示
+		 */
+		float getDrawAdvance();
 
 		/**
 		 * @brief オブジェクトのタイプが矩形なら**true**

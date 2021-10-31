@@ -188,6 +188,16 @@ Type Object::getType() {
 	return setting_.type;
 }
 
+// 描画の進行率を設定する
+void Object::setDrawAdvance(float advance) {
+	draw_advance_ = advance;
+}
+
+// 描画の進行率を取得する
+float Object::getDrawAdvance() {
+	return draw_advance_;
+}
+
 // オブジェクトのタイプが矩形なら**true**
 bool Object::isRectangle() {
 	return setting_.type == Type::kRectangle;
