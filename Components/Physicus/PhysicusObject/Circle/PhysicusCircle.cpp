@@ -55,8 +55,10 @@ void setCircleLinePositions(Physicus::Object* obj, float radius) {
  * @param current 始点のインデックス
  * @param next 終点のインデックス
  * @param angle オブジェクトの角度
+ * @param drawAdvance 描画進行率
  */
-void setDrawPos(b2Vec2& si, b2Vec2& so, b2Vec2& gi, b2Vec2& go, b2Vec2 position, std::vector<b2Vec2> inside, std::vector<b2Vec2> outside, int current, int next, float angle) {
+void setDrawPos(b2Vec2& si, b2Vec2& so, b2Vec2& gi, b2Vec2& go, b2Vec2 position, std::vector<b2Vec2> inside, std::vector<b2Vec2> outside, int current, int next, float angle, float drawAdvance = Float::kMax) {
+	// TODO: 進行率を適用する（si-gi間とso-go間）
 	si = inside.at(current);
 	so = outside.at(current);
 	gi = inside.at(next);
@@ -70,6 +72,8 @@ void setDrawPos(b2Vec2& si, b2Vec2& so, b2Vec2& gi, b2Vec2& go, b2Vec2 position,
 	so = B2Vec2::add(position, so);
 	gi = B2Vec2::add(position, gi);
 	go = B2Vec2::add(position, go);
+	gi = B2Vec2::between(si, gi, drawAdvance);
+	go = B2Vec2::between(so, go, drawAdvance);
 }
 
 /**
@@ -78,9 +82,10 @@ void setDrawPos(b2Vec2& si, b2Vec2& so, b2Vec2& gi, b2Vec2& go, b2Vec2 position,
  * @param obj オブジェクト
  * @param angle オブジェクトの角度
  * @param position オブジェクトの座標
+ * @param drawAdvance 描画の進行率
  * @param edgeDraw 画像の先端と末尾も描画するなら**true**
  */
-void drawCircleLine(Physicus::Object* obj, float angle, b2Vec2 position, bool edgeDraw = false) {
+void drawCircleLine(Physicus::Object* obj, float angle, b2Vec2 position, float drawAdvance = Float::kMax, bool edgeDraw = false) {
 	const auto inside = obj->getLocusInsideLines();
 	const auto outside = obj->getLocusOutsideLines();
 	auto images = obj->getLineImages();
@@ -93,16 +98,27 @@ void drawCircleLine(Physicus::Object* obj, float angle, b2Vec2 position, bool ed
 	int imgIndex = imgCountMin;
 	const float scale = obj->getWorldScale();
 	b2Vec2 so, si, go, gi;
+	// 進行度を決定する
+	int loopNum;
+	float lastAdvance;
+	Float::setAdvance(loopNum, lastAdvance, drawAdvance, inside.size());
+	
 	for(int i = 0; i < inside.size() - 1; i++) {
-		setDrawPos(si, so, gi, go, position, inside, outside, i, i + 1, angle);
+		const float t = i < loopNum ? Float::kMax : lastAdvance;
+		if(i > loopNum) {
+			return;
+		}
+		setDrawPos(si, so, gi, go, position, inside, outside, i, i + 1, angle, t);
 		drawModiGraphF(so, si, gi, go, images.at(imgIndex), TRUE);
 		imgIndex++;
 		if(imgIndex > imgCountMax) {
 			imgIndex = imgCountMin;
 		}
 	}
-	setDrawPos(si, so, gi, go, position, inside, outside, inside.size() - 1, 0, angle);
-	drawModiGraphF(so, si, gi, go, images.at(imgIndex), TRUE);
+	if(loopNum >= inside.size() - 1) {
+		setDrawPos(si, so, gi, go, position, inside, outside, inside.size() - 1, 0, angle, lastAdvance);
+		drawModiGraphF(so, si, gi, go, images.at(imgIndex), TRUE);
+	}
 }
 
 // 円オブジェクトを作成成功なら**true**
@@ -153,7 +169,7 @@ void drawCircle(Physicus::Object* obj) {
 		return;
 	}
 	auto body = bodies.front();
-	drawCircleLine(obj, body->GetAngle(), obj->getPosition(true));
+	drawCircleLine(obj, body->GetAngle(), obj->getPosition(true), obj->getDrawAdvance());
 }
 
 // 生成した円オブジェクトのフレームを描画する

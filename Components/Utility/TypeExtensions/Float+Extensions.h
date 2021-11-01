@@ -111,6 +111,20 @@ namespace Float {
 	};
 
 	/**
+	 * @brief 進行率がいくつかに分かれている時の節ごとの進行率と進行回数をセットする
+	 * 
+	 * @param loopNum 
+	 * @param lastAdvance 
+	 * @param advance 
+	 * @param size 
+	 */
+	static void setAdvance(int& separateNum, float& lastAdvance, float totalAdvance, int size) {
+		const float advance = totalAdvance * (float)size;
+		separateNum = (int)advance;
+		lastAdvance = totalAdvance == kMax ? kMax : fmodf(advance, 1.0 );
+	}
+
+	/**
 	 * @brief ２つのfloatの間の進行度に応じた値を返す
 	 * 
 	 * @param s 始点
