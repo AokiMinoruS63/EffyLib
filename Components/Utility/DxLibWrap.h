@@ -425,10 +425,11 @@ float nextBezieAdvance(float nowAdvance, float roughness, bool loop, bool init =
  * @param loop ループさせるなら**true**
  * @param edgeDraw imagesの最初の画像と最後の画像を使用しないなら**true**
  * @param firstIndex 最初のインデックス
+ * @param advance どこまで描画するか
  * @param GlobalPos パーティションを考慮したグローバル座標で描画するか、のフラグ。TRUEでグローバル座標描画
  * @return int 終了後のインデックス
  */
-int drawBezie(b2Vec2 left[3], b2Vec2 right[3], float roughness, std::vector<int> images, bool loop, bool edgeDraw, int firstIndex, int GlobalPos = FALSE);
+int drawBezie(b2Vec2 left[3], b2Vec2 right[3], float roughness, std::vector<int> images, bool loop, bool edgeDraw, int firstIndex, float advance = 1.0, int GlobalPos = FALSE);
 
 /**
  * @brief グラフィックの指定矩形部分のみを描画

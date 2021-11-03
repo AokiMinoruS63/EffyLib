@@ -44,7 +44,7 @@ void MainContent::run() {
 	// タッチ計算
 	touchMgr_->calc();
 	// タッチを物理演算に適用
-	world_->touchCalc(touchMgr_->get(), Physicus::Type::kCircle);
+	world_->touchCalc(touchMgr_->get(), Physicus::Type::kRectangle);
 	// 時間を進める
 	world_->timeCalc();
 

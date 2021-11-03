@@ -41,4 +41,15 @@ using namespace Physicus;
  */
 void getVertices(Physicus::Object* obj, std::vector<b2Vec2> vertices, b2Vec2 outside[4], b2Vec2 inside[4]);
 
+/**
+ * @brief １つの直線を分割して描画する
+ * 
+ * @param obj オブジェクト
+ * @param vec 頂点（外側終点、内側終点、内側始点、外側始点）
+ * @param drawAdvance 進行率
+ * @param imageIndex 現在のオブジェクトの画像インデックス
+ * @return int 描画終了時のimageIndex
+ */
+int drawSeparateLine(Physicus::Object* obj, b2Vec2 vec[4], float drawAdvance, int imageIndex);
+
 #endif

@@ -111,17 +111,54 @@ namespace Float {
 	};
 
 	/**
-	 * @brief 進行率がいくつかに分かれている時の節ごとの進行率と進行回数をセットする
+	 * @brief 合算値を返す
 	 * 
-	 * @param loopNum 
-	 * @param lastAdvance 
-	 * @param advance 
-	 * @param size 
+	 * @param vec 
+	 * @return float 
+	 */
+	static float total(std::vector<float> vec) {
+		float num = 0;
+		for(auto &itr: vec) {
+			num += itr;
+		}
+		return num;
+	}
+
+	/**
+	 * @brief 長さの等しい節における進行率と進行回数を全体の進行率からセットする
+	 * 
+	 * @param loopNum 現在何番目の節を進行しているか
+	 * @param lastAdvance 進行している最後の節の進行率
+	 * @param totalAdvance 全体の進行率。0.0〜1.0
+	 * @param size 節の個数
 	 */
 	static void setAdvance(int& separateNum, float& lastAdvance, float totalAdvance, int size) {
 		const float advance = totalAdvance * (float)size;
 		separateNum = (int)advance;
 		lastAdvance = totalAdvance == kMax ? kMax : fmodf(advance, 1.0 );
+	}
+
+	/**
+	 * @brief 長さの違う節における進行率と進行回数を全体の進行率からセットする
+	 * 
+	 * @param separateNum 現在何番目の節を進行しているか
+	 * @param lastAdvance 進行している最後の節の進行率
+	 * @param sections 節の長さの配列
+	 * @param totalAdvance 全体の進行率。0.0〜1.0
+	 */
+	static void setAdvance(int& separateNum, float& lastAdvance, std::vector<float> sections, float totalAdvance) {
+		const float totalLimit = total(sections);
+		totalAdvance *= totalLimit;
+		separateNum = 0;
+		lastAdvance = 0.0;
+		for(auto& itr: sections) {
+			if(itr > totalAdvance) {
+				lastAdvance = totalAdvance / itr;
+				break;
+			}
+			totalAdvance -= itr;
+			separateNum++;
+		}
 	}
 
 	/**
@@ -238,6 +275,20 @@ namespace Float {
 		const float tmp = *val1;
 		*val1 = *val2;
 		*val2 = tmp;
+	}
+
+	/**
+	 * @brief ２つの値の内小さい方を返す
+	 * 
+	 * @param num1 
+	 * @param num2 
+	 * @return float 
+	 */
+	static float smaller(float num1, float num2) {
+		if(num1 < num2) {
+			return num1;
+		}
+		return num2;
 	}
 }
 

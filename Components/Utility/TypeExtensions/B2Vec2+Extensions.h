@@ -632,6 +632,18 @@ namespace B2Vec2 {
 			Float::swap(&start->y, &end->y);
 		}
 	}
+
+	/**
+	 * @brief ある座標からある座標へ指定距離行った座標を取得する
+	 * 
+	 * @param start 始点
+	 * @param end 終点
+	 * @param distance 始点から終点にどれだけ進むか
+	 * @return b2Vec2 
+	 */
+	static b2Vec2 betweenFromDistance(b2Vec2 start, b2Vec2 end, float distance) {
+		return add(start, multiplication( unitVector(sub(end, start)), distance));
+	}
 }
 
 #endif

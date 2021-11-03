@@ -75,8 +75,9 @@ bool createRectangleBody(Object* obj) {
  * @param obj 描画するオブジェクト
  * @param outside 外側の頂点配列
  * @param inside 内側の頂点配列
+ * @param drawAdvance 描画の進行率
  */
-void draw(Object* obj, b2Vec2 outside[4], b2Vec2 inside[4]) {
+void draw(Object* obj, b2Vec2 outside[4], b2Vec2 inside[4], float drawAdvance = Float::kMax) {
 	// 画像ハンドルがなければ処理しない
 	const auto images = obj->getLineImages();
 	if(IsEmpty(images)) {
@@ -88,37 +89,72 @@ void draw(Object* obj, b2Vec2 outside[4], b2Vec2 inside[4]) {
 	const float sharp = obj->getSharpness();
 
 	b2Vec2 last[2], start[2];
+	// 距離を決める
+	float row = B2Vec2::distance(outside[0], outside[1]);
+	float column = B2Vec2::distance(outside[1], outside[2]);
+	float sharpDistance = Float::smaller(row * 0.5 * (Float::kMax - sharp), column * 0.5 * (Float::kMax - sharp));
+	row -= sharpDistance * 2;
+	column -= sharpDistance * 2;
+	std::vector<float> section;
+	section.push_back(row);
+	section.push_back(sharpDistance);
+	section.push_back(column);
+	section.push_back(sharpDistance);
+	section.push_back(row);
+	section.push_back(sharpDistance);
+	section.push_back(column);
+	section.push_back(sharpDistance);
+	int separateNum;
+	float lastAdvance;
+	float t;
+	Float::setAdvance(separateNum, lastAdvance, section, drawAdvance);
+	int nowIndex = 0;
+	#define SET_ADVANCE t = separateNum > nowIndex ? Float::kMax : lastAdvance; \
+						if(separateNum < nowIndex) { t = Float::kMin;}
+
 	for(int i = 0; i < 4; i++) {
+		nowIndex = i * 2;
+		SET_ADVANCE
 		const int next = (i + 1) % 4;
 		b2Vec2 base[4] = { outside[next], inside[next], inside[i], outside[i] };
 		b2Vec2 vertices[4];
 
-		vertices[0] = B2Vec2::between(base[0], B2Vec2::halfWay(base[0], base[3]), Float::kMax - sharp);
-		vertices[1] = B2Vec2::between(base[1], B2Vec2::halfWay(base[1], base[2]), Float::kMax - sharp);
-		vertices[2] = B2Vec2::between(base[2], B2Vec2::halfWay(base[2], base[1]), Float::kMax - sharp);
-		vertices[3] = B2Vec2::between(base[3], B2Vec2::halfWay(base[3], base[0]), Float::kMax - sharp);
-
-		drawModiGraphF(vertices[0], vertices[1], vertices[2], vertices[3], images.at(imageIndex), TRUE);
-		imageIndex = nextImageIndex(images, imageIndex, true, false);
+		vertices[0] = B2Vec2::betweenFromDistance(base[0], B2Vec2::halfWay(base[0], base[3]), sharpDistance);
+		vertices[1] = B2Vec2::betweenFromDistance(base[1], B2Vec2::halfWay(base[1], base[2]), sharpDistance);
+		vertices[2] = B2Vec2::betweenFromDistance(base[2], B2Vec2::halfWay(base[2], base[1]), sharpDistance);
+		vertices[3] = B2Vec2::betweenFromDistance(base[3], B2Vec2::halfWay(base[3], base[0]), sharpDistance);
+		if(t > Float::kMin) {
+			imageIndex = drawSeparateLine(obj, vertices, t, imageIndex);
+		}
 		if(i == 0) {
 			start[0] = vertices[3];
 			start[1] = vertices[2];
 		} else {
+			nowIndex = i * 2 - 1;
+			SET_ADVANCE
 			// TODO: 前の座標とベジェ曲線で繋ぐ
 			b2Vec2 outsideArray[3] = {last[0], base[3], vertices[3]};
 			b2Vec2 insideArray[3] = {last[1], base[2], vertices[2]};
-			imageIndex = drawBezie(outsideArray, insideArray, roughness, images, true, false, imageIndex);
-			imageIndex = nextImageIndex(images, imageIndex, true, false);
+			if(t > Float::kMin) {
+				imageIndex = drawBezie(outsideArray, insideArray, roughness, images, true, false, imageIndex, t);
+				imageIndex = nextImageIndex(images, imageIndex, true, false);
+			}
 			if(i == 3) {
+				nowIndex = 7;
+				SET_ADVANCE
+				if(t == Float::kMin) {
+					continue;
+				}
 				b2Vec2 outsideArrayEnd[3] = {vertices[0], base[0], start[0]};
 				b2Vec2 insideArrayEnd[3] = {vertices[1], base[1], start[1]};
-				drawBezie(outsideArrayEnd, insideArrayEnd, roughness, images, true, false, imageIndex);
+				drawBezie(outsideArrayEnd, insideArrayEnd, roughness, images, true, false, imageIndex, t);
 				imageIndex = nextImageIndex(images, imageIndex, true, false);
 			}
 		}
 		last[0] = vertices[0];
 		last[1] = vertices[1];
 	}
+	#undef SET_ADVANCE
 }
 
 // 矩形オブジェクトを描画する
@@ -133,7 +169,7 @@ void drawRectangle(Object* obj) {
 	const auto vertices = B2Body::vertices(body, 1.0 / obj->getWorldScale());
 	b2Vec2 outside[4], inside[4];
 	getVertices(obj, vertices, outside, inside);
-	draw(obj, outside, inside);
+	draw(obj, outside, inside, obj->getDrawAdvance());
 }
 
 // 編集中の矩形オブジェクトを描画する

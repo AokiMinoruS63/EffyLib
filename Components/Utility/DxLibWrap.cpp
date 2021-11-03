@@ -266,7 +266,10 @@ float nextBezieAdvance(float nowAdvance, float roughness, bool loop, bool init) 
 }
 
 // 制御点が３つのベジェ曲線を画像で描画する
-int drawBezie(b2Vec2 left[3], b2Vec2 right[3], float roughness, std::vector<int> images, bool loop, bool edgeDraw, int firstIndex, int GlobalPos) {
+int drawBezie(b2Vec2 left[3], b2Vec2 right[3], float roughness, std::vector<int> images, bool loop, bool edgeDraw, int firstIndex, float advance, int GlobalPos) {
+	if(advance == Float::kMin) {
+		return firstIndex;
+	}
 	float t = nextBezieAdvance(0.0, roughness, loop, true);
 	const int imgCountMin = edgeDraw || images.size() < 2 ? 0 : 1;
 	const int imgCountMax = Int::clamp(edgeDraw ? images.size() - 1 : images.size() - 2, 0, images.size());
@@ -277,6 +280,9 @@ int drawBezie(b2Vec2 left[3], b2Vec2 right[3], float roughness, std::vector<int>
 	b2Vec2 so, si, go, gi;
 	roughness = Float::clamp(roughness, 0.0, 1.0);
 	next = loop ? Float::clamp(t + roughness, 0.0, 1.0) : 1.0;
+	if(advance < next) {
+		next = advance;
+	}
 	while(!end) {
 		so = B2Vec2::bezieValue(left, t);
 		si = B2Vec2::bezieValue(right, t);
@@ -297,6 +303,11 @@ int drawBezie(b2Vec2 left[3], b2Vec2 right[3], float roughness, std::vector<int>
 		// 進行率を決める
 		t = nextBezieAdvance(t, roughness, loop);
 		next = nextBezieAdvance(t, roughness, loop);
+		if(advance < t) {
+			return imgIndex;
+		} else if(advance < next) {
+			next = advance;
+		}
 	}
 	return imgIndex;
 }
