@@ -11,6 +11,7 @@
 
 #include "PhysicusLinkBoard.h"
 #include "../PhysicusObject.h"
+#include "../Common/PhysicusObjectCommon.h"
 #include "../../../Utility/DxLibWrap.h"
 #include "../../PhysicusWorld/Frame/PhysicusWorldFrame.h"
 #include <vector>
@@ -136,6 +137,13 @@ void drawLinkBoard(Object* obj) {
 	b2Vec2 currentRect[4];
 	b2Vec2 lastRect[4], lastHalf[2];
 	const float roughness = obj->getRoughness();
+
+	// TODO: ボディの個数と進行率から個別の進行率を把握する
+	// 進行度を決定する
+	const float drawAdvance = obj->getDrawAdvance();
+	int loopNum;
+	float lastAdvance;
+	Float::setAdvance(loopNum, lastAdvance, drawAdvance, bodies.size());
 	for(auto& itr: bodies) {		
 		// 描画メソッド
 		const auto vertices = B2Body::vertices(itr, 1.0 / obj->getWorldScale());
@@ -165,20 +173,50 @@ void drawLinkBoard(Object* obj) {
 
 			// ボディが一つだけならそのまま描画
 			if(bodies.size() == 1) {
-				drawModiGraphF( vertices.at(indices[0]), vertices.at(indices[1]), vertices.at(indices[2]), vertices.at(indices[3]), images.front() , TRUE);
+				b2Vec2 vec[4] = {vertices.at(indices[2]), vertices.at(indices[3]), vertices.at(indices[0]), vertices.at(indices[1])};
+				drawSeparateLine(obj, vec, lastAdvance, 0);
 			} else {
 				// それ以外ならベジェ曲線を描く
 				if(itr == bodies.front()) {
 					// 半分まで描く
-					drawModiGraphF( currentRect[0], currentRect[1], halfRight, halfLeft, images.front() , TRUE);
+					float rate;
+					if(loopCount < loopNum) {
+						rate = Float::kMax;
+					} else if(loopCount > loopNum) {
+						rate = Float::kMin;
+					} else {
+						rate = lastAdvance;
+					}
+					b2Vec2 vec[2] = {
+						B2Vec2::between(currentRect[1], halfRight, rate),
+						B2Vec2::between(currentRect[0], halfLeft, rate)
+					};
+					drawModiGraphF( currentRect[0], currentRect[1], vec[0], vec[1], images.front() , TRUE);
 				} else {
 					// 前のボディの半分から現在のボディの半分までベジェ曲線を描く
-					b2Vec2 leftVec[3] = {lastHalf[0], B2Vec2::halfWay(lastRect[3], currentRect[0]), halfLeft};
-					b2Vec2 rightVec[3] = {lastHalf[1], B2Vec2::halfWay(lastRect[2], currentRect[1]), halfRight};
-					drawBezie(leftVec, rightVec, roughness, images, true, false, Array::kUnspecified );
+					float rate;
+					if(loopCount < loopNum) {
+						rate = Float::kMax;
+					} else if(loopCount > loopNum) {
+						rate = Float::kMin;
+					} else {
+						rate = itr == bodies.back() ? Float::clamp(lastAdvance * 2.0, Float::kMin, Float::kMax) : lastAdvance;
+					}
+					if(rate > Float::kMin) {
+						b2Vec2 leftVec[3] = {lastHalf[0], B2Vec2::halfWay(lastRect[3], currentRect[0]), halfLeft};
+						b2Vec2 rightVec[3] = {lastHalf[1], B2Vec2::halfWay(lastRect[2], currentRect[1]), halfRight};
+						drawBezie(leftVec, rightVec, roughness, images, true, false, Array::kUnspecified, rate );
+					}
 				}
 				// 最後なら半分から最後まで描く
 				if(itr == bodies.back()) {
+					// TODO: 進行率設定
+					if(loopCount != loopNum || lastAdvance < Float::kHalf) {
+						return;
+					}
+					const float rate =  (lastAdvance - Float::kHalf) * 2.0;
+					currentRect[3] = B2Vec2::between(halfLeft, currentRect[3], rate);
+					currentRect[2] = B2Vec2::between(halfRight, currentRect[2], rate);
 					drawModiGraphF( halfRight, halfLeft, currentRect[3], currentRect[2], images.back() , TRUE);
 				}
 			}

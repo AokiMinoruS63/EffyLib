@@ -71,7 +71,7 @@ int drawSeparateLine(Physicus::Object* obj, b2Vec2 vec[4], float drawAdvance, in
 		vertices[0] = B2Vec2::add(vertices[3], B2Vec2::multiplication(plusVec[0], t));
 		vertices[1] = B2Vec2::add(vertices[2], B2Vec2::multiplication(plusVec[1], t));
 
-		drawModiGraphF(vertices[0], vertices[1], vertices[2], vertices[3], images.at(imageIndex), TRUE);
+		drawModiGraphF(vertices[3], vertices[2], vertices[1], vertices[0], images.at(imageIndex), TRUE);
 		imageIndex = nextImageIndex(images, imageIndex, true, false);
 
 		vertices[2] = vertices[1];
