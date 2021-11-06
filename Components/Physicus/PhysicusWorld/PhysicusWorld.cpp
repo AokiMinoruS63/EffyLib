@@ -27,15 +27,47 @@ PhysicusWorld::PhysicusWorld(b2Vec2 gravity, float scale, Frame alive_area, floa
 	// 数珠繋ぎにする距離
 	tie_loop_range_ = tie_loop_range;
 	const std::vector<int> images = ComponentAssets::shared()->getImages().brush_crayon;
-	current_setting_ = ObjectSetting::init(world_scale_, Type::kLinkBoard, b2_staticBody, images);
+	current_setting_ = ObjectSetting::init(world_scale_, Type::kLinkBoard, b2_dynamicBody, images);
 	// NULL代入する
 	current_ = NULL;
+	// プレビューデータの作成
+	makePreviewData();
 }
 
 // デストラクタ
 PhysicusWorld::~PhysicusWorld(){
 	ForEach(objects_, [this](Object *item) { delete item; });
 	delete world_;
+}
+
+// プレビューの作成
+void PhysicusWorld::makePreviewData() {
+	makeRectangle(b2Vec2(0, 580), b2Vec2(580, 600));	
+}
+
+// 矩形の即時作成
+void PhysicusWorld::makeRectangle(b2Vec2 start, b2Vec2 end, b2BodyType body_type) {
+	auto tmp = current_setting_;
+	current_setting_.bodyType = body_type;
+	current_setting_.type = Type::kRectangle;
+
+	touch_t touch;
+	touch.pos_log_x.push_back(end.x);
+	touch.pos_log_x.push_back(start.x);
+	touch.pos_log_y.push_back(end.y);
+	touch.pos_log_y.push_back(start.y);
+	touch.input_log.push_back(false);
+	touch.input_log.push_back(true);
+	touch.x = start.x;
+	touch.y = start.y;
+	touch.status = TouchStatus::kJustRelease;
+	auto body = new Object(touch, Type::kRectangle, world_, world_scale_, current_setting_);
+	objects_.push_back(body);
+	touch.x = end.x;
+	touch.y = end.y;
+	body->generation(touch, tie_loop_range_);
+
+	current_setting_ = tmp;
 }
 
 // 時間を進める
@@ -58,6 +90,11 @@ void PhysicusWorld::timeCalc() {
 			++itr;
 		}
 	}
+
+	// TODO: 描画進行率テスト。後で消す
+	static LONG cnt = 0;
+	ForEach(objects_, [this](Object* item) { item->setDrawAdvance(((float)(cnt%300)) / 300.0);});
+	cnt++;
 }
 
 // スプライトに物理演算を適用する

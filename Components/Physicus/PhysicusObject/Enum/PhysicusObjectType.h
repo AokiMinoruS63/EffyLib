@@ -22,6 +22,8 @@ namespace Physicus {
 		kPolygon,
 		// 連結している矩形
 		kLinkBoard,
+		// 線
+		kLine
 	};
 }
 

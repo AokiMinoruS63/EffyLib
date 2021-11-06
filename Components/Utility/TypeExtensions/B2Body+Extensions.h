@@ -56,7 +56,15 @@ namespace B2Body {
 			printfDx("e_chain");
 			break;
 			case b2Shape::e_edge:
-			printfDx("e_edge");
+			{
+				b2EdgeShape* shape = (b2EdgeShape*)fixture->GetShape();
+				b2Vec2 pos1 = B2Vec2::add(position, B2Vec2::rotate(shape->m_vertex1, body->GetAngle()));
+				b2Vec2 pos2 = B2Vec2::add(position, B2Vec2::rotate(shape->m_vertex2, body->GetAngle()));
+				B2Vec2::applyScale(&pos1, scale);
+				B2Vec2::applyScale(&pos2, scale);
+				vertices.push_back(pos1);
+				vertices.push_back(pos2);
+			}
 			break;
 			case b2Shape::e_polygon:
 			{
@@ -104,7 +112,16 @@ namespace B2Body {
 			printfDx("e_chain");
 			break;
 			case b2Shape::e_edge:
-			printfDx("e_edge");
+			{
+				b2EdgeShape* shape = (b2EdgeShape*)fixture->GetShape();
+
+				b2Vec2 pos1 = B2Vec2::add(position, shape->m_vertex1);
+				b2Vec2 pos2 = B2Vec2::add(position, shape->m_vertex2);
+				if(area.areaIn(pos1) || area.areaIn(pos2)) {
+					return false;
+				}
+			
+			}
 			break;
 			case b2Shape::e_polygon:
 			{
@@ -151,7 +168,16 @@ namespace B2Body {
 			printfDx("e_chain");
 			break;
 			case b2Shape::e_edge:
-			printfDx("e_edge");
+			{
+				auto nowFixture = fixture;
+				while(nowFixture != NULL) {
+					b2EdgeShape* shape = (b2EdgeShape*)nowFixture->GetShape();
+					b2Vec2 start = B2Vec2::multiplication(B2Vec2::add(shape->m_vertex1, position), 1.0 / scale);
+					b2Vec2 end = B2Vec2::multiplication(B2Vec2::add(shape->m_vertex2, position), 1.0 / scale);
+					drawLine(start.x , start.y, end.x, end.y, color);
+					nowFixture = nowFixture->GetNext();
+				}
+			}
 			break;
 			case b2Shape::e_polygon:
 			//printfDx("e_polygon");

@@ -13,6 +13,7 @@
 #include "LinkBoard/PhysicusLinkBoard.h"
 #include "Rectangle/PhysicusRectangle.h"
 #include "Circle/PhysicusCircle.h"
+#include "Line/PhysicusLine.h"
 
 using namespace Physicus;
 
@@ -248,6 +249,12 @@ bool Object::generation(touch_t touch, float tie_loop_range) {
 			createLinkBoardBody(this);
 		}
 		 break;
+		 case kLine:
+		 if(B2Vec2::checkCreatePos(last, current)) {
+			locus_.push_back(current);
+			createLineBody(this);
+		}
+		 break;
 		default:break;
 	}
 
@@ -271,6 +278,7 @@ bool Object::generation(touch_t touch, float tie_loop_range) {
 		// 先にセンターを作成する。その後に８角形以下の図形を繋げて作成する
 		break;
 		case kLinkBoard:
+		case kLine:
 		// 距離が近ければ数珠繋ぎにする
 		if(B2Vec2::isTieLoop(locus_, tie_loop_range)) {
 			B2Joint::weldJointTieLoop(world_, bodies_);
@@ -376,6 +384,9 @@ void Object::draw() {
 		case kLinkBoard:
 		drawLinkBoard(this);
 		 break;
+		case kLine:
+		drawLine(this);
+		break;
 		default:
 
 		break;
@@ -399,6 +410,9 @@ void Object::drawEditing() {
 		case kLinkBoard:
 		drawEditingLinkBoard(this);
 		 break;
+		case kLine:
+		drawEditingLine(this);
+		break;
 		default:break;
 	}
 }
@@ -408,6 +422,7 @@ void Object::drawDebugFrame() {
 	switch (setting_.type) {
 		case kRectangle: 
 		case kLinkBoard:
+		case kLine:
 		case kPolygon:
 		// 先にセンターを作成する。その後に８角形以下の図形を繋げて作成する
 		// startが始点、endが終点
@@ -435,6 +450,7 @@ void Object::drawEditingDebugFrame() {
 		// 先にセンターを作成する。その後に８角形以下の図形を繋げて作成する
 		break;
 		case kLinkBoard:
+		case kLine:
 		ForEach(bodies_, [this](b2Body *item) { B2Body::drawFrame(item, world_scale_, setting_.color); });
 		 break;
 		default:

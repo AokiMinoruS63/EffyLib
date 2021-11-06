@@ -72,7 +72,7 @@ void createLinkBoardBody(Object* obj) {
 	}
 	
 	// 動体オブジェクトの参照値
-	b2BodyDef bodyDef = B2BodyDef::generate(obj->getSetting().bodyType, center);
+	b2BodyDef bodyDef = B2BodyDef::generate(obj->getSetting().bodyType, center, Float::kMax, obj->getRotateFix());
 	// まだ物理演算を適用させない
 	bodyDef.awake = false;
 	// ボディの作成
@@ -128,19 +128,18 @@ void createLinkBoardBody(Object* obj) {
 void drawLinkBoard(Object* obj) {
 	// 画像ハンドルがなければ処理しない
 	const auto images = obj->getLineImages();
-	if(IsEmpty(images)) {
+	const auto bodies = obj->getBodies();
+	const float roughness = obj->getRoughness();
+	const float drawAdvance = obj->getDrawAdvance();
+	if(IsEmpty(images) || IsEmpty(bodies) || roughness <= Float::kMin || drawAdvance == Float::kMin) {
 		return;
 	}
-	const auto bodies = obj->getBodies();
 	const int color = obj->getColor();
 	int loopCount = 0;
 	b2Vec2 currentRect[4];
 	b2Vec2 lastRect[4], lastHalf[2];
-	const float roughness = obj->getRoughness();
 
-	// TODO: ボディの個数と進行率から個別の進行率を把握する
-	// 進行度を決定する
-	const float drawAdvance = obj->getDrawAdvance();
+	// 進行度を決定する	
 	int loopNum;
 	float lastAdvance;
 	Float::setAdvance(loopNum, lastAdvance, drawAdvance, bodies.size());
