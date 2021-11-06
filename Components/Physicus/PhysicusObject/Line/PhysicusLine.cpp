@@ -42,14 +42,8 @@ void createLineBody(Physicus::Object* obj) {
 	shape.SetTwoSided(B2Vec2::relativePosition(center, last), B2Vec2::relativePosition(center, current));
 
 	// 動体オブジェクトの密度・摩擦の関連付け
-	b2FixtureDef fixtureDef;
+	b2FixtureDef fixtureDef = obj->getSetting().fixture;
 	fixtureDef.shape = &shape;
-	// 密度を設定
-	fixtureDef.density = 1.00f;
-	// 摩擦を設定
-	fixtureDef.friction = 0.1f;
-	// 反発を設定
-	fixtureDef.restitution = 0.0;
 	// 動体に適用
 	body->CreateFixture(&fixtureDef);
 	

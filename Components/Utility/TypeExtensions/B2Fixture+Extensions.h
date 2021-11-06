@@ -17,6 +17,22 @@
 
 namespace B2Fixture {
 	/**
+	 * @brief fixtureのデフォルトのプリセット
+	 * 
+	 * @return b2FixtureDef 
+	 */
+	static b2FixtureDef defaultSetting() {
+		b2FixtureDef fixtureDef = b2FixtureDef();
+		// 密度を設定
+		fixtureDef.density = 1.00f;
+		// 摩擦を設定
+		fixtureDef.friction = 0.1f;
+		// 反発を設定
+		fixtureDef.restitution = 0.0;
+		
+		return fixtureDef;
+	}
+	/**
 	 * @brief fixtureのサイズを得る
 	 * 
 	 * @param fixture fixtureのポインタ
