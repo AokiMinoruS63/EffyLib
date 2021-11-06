@@ -144,11 +144,7 @@ namespace B2Body {
 			{
 				b2CircleShape* shape = (b2CircleShape*)fixture->GetShape();
 				auto pos = fixture->GetBody()->GetPosition();
-				drawCircle(pos.x / scale, pos.y / scale, shape->m_radius / scale, color);
-				//for (b2Fixture* f = body->GetFixtureList(); f; f = f->GetNext()) {
-				//	f->GetBody()->GetWorldPoint(b2Vec2(0.0, 0.0)).x;
-				//}
-				
+				drawCircle(pos.x / scale, pos.y / scale, shape->m_radius / scale, color);				
 			}
 			break;
 			case b2Shape::e_chain:

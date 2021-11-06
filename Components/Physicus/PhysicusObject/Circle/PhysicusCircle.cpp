@@ -138,7 +138,7 @@ bool createCircleBody(Physicus::Object* obj) {
 	radius = B2Vec2::xyShortDistance(start, end);
 
 	// 動体オブジェクトの参照値
-	b2BodyDef bodyDef = B2BodyDef::generate(obj->getSetting().bodyType, start);
+	b2BodyDef bodyDef = B2BodyDef::generate(obj->getSetting().bodyType, start, Float::kMax, obj->getRotateFix());
 	bodyDef.position = start;
 	// ボディの作成
 	auto body = obj->getWorld()->CreateBody(&bodyDef);

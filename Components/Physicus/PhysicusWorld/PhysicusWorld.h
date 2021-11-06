@@ -59,7 +59,20 @@ class PhysicusWorld {
 	 */
 	~PhysicusWorld();
 
+	// MARK: - プレビュー
+
+	void makePreviewData();
+
 	// MARK: - 関数
+
+	/**
+	 * @brief 矩形の即時作成
+	 * 
+	 * @param start 始点
+	 * @param end 終点
+	 * @param body_type ボディタイプ
+	 */
+	void makeRectangle(b2Vec2 start, b2Vec2 end, b2BodyType body_type = b2_staticBody);
 
 	public:
 
