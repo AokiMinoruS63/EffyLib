@@ -20,8 +20,10 @@ namespace Physicus {
 		kCircle,
 		// 多角形
 		kPolygon,
-		// 連結している矩形
+		// 連結している形状同士で干渉する矩形の集合体
 		kLinkBoard,
+		// 連結している形状同士では干渉しない矩形の集合体
+		kHandWritten,
 		// 線
 		kLine
 	};

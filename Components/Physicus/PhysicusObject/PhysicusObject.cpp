@@ -11,6 +11,7 @@
 
 #include "PhysicusObject.h"
 #include "LinkBoard/PhysicusLinkBoard.h"
+#include "HandWritten/PhysicusHandWritten.h"
 #include "Rectangle/PhysicusRectangle.h"
 #include "Circle/PhysicusCircle.h"
 #include "Line/PhysicusLine.h"
@@ -242,15 +243,21 @@ bool Object::generation(touch_t touch, float tie_loop_range) {
 			locus_.push_back(current);
 			// TODO: 多角形の作成
 		}
-		 break;
+		break;
 		case kLinkBoard:
 		if(B2Vec2::checkCreatePos(last, current)) {
 			locus_.push_back(current);
 			createLinkBoardBody(this);
 		}
-		 break;
-		 case kLine:
-		 if(B2Vec2::checkCreatePos(last, current)) {
+		break;
+		case kHandWritten:
+		if(B2Vec2::distance(last, current) > B2Vec2::kHandwrittenVertexDistance) {
+			locus_.push_back(current);
+			createHandwrittenBody(this);
+		}
+		break;
+		case kLine:
+		if(B2Vec2::checkCreatePos(last, current)) {
 			locus_.push_back(current);
 			createLineBody(this);
 		}
@@ -278,15 +285,36 @@ bool Object::generation(touch_t touch, float tie_loop_range) {
 		// 先にセンターを作成する。その後に８角形以下の図形を繋げて作成する
 		break;
 		case kLinkBoard:
-		case kLine:
 		// 距離が近ければ数珠繋ぎにする
 		if(B2Vec2::isTieLoop(locus_, tie_loop_range)) {
 			B2Joint::weldJointTieLoop(world_, bodies_);
 		}
-		 break;
+		break;
+		case kLine:
+		// 線ではfixtureしか使用しないため、連結はしない
+		break;
+		case kHandWritten:
+		// 相対座標に変換する
+		locusLineToRelative();
+		break;
 		default:break;
 	}
 	return true;
+}
+
+// 軌跡を相対座標に変換する
+void Object::locusLineToRelative() {
+	if(IsEmpty(bodies_)) {
+		return;
+	}
+	const auto position = bodies_.front()->GetPosition();
+	for(auto &itr: locus_line_outside_) {
+		itr = B2Vec2::sub(itr, position);
+	}
+	for(auto &itr: locus_line_inside_) {
+		itr = B2Vec2::sub(itr, position);
+	}
+	
 }
 
 // オブジェクトが生存可能エリアを出たらオブジェクトを消滅させる
@@ -344,10 +372,15 @@ std::vector<Physicus::Frame> Object::getLocusFrames() {
 
 // 軌跡の線を追加する
 void Object::appendDrawLocusLine(b2Vec2 outside) {
-	locus_line_outside_.push_back(outside);
 	const b2Vec2 unit = B2Vec2::unitVector(outside);
 	const b2Vec2 linePos = B2Vec2::multiplication(unit, getDrawLineWidth());
 	const b2Vec2 inside = B2Vec2::sub(outside, linePos);
+	appendDrawLocusLine(outside, inside);
+}
+
+// 軌跡の線を追加する
+void Object::appendDrawLocusLine(b2Vec2 outside, b2Vec2 inside) {
+	locus_line_outside_.push_back(outside);
 	locus_line_inside_.push_back(inside);
 }
 
@@ -383,12 +416,14 @@ void Object::draw() {
 		break;
 		case kLinkBoard:
 		drawLinkBoard(this);
-		 break;
+		break;
+		case kHandWritten:
+		drawHandwritten(this);
+		break;
 		case kLine:
 		drawLine(this);
 		break;
 		default:
-
 		break;
 	}
 }
@@ -409,7 +444,10 @@ void Object::drawEditing() {
 		break;
 		case kLinkBoard:
 		drawEditingLinkBoard(this);
-		 break;
+		break;
+		case kHandWritten:
+		drawEditingHandwritten(this);
+		break;
 		case kLine:
 		drawEditingLine(this);
 		break;
@@ -422,6 +460,7 @@ void Object::drawDebugFrame() {
 	switch (setting_.type) {
 		case kRectangle: 
 		case kLinkBoard:
+		case kHandWritten:
 		case kLine:
 		case kPolygon:
 		// 先にセンターを作成する。その後に８角形以下の図形を繋げて作成する
@@ -450,9 +489,10 @@ void Object::drawEditingDebugFrame() {
 		// 先にセンターを作成する。その後に８角形以下の図形を繋げて作成する
 		break;
 		case kLinkBoard:
+		case kHandWritten:
 		case kLine:
 		ForEach(bodies_, [this](b2Body *item) { B2Body::drawFrame(item, world_scale_, setting_.color); });
-		 break;
+		break;
 		default:
 
 		break;

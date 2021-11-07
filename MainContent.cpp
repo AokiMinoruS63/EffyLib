@@ -44,7 +44,7 @@ void MainContent::run() {
 	// タッチ計算
 	touchMgr_->calc();
 	// タッチを物理演算に適用
-	world_->touchCalc(touchMgr_->get(), Physicus::Type::kLine);
+	world_->touchCalc(touchMgr_->get(), Physicus::Type::kHandWritten);
 	// 時間を進める
 	world_->timeCalc();
 
@@ -57,7 +57,7 @@ void MainContent::run() {
 	// オブジェクトの描画
 	world_->draw();
 	// ボーンの描画
-	//world_->drawDebugFrame();
+	world_->drawDebugFrame();
 
 	ScreenFlip();
 }

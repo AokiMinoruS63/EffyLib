@@ -23,6 +23,8 @@
 namespace B2Vec2 {
 	// 頂点作成の追加が可能な最低限の距離。ジョイント繋がりの強さに直結する
 	static const float kCreateVertexDistance = 3.0;
+	// 手書き線の頂点の追加が可能な最低限の距離。
+	static const float kHandwrittenVertexDistance = 0.5;
 	// ０
 	static const b2Vec2 kZero = b2Vec2(0.0, 0.0);
 	// 半分

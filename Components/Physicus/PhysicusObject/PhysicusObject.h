@@ -331,6 +331,12 @@ namespace Physicus {
 		bool judgeAreaOut(Frame alive_area);
 
 		/**
+		 * @brief 軌跡を相対座標に変換する
+		 * 
+		 */
+		void locusLineToRelative();
+
+		/**
 		 * @brief 演算を行うボディを全て削除する
 		 * 
 		 */
@@ -377,6 +383,14 @@ namespace Physicus {
 		 * @param outside 外側の線の頂点座標
 		 */
 		void appendDrawLocusLine(b2Vec2 outside);
+
+		/**
+		 * @brief 軌跡の線を追加する
+		 * 
+		 * @param outside 外側の線の頂点座標
+		 * @param inside 内側の線の頂点座標
+		 */
+		void appendDrawLocusLine(b2Vec2 outside, b2Vec2 inside);
 
 		/**
 		 * @brief 軌跡の線を削除する

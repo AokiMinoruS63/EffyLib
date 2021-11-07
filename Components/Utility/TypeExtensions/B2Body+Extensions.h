@@ -113,24 +113,32 @@ namespace B2Body {
 			break;
 			case b2Shape::e_edge:
 			{
+				auto itr = fixture;
 				b2EdgeShape* shape = (b2EdgeShape*)fixture->GetShape();
-
-				b2Vec2 pos1 = B2Vec2::add(position, shape->m_vertex1);
-				b2Vec2 pos2 = B2Vec2::add(position, shape->m_vertex2);
-				if(area.areaIn(pos1) || area.areaIn(pos2)) {
-					return false;
-				}
-			
+				while(itr != NULL) {
+					b2Vec2 pos1 = B2Vec2::add(position, shape->m_vertex1);
+					b2Vec2 pos2 = B2Vec2::add(position, shape->m_vertex2);
+					if(area.areaIn(pos1) || area.areaIn(pos2)) {
+						return false;
+					}
+					itr = itr->GetNext();
+					shape = (b2EdgeShape*)itr->GetShape();
+				}			
 			}
 			break;
 			case b2Shape::e_polygon:
 			{
+				auto itr = fixture;
 				b2PolygonShape* shape = (b2PolygonShape*)fixture->GetShape();
-				for(int i = 0; i < shape->m_count; i++) {
-					const b2Vec2 pos = B2Vec2::add(position, shape->m_vertices[i]);
-					if(area.areaIn(pos)) {
-						return false;
+				while(itr != NULL) {
+					for(int i = 0; i < shape->m_count; i++) {
+						const b2Vec2 pos = B2Vec2::add(position, shape->m_vertices[i]);
+						if(area.areaIn(pos)) {
+							return false;
+						}
 					}
+					itr = itr->GetNext();
+					shape = (b2PolygonShape*)itr->GetShape();
 				}
 			}
 			break;
@@ -180,15 +188,19 @@ namespace B2Body {
 			}
 			break;
 			case b2Shape::e_polygon:
-			//printfDx("e_polygon");
 			{
+				auto itr = fixture;
 				b2PolygonShape* shape = (b2PolygonShape*)fixture->GetShape();
-				for(int i = 0; i < shape->m_count; i++) {
-					auto localStart = shape->m_vertices[i];
-					auto localEnd = shape->m_vertices[(i + 1) % shape->m_count];
-					auto start = fixture->GetBody()->GetWorldPoint(localStart);
-					auto end = fixture->GetBody()->GetWorldPoint(localEnd);
-					drawLine(start.x / scale, start.y / scale, end.x / scale, end.y / scale, color);
+				while(itr != NULL && shape != NULL) {
+					for(int i = 0; i < shape->m_count; i++) {
+						auto localStart = shape->m_vertices[i];
+						auto localEnd = shape->m_vertices[(i + 1) % shape->m_count];
+						auto start = fixture->GetBody()->GetWorldPoint(localStart);
+						auto end = fixture->GetBody()->GetWorldPoint(localEnd);
+						drawLine(start.x / scale, start.y / scale, end.x / scale, end.y / scale, color);
+					}
+					itr = itr->GetNext();
+					shape = (b2PolygonShape*)itr->GetShape();
 				}
 			}
 			break;
