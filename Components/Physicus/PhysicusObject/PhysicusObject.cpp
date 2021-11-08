@@ -253,7 +253,7 @@ bool Object::generation(touch_t touch, float tie_loop_range) {
 		case kHandWritten:
 		if(B2Vec2::distance(last, current) > B2Vec2::kHandwrittenVertexDistance) {
 			locus_.push_back(current);
-			createHandwrittenBody(this);
+			createHandwrittenLocus(this);
 		}
 		break;
 		case kLine:
@@ -294,6 +294,10 @@ bool Object::generation(touch_t touch, float tie_loop_range) {
 		// 線ではfixtureしか使用しないため、連結はしない
 		break;
 		case kHandWritten:
+		// 作成する
+		for(int i = 1; i < locus_.size(); i++) {
+			createHandwrittenBody(this, i);
+		}
 		// 相対座標に変換する
 		locusLineToRelative();
 		break;
@@ -489,9 +493,11 @@ void Object::drawEditingDebugFrame() {
 		// 先にセンターを作成する。その後に８角形以下の図形を繋げて作成する
 		break;
 		case kLinkBoard:
-		case kHandWritten:
 		case kLine:
 		ForEach(bodies_, [this](b2Body *item) { B2Body::drawFrame(item, world_scale_, setting_.color); });
+		break;
+		case kHandWritten:
+		drawEditingHandwrittenDebug(this);
 		break;
 		default:
 
@@ -692,7 +698,7 @@ class box2DTest {
 		return body;
 	}
 
-	// 塗りつぶしを行わない手書き線を描く
+	// 塗りつぶしを行わない手描き線を描く
 	void createHandWrittenLine(touch_t touch, float width, bool fillFlag = false) {
 		b2Vec2 lastLeft;
 		b2Vec2 lastRight;
@@ -791,7 +797,7 @@ class box2DTest {
 		#undef CREATE
 	}
 
-	// 手書き線の作成
+	// 手描き線の作成
 	void createHandWritten(touch_t touch, float width) {
 		// タッチリリース直後でなければ処理を行わない
 		if(touch.status != TouchStatus::kJustRelease) {
