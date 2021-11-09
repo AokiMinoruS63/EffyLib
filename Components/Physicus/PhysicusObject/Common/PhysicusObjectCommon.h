@@ -42,6 +42,13 @@ using namespace Physicus;
 void getVertices(Physicus::Object* obj, std::vector<b2Vec2> vertices, b2Vec2 outside[4], b2Vec2 inside[4]);
 
 /**
+ * @brief 線の軌跡を作成する
+ * 
+ * @param obj 
+ */
+void createLineLocus(Physicus::Object* obj);
+
+/**
  * @brief １つの直線を分割して描画する
  * 
  * @param obj オブジェクト
@@ -51,5 +58,18 @@ void getVertices(Physicus::Object* obj, std::vector<b2Vec2> vertices, b2Vec2 out
  * @return int 描画終了時のimageIndex
  */
 int drawSeparateLine(Physicus::Object* obj, b2Vec2 vec[4], float drawAdvance, int imageIndex);
+
+/**
+ * @brief 編集中の手描き線・リンクボードオブジェクトを描画する
+ * 
+ */
+void drawEditingLine(Physicus::Object*);
+
+/**
+ * @brief 編集中の手描き線・リンクボードのデバッグフレームを描画する
+ * 
+ * @param obj 
+ */
+void drawEditingLineDebug(Physicus::Object* obj);
 
 #endif

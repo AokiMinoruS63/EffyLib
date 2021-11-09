@@ -10,6 +10,7 @@
  */
 
 #include "PhysicusObject.h"
+#include "Common/PhysicusObjectCommon.h"
 #include "LinkBoard/PhysicusLinkBoard.h"
 #include "HandWritten/PhysicusHandWritten.h"
 #include "Rectangle/PhysicusRectangle.h"
@@ -247,19 +248,19 @@ bool Object::generation(touch_t touch, float tie_loop_range) {
 		case kLinkBoard:
 		if(B2Vec2::checkCreatePos(last, current)) {
 			locus_.push_back(current);
-			createLinkBoardBody(this);
+			createLineLocus(this);
 		}
 		break;
 		case kHandWritten:
 		if(B2Vec2::distance(last, current) > B2Vec2::kHandwrittenVertexDistance) {
 			locus_.push_back(current);
-			createHandwrittenLocus(this);
+			createLineLocus(this);
 		}
 		break;
 		case kLine:
 		if(B2Vec2::checkCreatePos(last, current)) {
 			locus_.push_back(current);
-			createLineBody(this);
+			createStaticLineBody(this);
 		}
 		 break;
 		default:break;
@@ -286,6 +287,9 @@ bool Object::generation(touch_t touch, float tie_loop_range) {
 		break;
 		case kLinkBoard:
 		// 距離が近ければ数珠繋ぎにする
+		for(int i = 1; i < locus_.size(); i++) {
+			createLinkBoardBody(this, i);
+		}
 		if(B2Vec2::isTieLoop(locus_, tie_loop_range)) {
 			B2Joint::weldJointTieLoop(world_, bodies_);
 		}
@@ -425,7 +429,7 @@ void Object::draw() {
 		drawHandwritten(this);
 		break;
 		case kLine:
-		drawLine(this);
+		drawStaticLine(this);
 		break;
 		default:
 		break;
@@ -446,14 +450,12 @@ void Object::drawEditing() {
 		case kPolygon:
 		// 先にセンターを作成する。その後に８角形以下の図形を繋げて作成する
 		break;
-		case kLinkBoard:
-		drawEditingLinkBoard(this);
-		break;
 		case kHandWritten:
-		drawEditingHandwritten(this);
+		case kLinkBoard:
+		drawEditingLine(this);
 		break;
 		case kLine:
-		drawEditingLine(this);
+		drawEditingStaticLine(this);
 		break;
 		default:break;
 	}
@@ -492,12 +494,12 @@ void Object::drawEditingDebugFrame() {
 		case kPolygon:
 		// 先にセンターを作成する。その後に８角形以下の図形を繋げて作成する
 		break;
-		case kLinkBoard:
 		case kLine:
 		ForEach(bodies_, [this](b2Body *item) { B2Body::drawFrame(item, world_scale_, setting_.color); });
 		break;
 		case kHandWritten:
-		drawEditingHandwrittenDebug(this);
+		case kLinkBoard:
+		drawEditingLineDebug(this);
 		break;
 		default:
 

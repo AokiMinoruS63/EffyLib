@@ -17,13 +17,6 @@ namespace Physicus {
 };
 
 /**
- * @brief 手描き線の軌跡を作成する
- * 
- * @param obj 
- */
-void createHandwrittenLocus(Physicus::Object* obj);
-
-/**
  * @brief 手描き線オブジェクトを作成する
  * 
  * @param obj オブジェクトの生成
@@ -37,19 +30,5 @@ void createHandwrittenBody(Physicus::Object* obj, int index);
  * @param obj 
  */
 void drawHandwritten(Physicus::Object* obj);
-
-/**
- * @brief 編集中の手描き線オブジェクトを描画する
- * 
- */
-void drawEditingHandwritten(Physicus::Object*);
-
-/**
- * @brief 編集中の手描き線オブジェクトのデバッグフレームを描画する
- * 
- * @param obj 
- */
-void drawEditingHandwrittenDebug(Physicus::Object* obj);
-
 
 #endif

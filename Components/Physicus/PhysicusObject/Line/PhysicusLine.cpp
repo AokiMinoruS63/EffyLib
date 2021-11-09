@@ -17,7 +17,7 @@
 #include <vector>
 
 // 直線オブジェクトを生成する
-void createLineBody(Physicus::Object* obj) {
+void createStaticLineBody(Physicus::Object* obj) {
 	b2Vec2 current, last, lastLast;
 	const auto locus = obj->getLocus();
 	auto bodies = obj->getBodies();
@@ -51,7 +51,7 @@ void createLineBody(Physicus::Object* obj) {
 }
 
 // 生成した直線オブジェクトを描画する
-void drawLine(Physicus::Object* obj) {
+void drawStaticLine(Physicus::Object* obj) {
 	const auto images = obj->getLineImages();
 	const auto bodies = obj->getBodies();
 	const float roughness = obj->getRoughness();
@@ -144,6 +144,6 @@ void drawLine(Physicus::Object* obj) {
 }
 
 // 現在生成している直線オブジェクトを描画する
-void drawEditingLine(Physicus::Object* obj) {
-	drawLine(obj);
+void drawEditingStaticLine(Physicus::Object* obj) {
+	drawStaticLine(obj);
 }

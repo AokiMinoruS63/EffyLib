@@ -18,15 +18,17 @@
 
 using namespace Physicus;
 
-// 中身がスカスカなオブジェクトの作成
-void createLinkBoardBody(Object* obj) {
+// リンクボードオブジェクトの作成
+void createLinkBoardBody(Object* obj, int index) {
 	// 線の太さが一定以下なら処理を行わない
 	if(obj->getLineWidth() < B2Body::kMinCreateVertexRange) {
 		return;
 	}
 	b2Vec2 current, last, lastLast;
 	const auto locus = obj->getLocus();
-	B2Vec2::recentLocus(locus, &current, &last, &lastLast);
+	current = locus.at(index);
+	last = locus.at(Int::clamp(index - 1, 0, locus.size()));
+	lastLast = locus.at(Int::clamp(index - 2, 0, locus.size()));
 	
 	b2Vec2 center = B2Vec2::halfWay(last, current);
 	const float width = obj->getLineHalfWidth();
@@ -222,9 +224,4 @@ void drawLinkBoard(Object* obj) {
 		}
 		loopCount++;
 	}
-}
-
-// 編集中のリンクボードオブジェクトを描画する
-void drawEditingLinkBoard(Object* obj) {
-	drawLinkBoard(obj);
 }

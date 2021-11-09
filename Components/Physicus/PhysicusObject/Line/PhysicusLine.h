@@ -21,20 +21,20 @@ namespace Physicus {
  * 
  * @param obj 
  */
-void createLineBody(Physicus::Object* obj);
+void createStaticLineBody(Physicus::Object* obj);
 
 /**
  * @brief 生成した直線オブジェクトを描画する
  * 
  * @param obj 
  */
-void drawLine(Physicus::Object* obj);
+void drawStaticLine(Physicus::Object* obj);
 
 /**
  * @brief 現在生成している直線オブジェクトを描画する
  * 
  * @param obj 
  */
-void drawEditingLine(Physicus::Object* obj);
+void drawEditingStaticLine(Physicus::Object* obj);
 
 #endif
