@@ -14,7 +14,7 @@
 
 #include <vector>
 #include "../Enum/PhysicusObjectType.h"
-#include "../../../OpenSource/Box2D/box2d/box2d.h"
+#include "../../../OpenSource/Box2D/Box2D.h"
 #include "../../../Utility/TypeExtensions/B2Fixture+Extensions.h"
 
 

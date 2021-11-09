@@ -31,7 +31,7 @@
 #endif
 #include <cstdlib>
 #include <utility>
-#include "../OpenSource/Box2D/box2d/box2d.h"
+#include "../OpenSource/Box2D/Box2D.h"
 
 /* 読み込み、マウス、タッチ系 */
 

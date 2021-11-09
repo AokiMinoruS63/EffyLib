@@ -12,7 +12,7 @@
 #ifndef B2_JOINT_EXTENSION_H
 #define B2_JOINT_EXTENSION_H
 
-#include "../../OpenSource/Box2D/box2d/box2d.h"
+#include "../../OpenSource/Box2D/Box2D.h"
 #include "Float+Extensions.h"
 
 namespace B2Joint {
@@ -109,7 +109,6 @@ namespace B2Joint {
 		// ジョイントの定義
 		b2DistanceJointDef jointDef;
 		jointDef.Initialize(body1, body2, joint_position, joint_position);
-		jointDef.stiffness = 99999;
 		jointDef.collideConnected = collide_connected;
 		jointDef.length = 0;
 		// ジョイントを作る

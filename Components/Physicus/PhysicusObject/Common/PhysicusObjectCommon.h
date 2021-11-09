@@ -12,7 +12,7 @@
 #ifndef PHYSICUS_OBJECT_COMMON_H
 #define PHYSICUS_OBJECT_COMMON_H
 
-#include "../../../OpenSource/Box2D/box2d/box2d.h"
+#include "../../../OpenSource/Box2D/Box2D.h"
 #include <vector>
 
 namespace Physicus {

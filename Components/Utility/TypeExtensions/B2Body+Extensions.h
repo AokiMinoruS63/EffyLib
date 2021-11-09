@@ -14,7 +14,7 @@
 
 #include "Float+Extensions.h"
 #include "B2Vec2+Extensions.h"
-#include "../../OpenSource/Box2D/box2d/box2d.h"
+#include "../../OpenSource/Box2D/Box2D.h"
 #include "../DxLibWrap.h"
 #include "../../Physicus/PhysicusWorld/Frame/PhysicusWorldFrame.h"
 

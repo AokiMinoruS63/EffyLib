@@ -13,7 +13,7 @@
 #define PHYSICUS_OBJECT_H
 
 // TODO: include vector, Touch.h, box2d.h
-#include "../../OpenSource/Box2D/box2d/box2d.h"
+#include "../../OpenSource/Box2D/Box2D.h"
 #include <vector>
 #include "../../Touch/TouchData.h"
 #include "Enum/PhysicusObjectType.h"

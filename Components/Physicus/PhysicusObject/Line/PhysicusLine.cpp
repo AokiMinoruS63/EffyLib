@@ -39,7 +39,7 @@ void createLineBody(Physicus::Object* obj) {
 
 	// 動体オブジェクトの形を定義する
 	b2EdgeShape shape;
-	shape.SetTwoSided(B2Vec2::relativePosition(center, last), B2Vec2::relativePosition(center, current));
+	shape.Set(B2Vec2::relativePosition(center, last), B2Vec2::relativePosition(center, current));
 
 	// 動体オブジェクトの密度・摩擦の関連付け
 	b2FixtureDef fixtureDef = obj->getSetting().fixture;

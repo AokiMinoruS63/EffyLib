@@ -14,7 +14,7 @@
 
 #include "Float+Extensions.h"
 #include "Array+Extensions.h"
-#include "../../OpenSource/Box2D/box2d/b2_math.h"
+#include "../../OpenSource/Box2D/Common/b2Math.h"
 #include "../../Utility/DxLibWrap.h"
 #include "../../Touch/TouchData.h"
 #include <cmath>
