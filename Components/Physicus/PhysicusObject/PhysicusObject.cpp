@@ -20,7 +20,7 @@
 using namespace Physicus;
 
 // コンストラクタ
-Object::Object(touch_t touch, Type type, b2World* world, float scale, ObjectSetting setting) {
+Object::Object(touch_t touch, ObjectType type, b2World* world, float scale, ObjectSetting setting) {
 	world_ = world;
 	b2Vec2 vec = B2Vec2::fromTouch(touch, scale);
 	world_scale_ = scale;
@@ -187,7 +187,7 @@ void Object::setRoughness(float rough) {
 }
 
 // オブジェクトの種類を取得する
-Type Object::getType() {
+ObjectType Object::getType() {
 	return setting_.type;
 }
 
@@ -203,22 +203,22 @@ float Object::getDrawAdvance() {
 
 // オブジェクトのタイプが矩形なら**true**
 bool Object::isRectangle() {
-	return setting_.type == Type::kRectangle;
+	return setting_.type == ObjectType::kRectangle;
 }
 
 // オブジェクトのタイプが円なら**true**
 bool Object::isCircle() {
-	return setting_.type == Type::kCircle;
+	return setting_.type == ObjectType::kCircle;
 }
 
 // オブジェクトが多角形なら**true**
 bool Object::isPolygon() {
-	return setting_.type == Type::kPolygon;
+	return setting_.type == ObjectType::kPolygon;
 }
 
 // オブジェクトが連結している矩形なら**true**
 bool Object::isLinkBoard() {
-	return setting_.type == Type::kLinkBoard;
+	return setting_.type == ObjectType::kLinkBoard;
 }
 
 // オブジェクトの生成（ボディの追加など）
@@ -228,8 +228,8 @@ bool Object::generation(touch_t touch, float tie_loop_range) {
 	const b2Vec2 current = B2Vec2::fromTouch(touch, world_scale_);
 	
 	switch(setting_.type) {
-		case kRectangle: 
-		case kCircle:
+		case ObjectType::kRectangle: 
+		case ObjectType::kCircle:
 		setting_.roughness = Constant::Object::kBezieRoughness;
 		if(B2Vec2::checkCreatePos(start, current)) {
 			if(locus_.size() == 1) {
@@ -239,25 +239,25 @@ bool Object::generation(touch_t touch, float tie_loop_range) {
 			}
 		}
 		break;
-		case kPolygon:
+		case ObjectType::kPolygon:
 		if(B2Vec2::checkCreatePos(last, current)) {
 			locus_.push_back(current);
 			// TODO: 多角形の作成
 		}
 		break;
-		case kLinkBoard:
+		case ObjectType::kLinkBoard:
 		if(B2Vec2::checkCreatePos(last, current)) {
 			locus_.push_back(current);
 			createLineLocus(this);
 		}
 		break;
-		case kHandWritten:
+		case ObjectType::kHandWritten:
 		if(B2Vec2::distance(last, current) > B2Vec2::kHandwrittenVertexDistance) {
 			locus_.push_back(current);
 			createLineLocus(this);
 		}
 		break;
-		case kLine:
+		case ObjectType::kLine:
 		if(B2Vec2::checkCreatePos(last, current)) {
 			locus_.push_back(current);
 			createStaticLineBody(this);
@@ -269,23 +269,23 @@ bool Object::generation(touch_t touch, float tie_loop_range) {
 	if(touch.status != TouchStatus::kJustRelease) {
 		return false;
 	}
-	// TODO: オブジェクトを作成する
+	// オブジェクトを作成する
 	switch(setting_.type) {
-		case kRectangle: 
+		case ObjectType::kRectangle: 
 		if(!createRectangleBody(this)) {
 			return false;
 		}
 		break;
-		case kCircle:
+		case ObjectType::kCircle:
 		// startが円の中心、endで半径を決定する
 		if(!createCircleBody(this)) {
 			return false;
 		}
 		break;
-		case kPolygon:
+		case ObjectType::kPolygon:
 		// 先にセンターを作成する。その後に８角形以下の図形を繋げて作成する
 		break;
-		case kLinkBoard:
+		case ObjectType::kLinkBoard:
 		// 距離が近ければ数珠繋ぎにする
 		for(int i = 1; i < locus_.size(); i++) {
 			createLinkBoardBody(this, i);
@@ -294,10 +294,10 @@ bool Object::generation(touch_t touch, float tie_loop_range) {
 			B2Joint::weldJointTieLoop(world_, bodies_);
 		}
 		break;
-		case kLine:
+		case ObjectType::kLine:
 		// 線ではfixtureしか使用しないため、連結はしない
 		break;
-		case kHandWritten:
+		case ObjectType::kHandWritten:
 		// 作成する
 		for(int i = 1; i < locus_.size(); i++) {
 			createHandwrittenBody(this, i);
@@ -411,24 +411,24 @@ std::vector<b2Vec2> Object::getLocusOutsideLines() {
 // オブジェクトの描画
 void Object::draw() {
 	switch(setting_.type) {
-		case kRectangle: 
+		case ObjectType::kRectangle: 
 		// startが始点、endが終点
 		drawRectangle(this);
 		break;
-		case kCircle:
+		case ObjectType::kCircle:
 		// startが円の中心、endで半径を決定する
 		drawCircle(this);
 		break;
-		case kPolygon:
+		case ObjectType::kPolygon:
 		// 先にセンターを作成する。その後に８角形以下の図形を繋げて作成する
 		break;
-		case kLinkBoard:
+		case ObjectType::kLinkBoard:
 		drawLinkBoard(this);
 		break;
-		case kHandWritten:
+		case ObjectType::kHandWritten:
 		drawHandwritten(this);
 		break;
-		case kLine:
+		case ObjectType::kLine:
 		drawStaticLine(this);
 		break;
 		default:
@@ -439,22 +439,22 @@ void Object::draw() {
 // 現在生成しているオブジェクトを描画する
 void Object::drawEditing() {
 	switch(setting_.type) {
-		case kRectangle: 
+		case ObjectType::kRectangle: 
 		// startが始点、endが終点
 		drawEditingRectangle(this);
 		break;
-		case kCircle:
+		case ObjectType::kCircle:
 		// startが円の中心、endで半径を決定する
 		drawEditingCircle(this);
 		break;
-		case kPolygon:
+		case ObjectType::kPolygon:
 		// 先にセンターを作成する。その後に８角形以下の図形を繋げて作成する
 		break;
-		case kHandWritten:
-		case kLinkBoard:
+		case ObjectType::kHandWritten:
+		case ObjectType::kLinkBoard:
 		drawEditingLine(this);
 		break;
-		case kLine:
+		case ObjectType::kLine:
 		drawEditingStaticLine(this);
 		break;
 		default:break;
@@ -464,16 +464,16 @@ void Object::drawEditing() {
 // オブジェクトのフレームの描画
 void Object::drawDebugFrame() {
 	switch (setting_.type) {
-		case kRectangle: 
-		case kLinkBoard:
-		case kHandWritten:
-		case kLine:
-		case kPolygon:
+		case ObjectType::kRectangle: 
+		case ObjectType::kLinkBoard:
+		case ObjectType::kHandWritten:
+		case ObjectType::kLine:
+		case ObjectType::kPolygon:
 		// 先にセンターを作成する。その後に８角形以下の図形を繋げて作成する
 		// startが始点、endが終点
 		ForEach(bodies_, [this](b2Body *item) { B2Body::drawFrame(item, world_scale_, setting_.color); });
 		break;
-		case kCircle:
+		case ObjectType::kCircle:
 		// startが円の中心、endで半径を決定する
 		drawCircleDebug(this);
 		break;
@@ -484,21 +484,21 @@ void Object::drawDebugFrame() {
 // 現在生成しているオブジェクトのフレームを描画する
 void Object::drawEditingDebugFrame() {
 	switch(setting_.type) {
-		case kRectangle: 
+		case ObjectType::kRectangle: 
 		drawEditingRectangleDebug(this);
 		break;
-		case kCircle:
+		case ObjectType::kCircle:
 		// startが円の中心、endで半径を決定する
 		drawEditingCircleDebug(this);
 		break;
-		case kPolygon:
+		case ObjectType::kPolygon:
 		// 先にセンターを作成する。その後に８角形以下の図形を繋げて作成する
 		break;
-		case kLine:
+		case ObjectType::kLine:
 		ForEach(bodies_, [this](b2Body *item) { B2Body::drawFrame(item, world_scale_, setting_.color); });
 		break;
-		case kHandWritten:
-		case kLinkBoard:
+		case ObjectType::kHandWritten:
+		case ObjectType::kLinkBoard:
 		drawEditingLineDebug(this);
 		break;
 		default:

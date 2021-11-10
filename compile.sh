@@ -96,6 +96,12 @@ do
 em++ "${file}" -c -o "../../../build/${file%.*}.o" -O0 -std=c++17 -g4 -IDxLibForHTML5/include -IComponents -IComponents/OpenSource/
 done
 
+cd ../PhysicusParticle
+for file in *.cpp
+do
+em++ "${file}" -c -o "../../../build/${file%.*}.o" -O0 -std=c++17 -g4 -IDxLibForHTML5/include -IComponents -IComponents/OpenSource/
+done
+
 cd ../PhysicusObject
 for file in *.cpp
 do

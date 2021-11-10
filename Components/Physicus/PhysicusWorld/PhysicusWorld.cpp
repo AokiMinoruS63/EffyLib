@@ -27,9 +27,10 @@ PhysicusWorld::PhysicusWorld(b2Vec2 gravity, float scale, Frame alive_area, floa
 	// 数珠繋ぎにする距離
 	tie_loop_range_ = tie_loop_range;
 	const std::vector<int> images = ComponentAssets::shared()->getImages().brush_crayon;
-	current_setting_ = ObjectSetting::init(world_scale_, Type::kLinkBoard, b2_dynamicBody, images);
+	current_object_setting_ = ObjectSetting::init(world_scale_, ObjectType::kLinkBoard, b2_dynamicBody, images);
 	// NULL代入する
-	current_ = NULL;
+	current_object_ = NULL;
+	current_particle_ = NULL;
 	// プレビューデータの作成
 	makePreviewData();
 }
@@ -40,16 +41,50 @@ PhysicusWorld::~PhysicusWorld(){
 	delete world_;
 }
 
+// 操作の種類を取得する
+ControlType PhysicusWorld::getControlType() {
+	return control_type_;
+}
+
+// 操作の種類を設定する
+void PhysicusWorld::setControlType(Physicus::ControlType type) {
+	if(control_type_ != type) {
+		// TODO: 変更する場合かつ現在生成中のオブジェクトがあったら一旦キャンセルを行う
+	}
+	control_type_ = type;
+}
+
+// オブジェクトのタイプを取得する
+Physicus::ObjectType PhysicusWorld::getObjectType() {
+	return current_object_setting_.type;
+}
+
+// オブジェクトのタイプを設定する
+void PhysicusWorld::setObjectType(Physicus::ObjectType type) {
+	current_object_setting_.type = type;
+}
+
+// パーティクルのタイプを取得する
+Physicus::ParticleType PhysicusWorld::getParticleType() {
+	return current_particle_setting_.type;
+}
+// パーティクルのタイプを設定する
+void PhysicusWorld::setParticleType(Physicus::ParticleType type) {
+	current_particle_setting_.type = type;
+}
+
 // プレビューの作成
 void PhysicusWorld::makePreviewData() {
-	makeRectangle(b2Vec2(0, 580), b2Vec2(580, 600));	
+	makeRectangle(b2Vec2(0, 580), b2Vec2(880, 600));
+	makeRectangle(b2Vec2(0, 200), b2Vec2(20, 600));
+	makeRectangle(b2Vec2(860, 200), b2Vec2(880, 600));	
 }
 
 // 矩形の即時作成
 void PhysicusWorld::makeRectangle(b2Vec2 start, b2Vec2 end, b2BodyType body_type) {
-	auto tmp = current_setting_;
-	current_setting_.bodyType = body_type;
-	current_setting_.type = Type::kRectangle;
+	auto tmp = current_object_setting_;
+	current_object_setting_.bodyType = body_type;
+	current_object_setting_.type = ObjectType::kRectangle;
 
 	touch_t touch;
 	touch.pos_log_x.push_back(end.x);
@@ -61,13 +96,13 @@ void PhysicusWorld::makeRectangle(b2Vec2 start, b2Vec2 end, b2BodyType body_type
 	touch.x = start.x;
 	touch.y = start.y;
 	touch.status = TouchStatus::kJustRelease;
-	auto body = new Object(touch, Type::kRectangle, world_, world_scale_, current_setting_);
+	auto body = new Object(touch, ObjectType::kRectangle, world_, world_scale_, current_object_setting_);
 	objects_.push_back(body);
 	touch.x = end.x;
 	touch.y = end.y;
 	body->generation(touch, tie_loop_range_);
 
-	current_setting_ = tmp;
+	current_object_setting_ = tmp;
 }
 
 // 時間を進める
@@ -103,48 +138,80 @@ void PhysicusWorld::applySprite(Sprite* sprite) {
 }
 
 // タッチによるオブジェクトの干渉（生成も含む）
-bool PhysicusWorld::touchCalc(touch_t touch, Type type) {
+bool PhysicusWorld::touchCalc(touch_t touch) {
+	switch(control_type_) {
+		case ControlType::kControl:
+		break;
+		case ControlType::kObjectCreate:
+		return touchObjectCreate(touch);
+		case ControlType::kParticleCreate:
+		return touchParticleCreate(touch);
+	}
+	return false;
+}
+
+// タッチによってオブジェクトを生成する
+bool PhysicusWorld::touchObjectCreate(touch_t touch) {
 	bool generate = false;
-	current_setting_.type = type;
 	// 生成開始
-	if(touch.status == TouchStatus::kJustTouch && current_ == NULL) {
-		current_ = new Object(touch, type, world_, world_scale_, current_setting_);
-		objects_.push_back(current_);
+	if(touch.status == TouchStatus::kJustTouch && current_object_ == NULL) {
+		current_object_ = new Object(touch, current_object_setting_.type, world_, world_scale_, current_object_setting_);
+		objects_.push_back(current_object_);
 		generate = true;
 	}
 
-	if(current_ != NULL) {
+	if(current_object_ != NULL) {
 		// 生成中
-		if(current_->generation(touch, tie_loop_range_)) {
+		if(current_object_->generation(touch, tie_loop_range_)) {
 			// 生成完了
-			current_->setAwake();
-			current_ = NULL;
+			current_object_->setAwake();
+			current_object_ = NULL;
 		}
 	}
+	return generate;
+}
 
+// タッチによってパーティクルを生成する
+bool PhysicusWorld::touchParticleCreate(touch_t touch) {
+	bool generate = false;
+	// 生成開始
+	if(touch.status == TouchStatus::kJustTouch && current_particle_ == NULL) {
+		current_particle_ = new Particle(/*touch, current_particle_setting_.type, world_, world_scale_, current_particle_setting_*/);
+		particles_.push_back(current_particle_);
+		generate = true;
+	}
+
+	if(current_particle_ != NULL) {
+		// 生成中
+		if(current_particle_->generation(touch)) {
+			// 生成完了
+			//current_particle_->setAwake();
+			current_particle_ = NULL;
+		}
+	}
 	return generate;
 }
 
 
-// オブジェクトを描画する
+// オブジェクトとパーティクルを描画する
 void PhysicusWorld::draw() {
 	for(auto& itr: objects_) {
-		if(itr != current_) {
+		if(itr != current_object_) {
 			itr->draw();
 		}
 	}
-	current_->drawEditing();
+	current_object_->drawEditing();
 }
 
 
-// オブジェクトのフレームを描画する
+// オブジェクトとパーティクルのフレームを描画する
 void PhysicusWorld::drawDebugFrame() {
 	for(auto& itr: objects_) {
-		if(itr != current_) {
+		if(itr != current_object_) {
 			itr->drawDebugFrame();
 		}
 	}
-	if(current_ != NULL) {
-		current_->drawEditingDebugFrame();
+	if(current_object_ != NULL) {
+		current_object_->drawEditingDebugFrame();
 	}
 }

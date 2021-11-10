@@ -14,7 +14,9 @@
 
 #include <vector>
 #include "../PhysicusObject/PhysicusObject.h"
+#include "../PhysicusParticle/PhysicusParticle.h"
 #include "Frame/PhysicusWorldFrame.h"
+#include "PhysicusControlType.h"
 
 // 相互参照
 class Sprite;
@@ -31,14 +33,22 @@ class PhysicusWorld {
 	std::vector<Sprite *> sprites_;
 	// 物理演算を行うボディ配列
 	std::vector<Physicus::Object *> objects_;
-	// 現在生成・操作を行なっているボディ
-	Physicus::Object* current_;
+	// 現在生成・操作を行なっているオブジェクト
+	Physicus::Object* current_object_;
+	// 現在生成・操作を行なっているパーティクル
+	Physicus::Particle* current_particle_;
+	// 物理演算を行うParticle配列
+	std::vector<Physicus::Particle *> particles_;
 	// オブジェクトの設定
-	Physicus::ObjectSetting current_setting_;
-	// オブジェクトが生存できるエリア
+	Physicus::ObjectSetting current_object_setting_;
+	// パーティクルの設定
+	Physicus::ParticleSetting current_particle_setting_;
+	// オブジェクト・パーティクルが生存できるエリア
 	Physicus::Frame alive_area_;
 	// 数珠繋ぎにする距離
 	float tie_loop_range_;
+	// 操作の種類
+	Physicus::ControlType control_type_;
 
 	// MARK: - コンストラクタ・デストラクタ
 
@@ -59,11 +69,75 @@ class PhysicusWorld {
 	 */
 	~PhysicusWorld();
 
+	// MARK: - Getter, Setter
+
+	/**
+	 * @brief 操作の種類を取得する
+	 * 
+	 * @return Physicus::ControlType 
+	 */
+	Physicus::ControlType getControlType();
+
+	/**
+	 * @brief 操作の種類を設定する
+	 * 
+	 * @param type 
+	 */
+	void setControlType(Physicus::ControlType type);
+
+	/**
+	 * @brief オブジェクトのタイプを取得する
+	 * 
+	 * @return Physicus::ObjectType 
+	 */
+	Physicus::ObjectType getObjectType();
+
+	/**
+	 * @brief オブジェクトのタイプを設定する
+	 * 
+	 * @param type 
+	 */
+	void setObjectType(Physicus::ObjectType type);
+
+	/**
+	 * @brief パーティクルのタイプを取得する
+	 * 
+	 * @return Physicus::ParticleType 
+	 */
+	Physicus::ParticleType getParticleType();
+
+	/**
+	 * @brief パーティクルのタイプを設定する
+	 * 
+	 * @param type 
+	 */
+	void setParticleType(Physicus::ParticleType type);
+
 	// MARK: - プレビュー
 
 	void makePreviewData();
 
 	// MARK: - 関数
+
+	/**
+	 * @brief タッチによってオブジェクトを生成する
+	 * 
+	 * @param touch タッチ情報
+	 * @return true オブジェクトが生成されるなら**true**
+	 * @return false 
+	 */
+	bool touchObjectCreate(touch_t touch);
+
+	/**
+	 * @brief タッチによってパーティクルを生成する
+	 * 
+	 * @param touch タッチ情報
+	 * @return true パーティクルが生成されるなら**true**
+	 * @return false 
+	 */
+	bool touchParticleCreate(touch_t touch);
+
+	public:
 
 	/**
 	 * @brief 矩形の即時作成
@@ -73,8 +147,6 @@ class PhysicusWorld {
 	 * @param body_type ボディタイプ
 	 */
 	void makeRectangle(b2Vec2 start, b2Vec2 end, b2BodyType body_type = b2_staticBody);
-
-	public:
 
 	/**
 	 * @brief 時間を進める
@@ -93,20 +165,19 @@ class PhysicusWorld {
 	 * @brief タッチによるオブジェクトの干渉（生成も含む）
 	 * 
 	 * @param touch 
-	 * @param type 
 	 * @return true オブジェクトが生成
 	 * @return false オブジェクトが未生成
 	 */
-	bool touchCalc(touch_t touch, Physicus::Type type);
+	bool touchCalc(touch_t touch);
 
 	/**
-	 * @brief オブジェクトを描画する
+	 * @brief オブジェクトとパーティクルを描画する
 	 * 
 	 */
 	void draw();
 
 	/**
-	 * @brief オブジェクトのフレームを描画する
+	 * @brief オブジェクトとパーティクルのフレームを描画する
 	 * 
 	 */
 	void drawDebugFrame();

@@ -22,7 +22,7 @@ namespace Physicus {
 	// オブジェクトの設定
 	struct ObjectSetting {
 		// オブジェクトのタイプ
-		Type type;
+		ObjectType type;
 		// ボディの演算タイプ（動くか止まったままかなど）
 		b2BodyType bodyType;
 		// 線の太さ
@@ -58,7 +58,7 @@ namespace Physicus {
 		 * @param fixture 
 		 * @return ObjectSetting 
 		 */
-		static ObjectSetting init(float world_scale, Type type, b2BodyType bodyType, std::vector<int> line_images, float line_width = Constant::Object::kDefaultLineWidth, int color = Color::kWhite, bool rotate_fix = false, bool area_out_alive = false, float sharp = Constant::Object::kDefaultSharpness, float rough = Constant::Object::kBezieRoughness, b2FixtureDef fixture = B2Fixture::defaultSetting()) {
+		static ObjectSetting init(float world_scale, ObjectType type, b2BodyType bodyType, std::vector<int> line_images, float line_width = Constant::Object::kDefaultLineWidth, int color = Color::kWhite, bool rotate_fix = false, bool area_out_alive = false, float sharp = Constant::Object::kDefaultSharpness, float rough = Constant::Object::kBezieRoughness, b2FixtureDef fixture = B2Fixture::defaultSetting()) {
 			line_width *= world_scale;
 			return {type, bodyType, line_width, line_images, color, rotate_fix, area_out_alive, sharp, rough, fixture};
 		}
@@ -80,7 +80,7 @@ namespace Physicus {
 		 * @param fixture 
 		 * @return ObjectSetting 
 		 */
-		static ObjectSetting init(float world_scale, Type type, b2BodyType bodyType, int* line_images, int line_images_size, float line_width = Constant::Object::kDefaultLineWidth, int color = Color::kWhite, bool rotate_fix = false, bool area_out_alive = false, float sharp = Float::kMax, float rough = Constant::Object::kBezieRoughness, b2FixtureDef fixture = B2Fixture::defaultSetting()) {
+		static ObjectSetting init(float world_scale, ObjectType type, b2BodyType bodyType, int* line_images, int line_images_size, float line_width = Constant::Object::kDefaultLineWidth, int color = Color::kWhite, bool rotate_fix = false, bool area_out_alive = false, float sharp = Float::kMax, float rough = Constant::Object::kBezieRoughness, b2FixtureDef fixture = B2Fixture::defaultSetting()) {
 			line_width *= world_scale;
 			std::vector<int> images;
 			for(int i = 0; i < line_images_size; i++) {

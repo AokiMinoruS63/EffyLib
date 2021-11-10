@@ -12,7 +12,6 @@
 #ifndef PHYSICUS_OBJECT_H
 #define PHYSICUS_OBJECT_H
 
-// TODO: include vector, Touch.h, box2d.h
 #include "../../OpenSource/Box2D/Box2D.h"
 #include <vector>
 #include "../../Touch/TouchData.h"
@@ -63,7 +62,7 @@ namespace Physicus {
 		 * @param scale ワールドの拡大率
 		 * @param setting オブジェクトの設定
 		 */
-		Object(touch_t touch, Type type, b2World* world, float scale, ObjectSetting setting);
+		Object(touch_t touch, ObjectType type, b2World* world, float scale, ObjectSetting setting);
 		~Object();
 
 		// MARK: - Getter, Setter
@@ -261,7 +260,7 @@ namespace Physicus {
 		 * 
 		 * @return Type 
 		 */
-		Type getType();
+		ObjectType getType();
 
 		/**
 		 * @brief 描画の進行率を設定する
