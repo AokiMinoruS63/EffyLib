@@ -78,10 +78,10 @@ void Liquid::postRender() {
 
 	setDrawBlendMode(BlendMode::kNoBlend, 0);
 	setDrawScreenBack();
-	GraphFilter(fill_screen, Filter::kGauss, 16, fill_gauss_rate_ );
-	GraphFilter(fill_screen, Filter::kTwoColor, 20, Color::kBlack, 0, Color::kWhite, 255);
-	GraphFilterBlt(fill_screen, edge_screen, Filter::kGauss, 16, edge_gauss_rate_);
-	GraphFilter(edge_screen, Filter::kTwoColor, 20,  Color::kBlack, 0, Color::kWhite, 255);
+	graphFilter(fill_screen, Filter::kGauss, 16, fill_gauss_rate_ );
+	graphFilter(fill_screen, Filter::kTwoColor, 20, Color::kBlack, 0, Color::kWhite, 255);
+	graphFilterBlt(fill_screen, edge_screen, Filter::kGauss, 16, edge_gauss_rate_);
+	graphFilter(edge_screen, Filter::kTwoColor, 20,  Color::kBlack, 0, Color::kWhite, 255);
 
 	setDrawScreen(edge_screen);
 	int beforeBlendMode, beforeBlendPrm;
@@ -93,10 +93,10 @@ void Liquid::postRender() {
 	setDrawScreenBack();
 
 	if(fill_finish_gauss_rate_ > 0) {
-		GraphFilter(fill_screen, Filter::kGauss, 16, fill_finish_gauss_rate_ );
+		graphFilter(fill_screen, Filter::kGauss, 16, fill_finish_gauss_rate_ );
 	}
 	if(edge_finish_gauss_rate_ > 0) {
-		GraphFilter(edge_screen, Filter::kGauss, 16, edge_finish_gauss_rate_ );
+		graphFilter(edge_screen, Filter::kGauss, 16, edge_finish_gauss_rate_ );
 	}
 	setDrawMode(kBilinear);
 	setDrawBright(fill_color);
@@ -104,7 +104,7 @@ void Liquid::postRender() {
 	setDrawBright(edge_color);
 	setDrawBlendMode(BlendMode::kAdd, 255);
 	drawExtendGraph(0, 0, frame.width, frame.height, edge_screen, TRUE);
-	// ガウスをしたらもう一度描画する
+	// ガウスぼかしをならもう一度描画する
 	if(edge_finish_gauss_rate_ > 0 ) {
 		drawExtendGraph(0, 0, frame.width, frame.height, edge_screen, TRUE);
 		drawExtendGraph(0, 0, frame.width, frame.height, edge_screen, TRUE);

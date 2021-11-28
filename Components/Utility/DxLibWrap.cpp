@@ -11,10 +11,8 @@
 
 #include "DxLibWrap.h"
 #include <vector>
-#include "TypeExtensions/Int+Extensions.h"
-#include "TypeExtensions/Float+Extensions.h"
-#include "TypeExtensions/B2Vec2+Extensions.h"
-#include "TypeExtensions/VectorOrArray+Extension.h"
+#include "TypeExtensions.h"
+#include <stdarg.h>
 
 // バイナリをバッファに丸ごと読み込む
 void* loadToBuffer(const char* filePath) {
@@ -84,6 +82,218 @@ ScreenState::Frame getScreenState() {
 	ScreenState::Frame state;
 	GetScreenState(&state.width, &state.height, &state.depth);
 	return state;
+}
+
+/**
+ * @brief スクリーン・画像にフィルターを施す
+ * 
+ * @param graph_handle フィルタをかける画像・スクリーン
+ * @param dest_gr_handle 出力先の画像・スクリーン
+ * @param filter_type フィルタのタイプ
+ * @param output アウトプットをするなら TRUE(1)
+ * @param va 可変調引数
+ * @return int 
+ */
+int graphFilterCommon(int graph_handle, int dest_gr_handle, int filter_type, int output, va_list va) {
+	// インナーマクロ
+	#define SET va_arg( va, int )
+	#define FILTER(...) output == FALSE ? GraphFilter(graph_handle, filter_type , __VA_ARGS__) : GraphFilterBlt(graph_handle, dest_gr_handle, filter_type, __VA_ARGS__)
+	#define FILTER_EMP output == FALSE ? GraphFilter(graph_handle, filter_type) : GraphFilterBlt(graph_handle, dest_gr_handle, filter_type)
+	int return_num = kErrorCode;
+
+	switch(filter_type) {
+		// モノトーンフィルタ
+		case GraphEffect::kMono:
+		{
+			int cb = SET;
+			int cr = SET;
+			return_num = FILTER(cb, cr);
+		}
+		break;
+		// ガウスフィルタ
+		case GraphEffect::kGauss:
+		{
+			int pixel_width = SET;
+			int prm = SET;
+			return_num = FILTER(pixel_width, prm);
+		}
+		break;
+		// 縮小フィルタ
+		case GraphEffect::kDownScale:
+		{
+			int div_num = SET;
+			return_num = FILTER(div_num);
+		}
+		break;
+		// 明るさクリップフィルタ
+		case GraphEffect::kBrightClip:
+		{
+			int cmp_type = SET;
+			int cmp_param = SET;
+			int clip_fill_flag = SET;
+			int clip_fill_color = SET;
+			int clip_fill_alpha = SET;
+			return_num = FILTER(cmp_type, cmp_param, clip_fill_flag, clip_fill_color, clip_fill_alpha);
+		}
+		break;
+		// 指定の明るさ領域を拡大するフィルタ
+		case GraphEffect::kBrightScale:
+		{
+			int min_bright = SET;
+			int max_bright = SET;
+			return_num = FILTER(min_bright, max_bright);
+		}
+		break;
+		// 色相・彩度・明度フィルタ
+		case GraphEffect::kHSB:
+		{
+			int hue_type = SET;
+			int hue = SET;
+			int saturation = SET;
+			int bright = SET;
+			return_num = FILTER(hue_type, hue, saturation, bright);
+		}
+		break;
+		// 階調の反転フィルタ
+		case GraphEffect::kInvert:
+			return_num = FILTER_EMP;
+		break;
+		// レベル補正フィルタ
+		case GraphEffect::kLevel:
+		{
+			int min = SET;
+			int max = SET;
+			int gamma = SET;
+			int after_min = SET;
+			int after_max = SET;
+			return_num = FILTER(min, max, gamma, after_min, after_max);
+		}
+		break;
+		// ２階調化フィルタ
+		case GraphEffect::kTwoColor:
+		{
+			int threshold = SET;
+			int low_color = SET;
+			int low_alpha = SET;
+			int high_color = SET;
+			int high_alpha = SET;
+			return_num = FILTER(threshold, low_color, low_alpha, high_color, high_alpha);
+		}
+		break;
+		// グラデーションマップフィルタ
+		case GraphEffect::kGradientMap:
+		{
+			int map_gr_handle = SET;
+			int reverse = SET;
+			return_num = FILTER(map_gr_handle, reverse);
+		}
+		break;
+		// 色の置換
+		case GraphEffect::kReplacement:
+		{
+			int target_r = SET;
+			int target_g = SET;
+			int target_b = SET;
+			int target_a = SET;
+			int r = SET;
+			int g = SET;
+			int b = SET;
+			int a = SET;
+			return_num = FILTER(target_r, target_g, target_b, target_a, r, g, b, a);
+		}
+		break;
+		// 通常のアルファチャンネル付き画像を乗算済みアルファ画像に変換するフィルタ
+		case GraphEffect::kPremulAlpha:
+			return_num = FILTER_EMP;
+		break;
+		// 乗算済みα画像を通常のアルファチャンネル付き画像に変換するフィルタ
+		case GraphEffect::kInterpAlpha:
+			return_num = FILTER_EMP;
+		break;
+		// YUVカラーをRGBカラーに変換するフィルタ
+		case GraphEffect::kYuvToRgb:
+			return_num = FILTER_EMP;
+		break;
+		// YUVカラーをRGBカラーに変換するフィルタ( UV成分が Y成分の半分・又は４分の１( 横・縦片方若しくは両方 )の解像度しかない場合用 )
+		case GraphEffect::kY2uv1ToRgb:
+		{
+			int uv_gr_handle = SET;
+			return_num = FILTER(uv_gr_handle);
+		}
+		break;
+		// YUVカラーをRGBカラーに変換するフィルタ( 且つ右側半分のRの値をアルファ値として扱う )
+		case GraphEffect::kYuvToRgbRra:
+			return_num = FILTER_EMP;
+		break;
+		// YUVカラーをRGBカラーに変換するフィルタ( UV成分が Y成分の半分・又は４分の１( 横・縦片方若しくは両方 )の解像度しかない場合用 )( 且つ右側半分のRの値をアルファ値として扱う )
+		case GraphEffect::kY2uv1ToRgbRra:
+		{
+			int uv_gr_handle = SET;
+			return_num = FILTER(uv_gr_handle);
+		}
+		break;
+		// バイキュービックを使用した拡大・縮小フィルタ
+		case GraphEffect::kBicubicScale:
+		{
+			int dest_size_x = SET;
+			int des_size_y = SET;
+			return_num = FILTER(dest_size_x, des_size_y);
+		}
+		break;
+		// Lanczos-3を使用した拡大・縮小フィルタ
+		case GraphEffect::kLanczos3Scale:
+		{
+			int dest_size_x = SET;
+			int des_size_y = SET;
+			return_num = FILTER(dest_size_x, des_size_y);
+		}
+		break;
+		// 明るさクリップフィルタ(乗算済みアルファ画像用)
+		// kPmaBrightClip = DX_GRAPH_FILTER_PMA_BRIGHT_CLIP,
+		// 指定の明るさ領域を拡大するフィルタ(乗算済みアルファ画像用)
+		// kPmaBrightScale = DX_GRAPH_FILTER_PMA_BRIGHT_SCALE,
+		// 色相・彩度・明度フィルタ(乗算済みアルファ画像用)
+		// kPmaHsb = DX_GRAPH_FILTER_PMA_HSB,
+		// 階調の反転フィルタ(乗算済みアルファ画像用)
+		// kPmaInvert = DX_GRAPH_FILTER_PMA_INVERT,
+		// レベル補正フィルタ(乗算済みアルファ画像用)
+		// kPmaLevel = DX_GRAPH_FILTER_PMA_LEVEL,
+		// ２階調化フィルタ(乗算済みアルファ画像用)
+		// kPmaTwoColor = DX_GRAPH_FILTER_PMA_TWO_COLOR,
+		// グラデーションマップフィルタ(乗算済みアルファ画像用)
+		// kPmaGradientMap = DX_GRAPH_FILTER_PMA_GRADIENT_MAP,
+		// 色の置換(乗算済みアルファ画像用)
+		// kPmaReplacement = DX_GRAPH_FILTER_PMA_REPLACEMENT,
+		default:
+		break;
+	}
+
+	#undef SET
+	#undef FILTER
+	#undef FILTER_EMP
+	return return_num;
+}
+
+// スクリーン・画像にフィルターを施す
+int graphFilter(int graph_handle, int filter_type, ...) {
+	int return_num = kErrorCode;
+	va_list va;
+	va_start(va, filter_type);
+
+	return_num = graphFilterCommon(graph_handle, FALSE, filter_type, FALSE, va);
+	va_end(va);
+	return return_num;
+}
+
+// スクリーン・画像にフィルターを施し、出力先の画像又はスクリーンに出力する
+int graphFilterBlt(int graph_handle, int dest_gr_handle, int filter_type, ...) {
+	int return_num = kErrorCode;
+	va_list va;
+	va_start(va, filter_type);
+
+	return_num = graphFilterCommon(graph_handle, dest_gr_handle, filter_type, TRUE, va);
+	va_end(va);
+	return return_num;
 }
 
 // 線形補完を取得する

@@ -35,6 +35,7 @@
 #include "TypeExtensions/Color+Extensions.h"
 #include "TypeExtensions/BlendMode+Extension.h"
 #include "TypeExtensions/ScreenState+Extensions.h"
+#include <stdarg.h>
 
 // 成功時に返す値
 const int kSuccessCode = 0;
@@ -123,6 +124,27 @@ int setDrawBlendMode(BlendMode::Property blend);
  * @return ScreenState 
  */
 ScreenState::Frame getScreenState();
+
+/**
+ * @brief スクリーン・画像にフィルターを施す
+ * 
+ * @param graph_handle 
+ * @param filter_type 
+ * @param ... 
+ * @return int 
+ */
+int graphFilter(int graph_handle, int filter_type, ...);
+
+/**
+ * @brief スクリーン・画像にフィルターを施し、出力先の画像又はスクリーンに出力する
+ * 
+ * @param graph_handle フィルタを施す画像・スクリーン
+ * @param dest_gr_handle 出力先の画像・スクリーン
+ * @param filter_type フィルターのタイプ
+ * @param ... 
+ * @return int 
+ */
+int graphFilterBlt(int graph_handle, int dest_gr_handle, int filter_type, ...);
 
 /**
  * @brief 線形補完を取得する
