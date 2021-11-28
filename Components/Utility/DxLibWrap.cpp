@@ -54,6 +54,63 @@ int getTouchInput(int InputNo, int *PositionX, int *PositionY, int GlobalPos, in
     return GetTouchInput(InputNo, PositionX, PositionY, ID, Device);
 }
 
+// 明るさを取得する
+int getDrawBright(Color::Color* color) {
+	return GetDrawBright(&color->red, &color->green, &color->blue);
+}
+
+// 明るさを設定する
+int setDrawBright(Color::Color color) {
+	return SetDrawBright(color.red, color.green, color.blue);
+}
+
+// ブレンドモードを取得する
+int getDrawBlendMode(BlendMode::Property* blend) {
+	return GetDrawBlendMode(&blend->mode, &blend->prm);
+}
+
+// ブレンドモードをセットする
+int setDrawBlendMode(int mode, int prm) {
+	return SetDrawBlendMode(mode, prm);
+}
+
+// ブレンドモードをセットする
+int setDrawBlendMode(BlendMode::Property blend) {
+	return SetDrawBlendMode(blend.mode, blend.prm);
+}
+
+// スクリーンの幅、高さ、深度を取得する
+ScreenState::Frame getScreenState() {
+	ScreenState::Frame state;
+	GetScreenState(&state.width, &state.height, &state.depth);
+	return state;
+}
+
+// 線形補完を取得する
+int getDrawMode() {
+	return GetDrawMode();
+}
+
+// 線形補完を設定する
+int setDrawMode(int draw_mode) {
+	return SetDrawMode(draw_mode);
+}
+
+// 描画を行うスクリーンをセットする
+int setDrawScreen(int screen) {
+	return SetDrawScreen(screen);
+}
+
+// 描画を行うスクリーンをバッファスクリーンにする
+int setDrawScreenBack() {
+	return SetDrawScreen(ScreenState::kBack);
+}
+
+// 色をintからRGBに変換する
+int getColor2(unsigned int color, Color::Color* colorBuf) {
+	return GetColor2(color, &colorBuf->red, &colorBuf->green, &colorBuf->blue);
+}
+
 // 線を描画
 int drawLine( int x1 , int y1 , int x2 , int y2 , unsigned int Color, int GlobalPos, int Thickness) {
     if (GlobalPos == FALSE) {

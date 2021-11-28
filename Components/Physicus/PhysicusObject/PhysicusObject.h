@@ -15,11 +15,11 @@
 #include "../../OpenSource/Box2D/Box2D.h"
 #include <vector>
 #include "../../Touch/TouchData.h"
-#include "Enum/PhysicusObjectType.h"
+#include "PhysicusObjectType.h"
 #include "../../Utility/TypeExtensions.h"
 #include "../PhysicusWorld/Frame/PhysicusWorldFrame.h"
 #include "Constant/PhysicusConstant.h"
-#include "Setting/PhysicusObjectSetting.h"
+#include "PhysicusObjectSetting.h"
 
 namespace Physicus {
 

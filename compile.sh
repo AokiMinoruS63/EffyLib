@@ -76,6 +76,13 @@ em++ "${file}" -c -o "../../build/${file%.*}.o" -O0 -std=c++17 -g4 -IDxLibForHTM
 done
 
 cd ..
+cd Effect
+for file in *.cpp
+do
+em++ "${file}" -c -o "../../build/${file%.*}.o" -O0 -std=c++17 -g4 -IDxLibForHTML5/include -IComponents -IComponents/OpenSource/
+done
+
+cd ..
 cd Touch
 for file in *.cpp
 do

@@ -23,5 +23,8 @@
 #include "TypeExtensions/VectorOrArray+Extension.h"
 #include "TypeExtensions/Vector+Extension.h"
 #include "TypeExtensions/Array+Extensions.h"
+#include "TypeExtensions/BlendMode+Extension.h"
+#include "TypeExtensions/ScreenState+Extensions.h"
+#include "TypeExtensions/GraphEffect+Extensions.h"
 
 #endif

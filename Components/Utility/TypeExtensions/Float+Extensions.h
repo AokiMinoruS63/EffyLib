@@ -13,6 +13,7 @@
 #define FLOAT_EXTENSION_H
 
 #include "../../Utility/DxLibWrap.h"
+#include <vector>
 
 namespace Float {
 

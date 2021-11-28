@@ -22,6 +22,21 @@ namespace Color {
 	static const int kBlue = GetColor(0, 0, 255);
 	static const int kYellow = GetColor(255, 255, 0);
 	static const int kPurple = GetColor(0, 255, 255);
+
+	static const int kLightBlue = GetColor(157, 204, 224);
+	static const int kNigelleBlue = GetColor(0, 133, 201);
+	/**
+	 * @brief 色
+	 * 
+	 */
+	struct Color {
+		// 赤
+		int red;
+		// 緑
+		int green;
+		// 青
+		int blue;
+	};
 }
 
 #endif

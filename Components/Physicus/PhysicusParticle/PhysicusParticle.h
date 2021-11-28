@@ -22,8 +22,14 @@ namespace Physicus {
 
 		// MARK: - 変数
 
-		// パーティクルの中に入っている子パーティクル
-		std::vector<b2ParticleSystem *> particle_;
+		// パーティクルの管理クラス
+		b2ParticleSystem* particle_system_;
+		// パーティクル
+		b2ParticleGroup* particle_;
+		// 演算を行うワールド
+		b2World* world_;
+		// タッチの軌跡
+		std::vector<b2Vec2> locus_;
 		// 拡大率
 		float world_scale_;
 		// 設定
@@ -33,8 +39,17 @@ namespace Physicus {
 
 		public:
 
-		Particle();
+		Particle(touch_t touch, b2ParticleSystem* particle_system, b2World* world, float scale, ParticleSetting setting);
 		~Particle();
+
+		// MARK: - Getter, Setter
+
+		/**
+		 * @brief グループを取得する
+		 * 
+		 * @return int 
+		 */
+		int getGroup();
 
 		// MARK: - 生成
 

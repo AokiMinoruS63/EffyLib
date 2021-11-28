@@ -17,6 +17,8 @@ using namespace Physicus;
 
 // コンストラクタ
 PhysicusWorld::PhysicusWorld(b2Vec2 gravity, float scale, Frame alive_area, float tie_loop_range){
+	// エフェクトのスクリーンを作成する
+	effect_screen_ = new EffectScreen();
 	// 物理演算世界を初期化する
 	world_ = new b2World(gravity);
 	// 拡大率適用
@@ -28,6 +30,9 @@ PhysicusWorld::PhysicusWorld(b2Vec2 gravity, float scale, Frame alive_area, floa
 	tie_loop_range_ = tie_loop_range;
 	const std::vector<int> images = ComponentAssets::shared()->getImages().brush_crayon;
 	current_object_setting_ = ObjectSetting::init(world_scale_, ObjectType::kLinkBoard, b2_dynamicBody, images);
+	current_particle_setting_ = ParticleSetting::init();
+	// パーティクル生成クラスを初期化
+	particle_system_ =  world_->CreateParticleSystem(&current_particle_setting_.setting);
 	// NULL代入する
 	current_object_ = NULL;
 	current_particle_ = NULL;
@@ -78,6 +83,8 @@ void PhysicusWorld::makePreviewData() {
 	makeRectangle(b2Vec2(0, 580), b2Vec2(880, 600));
 	makeRectangle(b2Vec2(0, 200), b2Vec2(20, 600));
 	makeRectangle(b2Vec2(860, 200), b2Vec2(880, 600));	
+
+	makeRectangle(b2Vec2(0, 200), b2Vec2(300, 230));
 }
 
 // 矩形の即時作成
@@ -174,12 +181,16 @@ bool PhysicusWorld::touchObjectCreate(touch_t touch) {
 // タッチによってパーティクルを生成する
 bool PhysicusWorld::touchParticleCreate(touch_t touch) {
 	bool generate = false;
+	makeParticleScreen(current_particle_setting_.group, current_particle_setting_.fill_color, current_particle_setting_.edge_color);
 	// 生成開始
 	if(touch.status == TouchStatus::kJustTouch && current_particle_ == NULL) {
-		current_particle_ = new Particle(/*touch, current_particle_setting_.type, world_, world_scale_, current_particle_setting_*/);
+		current_particle_ = new Particle(touch, particle_system_, world_, world_scale_, current_particle_setting_);
 		particles_.push_back(current_particle_);
 		generate = true;
 	}
+
+	// TODO: 後で変える
+	current_particle_ = NULL;
 
 	if(current_particle_ != NULL) {
 		// 生成中
@@ -192,26 +203,66 @@ bool PhysicusWorld::touchParticleCreate(touch_t touch) {
 	return generate;
 }
 
+// パーティクル用のスクリーンを生成する
+void PhysicusWorld::makeParticleScreen(int group, int fill_color, int edge_color) {
+	for(auto &itr: screen_) {
+		if(itr.getGroup() == group) {
+			return;
+		}
+	}
+	screen_.push_back(Effect::Liquid(effect_screen_, group, fill_color, edge_color));
+}
 
 // オブジェクトとパーティクルを描画する
 void PhysicusWorld::draw() {
+	// オブジェクト描画
 	for(auto& itr: objects_) {
 		if(itr != current_object_) {
 			itr->draw();
 		}
 	}
+	// パーティクル描画
+	for(auto& scr: screen_) {
+		if(scr.getGroup() > 0) {
+			scr.preRender();
+		}
+		for(auto& itr: particles_) {
+			if(scr.getGroup() != itr->getGroup() || itr == current_particle_) {
+				continue;
+			}
+			itr->draw();
+		}
+		if(scr.getGroup() > 0) {
+			scr.postRender();
+		}
+	}
+	// 編集中のオブジェクト描画
 	current_object_->drawEditing();
+	// 編集中のパーティクル描画
+	current_particle_->drawEditing();
 }
 
 
 // オブジェクトとパーティクルのフレームを描画する
 void PhysicusWorld::drawDebugFrame() {
+	// オブジェクト描画
 	for(auto& itr: objects_) {
 		if(itr != current_object_) {
 			itr->drawDebugFrame();
 		}
 	}
+	// パーティクル描画
+	for(auto& itr: particles_) {
+		if(itr != current_particle_) {
+			itr->drawDebugFrame();
+		}
+	}
+	// 編集中のオブジェクト描画
 	if(current_object_ != NULL) {
 		current_object_->drawEditingDebugFrame();
+	}
+	// 編集中のパーティクル描画
+	if(current_particle_ != NULL) {
+		current_particle_->drawEditingDebugFrame();
 	}
 }

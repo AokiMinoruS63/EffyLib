@@ -32,6 +32,14 @@
 #include <cstdlib>
 #include <utility>
 #include "../OpenSource/Box2D/Box2D.h"
+#include "TypeExtensions/Color+Extensions.h"
+#include "TypeExtensions/BlendMode+Extension.h"
+#include "TypeExtensions/ScreenState+Extensions.h"
+
+// 成功時に返す値
+const int kSuccessCode = 0;
+// エラーの時に返す値
+const int kErrorCode = -1;
 
 /* 読み込み、マウス、タッチ系 */
 
@@ -65,6 +73,95 @@ int getMousePoint(int *XBuf, int *YBuf);
  */
 int getTouchInput(int InputNo, int *PositionX, int *PositionY, 
                     int GlobalPos = FALSE, int *ID = (int *)0, int *Device = (int *)0);
+
+/* 色・スクリーン関係 */
+
+/**
+ * @brief 明るさを取得する
+ * 
+ * @param color 
+ * @return int 0: 成功、-1: エラー発生
+ */
+int getDrawBright(Color::Color* color);
+
+/**
+ * @brief 明るさを設定する
+ * 
+ * @param color 
+ * @return int 
+ */
+int setDrawBright(Color::Color color);
+
+/**
+ * @brief ブレンドモードを取得する
+ * 
+ * @param blend 
+ * @return int 
+ */
+int getDrawBlendMode(BlendMode::Property* blend);
+
+/**
+ * @brief ブレンドモードをセットする
+ * 
+ * @param mode 
+ * @param prm 
+ * @return int 
+ */
+int setDrawBlendMode(int mode, int prm);
+
+/**
+ * @brief ブレンドモードをセットする
+ * 
+ * @param blend 
+ * @return int 
+ */
+int setDrawBlendMode(BlendMode::Property blend);
+
+/**
+ * @brief スクリーンの幅、高さ、深度を取得する
+ * 
+ * @return ScreenState 
+ */
+ScreenState::Frame getScreenState();
+
+/**
+ * @brief 線形補完を取得する
+ * 
+ * @return int 
+ */
+int getDrawMode();
+
+/**
+ * @brief 線形補完を設定する
+ * 
+ * @param drawMode 
+ * @return int 
+ */
+int setDrawMode(int draw_mode);
+
+/**
+ * @brief 描画を行うスクリーンをセットする
+ * 
+ * @param screen 
+ * @return int 
+ */
+int setDrawScreen(int screen);
+
+/**
+ * @brief 描画を行うスクリーンをバッファスクリーンにする
+ * 
+ * @return int 
+ */
+int setDrawScreenBack();
+
+/**
+ * @brief 色をintからRGBに変換する
+ * 
+ * @param color 
+ * @param colorBuf 
+ * @return int 
+ */
+int getColor2(unsigned int color, Color::Color* colorBuf);
 
 /* 図形描画 */
 

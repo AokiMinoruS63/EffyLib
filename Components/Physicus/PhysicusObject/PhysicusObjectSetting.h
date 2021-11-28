@@ -13,9 +13,9 @@
 #define PHYSICUS_OBJECT_SETTING_H
 
 #include <vector>
-#include "../Enum/PhysicusObjectType.h"
-#include "../../../OpenSource/Box2D/Box2D.h"
-#include "../../../Utility/TypeExtensions/B2Fixture+Extensions.h"
+#include "PhysicusObjectType.h"
+#include "../../OpenSource/Box2D/Box2D.h"
+#include "../../Utility/TypeExtensions/B2Fixture+Extensions.h"
 
 
 namespace Physicus {

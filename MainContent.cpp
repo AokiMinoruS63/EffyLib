@@ -16,7 +16,6 @@
 #include <emscripten.h>
 #endif
 
-
 MainContent::MainContent() {
 	SetGraphMode(getScreenWidthWithPartition(), getScreenHeightWithPartition(), 32);
     if (DxLib_Init() == -1) {
@@ -43,10 +42,12 @@ void MainContent::run() {
 
 	// タッチ計算
 	touchMgr_->calc();
+	// パーティクルのタイプをシングルに
+	world_->setParticleType(Physicus::ParticleType::kSingle);
 	// オブジェクトのタイプを手描き線に先行
-	world_->setObjectType(Physicus::ObjectType::kHandWritten);
+	//world_->setObjectType(Physicus::ObjectType::kHandWritten);
 	// 操作内容をパーティクル生成に変更
-	world_->setControlType(Physicus::ControlType::kObjectCreate);
+	world_->setControlType(Physicus::ControlType::kParticleCreate);
 	// タッチを物理演算に適用
 	world_->touchCalc(touchMgr_->get());
 	// 時間を進める
@@ -61,7 +62,7 @@ void MainContent::run() {
 	// オブジェクトの描画
 	world_->draw();
 	// ボーンの描画
-	world_->drawDebugFrame();
+	//world_->drawDebugFrame();
 
 	ScreenFlip();
 }

@@ -17,6 +17,8 @@
 #include "../PhysicusParticle/PhysicusParticle.h"
 #include "Frame/PhysicusWorldFrame.h"
 #include "PhysicusControlType.h"
+#include "../../Effect/EffectScreen.h"
+#include "../../Effect/LiquidEffect.h"
 
 // 相互参照
 class Sprite;
@@ -35,6 +37,8 @@ class PhysicusWorld {
 	std::vector<Physicus::Object *> objects_;
 	// 現在生成・操作を行なっているオブジェクト
 	Physicus::Object* current_object_;
+	// パーティクルの生成クラス
+	b2ParticleSystem* particle_system_;
 	// 現在生成・操作を行なっているパーティクル
 	Physicus::Particle* current_particle_;
 	// 物理演算を行うParticle配列
@@ -49,6 +53,10 @@ class PhysicusWorld {
 	float tie_loop_range_;
 	// 操作の種類
 	Physicus::ControlType control_type_;
+	// エフェクト用の共用で使用するスクリーン
+	EffectScreen* effect_screen_;
+	// 液体エフェクトのスクリーン
+	std::vector<Effect::Liquid> screen_;
 
 	// MARK: - コンストラクタ・デストラクタ
 
@@ -136,6 +144,15 @@ class PhysicusWorld {
 	 * @return false 
 	 */
 	bool touchParticleCreate(touch_t touch);
+
+	/**
+	 * @brief パーティクル用のスクリーンを生成する
+	 * 
+	 * @param group 描画用のスクリーンのグループ
+	 * @param fill_color 塗りつぶし色
+	 * @param edge_color 線の色
+	 */
+	void makeParticleScreen(int group, int fill_color, int edge_color);
 
 	public:
 
