@@ -12,6 +12,8 @@
 #ifndef LIQUID_EFFECT_H
 #define LIQUID_EFFECT_H
 
+#include "LiquidSetting.h"
+
 class EffectScreen;
 
 namespace Effect {
@@ -19,26 +21,15 @@ namespace Effect {
 		// MARK: - 変数
 
 		private:
-		// スクリーンのグループ
-		int group_;
+		LONG cnt_;
 		// 現在のスクリーン
 		int current_screen_;
 		// 描画準備用のスクリーン
 		int render_screen_[2];
 		// 共用で使用される描画用のスクリーン
 		EffectScreen* effect_screen_;
-		// 前景のぼかしの強さ
-		int fill_gauss_rate_;
-		// 背景のぼかしの強さ
-		int edge_gauss_rate_;
-		// 前景の仕上げのぼかしの強さ
-		int fill_finish_gauss_rate_;
-		// 背景の仕上げのぼかしの強さ
-		int edge_finish_gauss_rate_;
-		// 塗りつぶしの色
-		int fill_color_;
-		// 線の色
-		int edge_color_;
+		// 設定
+		LiquidSetting setting_;
 
 		// MARK: - コンストラクタ・デストラクタ
 
@@ -62,18 +53,12 @@ namespace Effect {
 		Liquid init(EffectScreen *screen);
 
 		/**
-		 * @brief Construct a new Liquid object
+		 * @brief コンストラクタ
 		 * 
 		 * @param screen 
-		 * @param group スクリーンのグループ
-		 * @param front_color 前景色
-		 * @param back_color 背景色
-		 * @param front_gauss_rate 前景のガウスの強さ
-		 * @param back_gauss_rate 背景のガウスの強さ
-		 * @param front_finish_gauss_rate 前景の仕上げのぼかしの強さ
-		 * @param back_finish_gauss_rate 背景の仕上げのぼかしの強さ
+		 * @param setting セッティング
 		 */
-		Liquid(EffectScreen *screen, int group, int front_color, int back_color, int front_gauss_rate = 700, int back_gauss_rate = 200, int front_finish_gauss_rate = 0, int back_finish_gauss_rate = 0);
+		Liquid(EffectScreen *screen, LiquidSetting setting);
 
 		/**
 		 * @brief Destroy the Liquid object

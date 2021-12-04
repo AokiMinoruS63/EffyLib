@@ -16,6 +16,7 @@
 #include "PhysicusParticleType.h"
 #include "../../Utility/TypeExtensions/Color+Extensions.h"
 #include "../../Utility/TypeExtensions/Float+Extensions.h"
+#include <vector>
 
 namespace Physicus {
 	struct ParticleSetting {
@@ -39,11 +40,28 @@ namespace Physicus {
 		int draw_small_value_x;
 		// ガウスを考慮してどれだけ小さく描くか
 		int draw_small_value_y;
+		// 画像をどれだけ大きく描くか
+		int draw_big_image_value;
+		// 画像
+		std::vector<int> images;
 
 		static ParticleSetting init() {
 			b2ParticleSystemDef setting = b2ParticleSystemDef();
 			setting.density = 1.0;
-			return ParticleSetting({ ParticleType::kSingle, setting, 1, Color::kWhite, Color::kNigelleBlue, false, Float::kMax, Float::kQuarter, 2, 8});
+			return ParticleSetting({ ParticleType::kSingle, setting, 0, Color::kWhite, Color::kNigelleBlue, false, Float::kMax, Float::kQuarter, 2, 8, 5});
+		}
+
+		/**
+		 * @brief 画像をセットする
+		 * 
+		 * @param imgs 
+		 * @param size 
+		 */
+		void setImages(int* imgs, int size) {
+			images.clear();
+			for(int i = 0; i < size; i++) {
+				images.push_back(imgs[i]);
+			}
 		}
 	};
 }

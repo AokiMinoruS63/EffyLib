@@ -91,6 +91,20 @@ ScreenState::Frame getScreenState() {
 	return state;
 }
 
+// 画像の幅を返す
+float getImageWidth(int graph_handle) {
+	int width = -1, height = -1;
+	GetGraphSize(graph_handle, &width, &height);
+	return (float)width;
+}
+
+// 画像の高さを返す
+float getImageHeight(int graph_handle) {
+	int width = -1, height = -1;
+	GetGraphSize(graph_handle, &width, &height);
+	return (float)height;
+}
+
 /**
  * @brief スクリーン・画像にフィルターを施す
  * 

@@ -19,9 +19,15 @@
 
 namespace Physicus {
 	class Particle {
+		// MARK: - 定数
+
+		public:
+		// ガウスぼかしを行わないグループ
+		static const int kNoGaussGroup = 0;
 
 		// MARK: - 変数
 
+		private:
 		// パーティクルの管理クラス
 		b2ParticleSystem* particle_system_;
 		// パーティクル

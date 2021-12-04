@@ -121,6 +121,20 @@ class PhysicusWorld {
 	 */
 	void setParticleType(Physicus::ParticleType type);
 
+	/**
+	 * @brief パーティクルの設定を取得する
+	 * 
+	 * @return ParticleSetting 
+	 */
+	Physicus::ParticleSetting getParticleSetting();
+
+	/**
+	 * @brief パーティクルの設定を設定する
+	 * 
+	 * @param setting 
+	 */
+	void setParticleSetting(Physicus::ParticleSetting setting);
+
 	// MARK: - プレビュー
 
 	void makePreviewData();

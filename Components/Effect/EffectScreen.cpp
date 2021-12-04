@@ -18,12 +18,12 @@
  */
 EffectScreen::EffectScreen() {
 	ScreenState::Frame state = getScreenState();
-	state.width /= kGaussRatio;
-	state.height /= kGaussRatio;
 	edge_screen_ = -1;
 	fill_screen_ = -1;
 	edge_screen_ = MakeScreen(state.width, state.height, TRUE);
 	fill_screen_ = MakeScreen(state.width, state.height, TRUE);
+	state.width /= kGaussRatio;
+	state.height /= kGaussRatio;
 	gauss_screen_ = MakeScreen(state.width, state.height, TRUE);
 }
 

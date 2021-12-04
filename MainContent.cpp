@@ -27,10 +27,24 @@ MainContent::MainContent() {
 	bmFontMgr_->load("GameFont_Blue");
 	bmFontMgr_->load("GameFont_Orange");
 	bmFontMgr_->load("GameFont_White");
+
+	auto setting = world_->getParticleSetting();
+	int money = ComponentAssets::shared()->getImages().icons.front();
+	int jewery = ComponentAssets::shared()->getImages().icons.back();
+	int images[30];
+	for(int i = 0; i < 30; i++) {
+		if(i % 5 == 0) {
+			images[i] = jewery;
+		} else {
+			images[i] = money;
+		}
+	}
+	setting.setImages(images, 30);
+	world_->setParticleSetting(setting);
 	
 
     ChangeFont("07LogoTypeGothic7.ttf");
-	SetDrawScreen(DX_SCREEN_BACK);
+	setDrawScreen(ScreenState::kBack);
 }
 
 MainContent::~MainContent() {
@@ -38,7 +52,7 @@ MainContent::~MainContent() {
 }
 
 void MainContent::run() {
-	ClearDrawScreen();
+	clearDrawScreen();
 
 	// タッチ計算
 	touchMgr_->calc();

@@ -78,6 +78,16 @@ void PhysicusWorld::setParticleType(Physicus::ParticleType type) {
 	current_particle_setting_.type = type;
 }
 
+// パーティクルの設定を取得する
+ParticleSetting PhysicusWorld::getParticleSetting() {
+	return current_particle_setting_;
+}
+
+// パーティクルの設定を設定する
+void PhysicusWorld::setParticleSetting(ParticleSetting setting) {
+	current_particle_setting_ = setting;
+}
+
 // プレビューの作成
 void PhysicusWorld::makePreviewData() {
 	makeRectangle(b2Vec2(0, 580), b2Vec2(880, 600));
@@ -210,7 +220,11 @@ void PhysicusWorld::makeParticleScreen(int group, int fill_color, int edge_color
 			return;
 		}
 	}
-	screen_.push_back(Effect::Liquid(effect_screen_, group, fill_color, edge_color));
+	auto setting = Effect::LiquidSetting::init();
+	setting.setBlendMode(BlendMode::kAdd);
+	if(group != Particle::kNoGaussGroup) {
+		screen_.push_back(Effect::Liquid(effect_screen_, setting));
+	}
 }
 
 // オブジェクトとパーティクルを描画する
@@ -222,8 +236,17 @@ void PhysicusWorld::draw() {
 		}
 	}
 	// パーティクル描画
+	// ぼかしを使用しないパーティクル
+	for(auto& itr: particles_) {
+		if(itr->getGroup() != Particle::kNoGaussGroup || itr == current_particle_) {
+			continue;
+		}
+		itr->draw();
+	}
+	// ぼかしを使用するパーティクル
 	for(auto& scr: screen_) {
-		if(scr.getGroup() > 0) {
+		const bool isGauss = scr.getGroup() != Particle::kNoGaussGroup;
+		if(isGauss) {
 			scr.preRender();
 		}
 		for(auto& itr: particles_) {
@@ -232,7 +255,7 @@ void PhysicusWorld::draw() {
 			}
 			itr->draw();
 		}
-		if(scr.getGroup() > 0) {
+		if(isGauss) {
 			scr.postRender();
 		}
 	}

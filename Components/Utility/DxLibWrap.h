@@ -134,6 +134,22 @@ int setDrawBlendMode(BlendMode::Property blend);
 ScreenState::Frame getScreenState();
 
 /**
+ * @brief 画像の幅を返す
+ * 
+ * @param graph_handle 
+ * @return float 
+ */
+float getImageWidth(int graph_handle);
+
+/**
+ * @brief 画像の高さを返す
+ * 
+ * @param graph_handle 
+ * @return int 
+ */
+float getImageHeight(int graph_handle);
+
+/**
  * @brief スクリーン・画像にフィルターを施す
  * 
  * @param graph_handle 

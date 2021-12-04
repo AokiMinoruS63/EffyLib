@@ -154,7 +154,6 @@ bool Particle::generation(touch_t touch) {
 
 // パーティクルの描画
 void Particle::draw() {
-	//printfDx("パーティクル描画メソッド\n");
 	// TODO: 液体以外にも画像などの描画も行う
 	b2Vec2* vecList { particle_system_->GetPositionBuffer() + particle_->GetBufferIndex() };
 	for(int i = 0; i < particle_->GetParticleCount(); i++) {
@@ -163,7 +162,14 @@ void Particle::draw() {
 		int y = (int)(position.y / world_scale_);
 		int r = (int)(setting_.setting.radius / world_scale_);
 		// 楕円の描画を行う
-		drawOval(x, y, r - setting_.draw_small_value_x, r - setting_.draw_small_value_y, Color::kWhite, TRUE);
+		if(setting_.group == kNoGaussGroup) {
+			// TODO: 回転させる。半径と画像のサイズから拡大率を算出し画像を合わせる。
+			const int image = setting_.images.at(i % setting_.images.size());
+			const float scale = ((float)r * 2.0 + setting_.draw_big_image_value) / (getImageWidth(image));
+			drawRotaGraph(x, y, scale, 0.0, setting_.images.at(i % setting_.images.size()), TRUE, FALSE);
+		} else {
+			drawOval(x, y, r - setting_.draw_small_value_x, r - setting_.draw_small_value_y, Color::kWhite, TRUE);
+		}
 	}
 }
 

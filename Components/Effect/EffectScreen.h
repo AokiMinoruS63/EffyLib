@@ -19,7 +19,7 @@ class EffectScreen {
 
 	public:
 	// 1/kGaussRatioの大きさのスクリーンにする
-	static const int kGaussRatio = 1;
+	static const int kGaussRatio = 2;
 
 	// MARK: 変数
 
