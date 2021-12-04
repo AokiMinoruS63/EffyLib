@@ -13,6 +13,11 @@
 #include <vector>
 #include "TypeExtensions.h"
 #include <stdarg.h>
+#ifdef EMSCRIPTEN
+#include "../../DxLibForHTML5/include/DxLib.h"
+#else
+#include <DxLib.h>
+#endif
 
 // バイナリをバッファに丸ごと読み込む
 void* loadToBuffer(const char* filePath) {

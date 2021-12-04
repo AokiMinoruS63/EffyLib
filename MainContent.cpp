@@ -29,8 +29,8 @@ MainContent::MainContent() {
 	bmFontMgr_->load("GameFont_White");
 
 	auto setting = world_->getParticleSetting();
-	int money = ComponentAssets::shared()->getImages().icons.front();
-	int jewery = ComponentAssets::shared()->getImages().icons.back();
+	int money = ComponentAssets::shared()->getImages().icons.at(0);
+	int jewery = ComponentAssets::shared()->getImages().icons.at(1);
 	int images[30];
 	for(int i = 0; i < 30; i++) {
 		if(i % 5 == 0) {

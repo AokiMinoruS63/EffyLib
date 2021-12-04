@@ -36,6 +36,7 @@ namespace Components {
 			LoadDivGraph("Components/Texture/crayon.png", 3, 1, 3, 128, 128, crayon_images);
 			icons.push_back( LoadGraph("Components/Texture/gold.png") );
 			icons.push_back( LoadGraph("Components/Texture/jewel.png") );
+			icons.push_back( LoadGraph("Components/Texture/charcoal.png") );
 			return { Array::toVector(crayon_images, 3), icons };
 		}
 	};

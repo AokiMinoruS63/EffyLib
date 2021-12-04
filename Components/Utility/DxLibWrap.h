@@ -23,12 +23,6 @@
 #ifndef DXLIB_WRAPPING_H
 #define DXLIB_WRAPPING_H
 
-#ifdef EMSCRIPTEN
-#include "../../DxLibForHTML5/include/DxLib.h"
-#include "ScreenSizeGenerator.h"
-#else
-#include <DxLib.h>
-#endif
 #include <cstdlib>
 #include <utility>
 #include "../OpenSource/Box2D/Box2D.h"
@@ -36,6 +30,10 @@
 #include "TypeExtensions/BlendMode+Extension.h"
 #include "TypeExtensions/ScreenState+Extensions.h"
 #include <stdarg.h>
+
+#ifdef EMSCRIPTEN
+#include "ScreenSizeGenerator.h"
+#endif
 
 // 成功時に返す値
 const int kSuccessCode = 0;
