@@ -25,6 +25,8 @@ namespace Color {
 
 	static const int kLightBlue = GetColor(157, 204, 224);
 	static const int kNigelleBlue = GetColor(0, 133, 201);
+	static const int kOrange = GetColor(255, 165, 0);
+	static const int kDeepOrange = GetColor(255, 102, 51);
 	/**
 	 * @brief 色
 	 * 

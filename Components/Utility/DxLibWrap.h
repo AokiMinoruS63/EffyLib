@@ -94,6 +94,14 @@ int getDrawBright(Color::Color* color);
 int setDrawBright(Color::Color color);
 
 /**
+ * @brief 明るさを設定する
+ * 
+ * @param color 
+ * @return int 
+ */
+int setDrawBright(int color);
+
+/**
  * @brief ブレンドモードを取得する
  * 
  * @param blend 
@@ -175,6 +183,13 @@ int setDrawScreen(int screen);
  * @return int 
  */
 int setDrawScreenBack();
+
+/**
+ * @brief 現在描画を行なっているスクリーンをクリアする
+ * 
+ * @return int 
+ */
+int clearDrawScreen();
 
 /**
  * @brief 色をintからRGBに変換する

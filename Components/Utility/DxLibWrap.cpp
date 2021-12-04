@@ -62,6 +62,13 @@ int setDrawBright(Color::Color color) {
 	return SetDrawBright(color.red, color.green, color.blue);
 }
 
+// 明るさを設定する
+int setDrawBright(int color) {
+	Color::Color col;
+	getColor2(color, &col);
+	return SetDrawBright(col.red, col.green, col.blue);
+}
+
 // ブレンドモードを取得する
 int getDrawBlendMode(BlendMode::Property* blend) {
 	return GetDrawBlendMode(&blend->mode, &blend->prm);
@@ -314,6 +321,11 @@ int setDrawScreen(int screen) {
 // 描画を行うスクリーンをバッファスクリーンにする
 int setDrawScreenBack() {
 	return SetDrawScreen(ScreenState::kBack);
+}
+
+// 現在描画を行なっているスクリーンをクリアする
+int clearDrawScreen() {
+	return ClearDrawScreen();
 }
 
 // 色をintからRGBに変換する
