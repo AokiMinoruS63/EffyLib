@@ -36,8 +36,6 @@ PhysicusWorld::PhysicusWorld(b2Vec2 gravity, float scale, Frame alive_area, floa
 	// NULL代入する
 	current_object_ = NULL;
 	current_particle_ = NULL;
-	// プレビューデータの作成
-	makePreviewData();
 }
 
 // デストラクタ
@@ -95,6 +93,12 @@ void PhysicusWorld::makePreviewData() {
 	makeRectangle(b2Vec2(860, 200), b2Vec2(880, 600));	
 
 	makeRectangle(b2Vec2(0, 200), b2Vec2(300, 230));
+
+	auto setting = Physicus::ParticleSetting::init();
+	setting.effect_setting.group = 2;
+	setting.effect_setting.fill_color = Color::kDeepOrange;
+	setting.effect_setting.effect = true;
+	makeParticle(b2Vec2(200, 200), setting);
 }
 
 // 矩形の即時作成
@@ -120,6 +124,18 @@ void PhysicusWorld::makeRectangle(b2Vec2 start, b2Vec2 end, b2BodyType body_type
 	body->generation(touch, tie_loop_range_);
 
 	current_object_setting_ = tmp;
+}
+
+// パーティクルの即時作成
+void PhysicusWorld::makeParticle(b2Vec2 position, Physicus::ParticleSetting setting) {
+	makeParticleScreen(setting.effect_setting);
+	// 生成開始
+	touch_t touch = touch_t();
+	touch.x = position.x;
+	touch.y = position.y;
+	touch.status = TouchStatus::kJustRelease;
+	auto particle = new Particle(touch, particle_system_, world_, world_scale_, setting);
+	particles_.push_back(particle);
 }
 
 // 時間を進める
@@ -191,7 +207,7 @@ bool PhysicusWorld::touchObjectCreate(touch_t touch) {
 // タッチによってパーティクルを生成する
 bool PhysicusWorld::touchParticleCreate(touch_t touch) {
 	bool generate = false;
-	makeParticleScreen(current_particle_setting_.group, current_particle_setting_.fill_color, current_particle_setting_.edge_color);
+	makeParticleScreen(current_particle_setting_.effect_setting);
 	// 生成開始
 	if(touch.status == TouchStatus::kJustTouch && current_particle_ == NULL) {
 		current_particle_ = new Particle(touch, particle_system_, world_, world_scale_, current_particle_setting_);
@@ -214,15 +230,14 @@ bool PhysicusWorld::touchParticleCreate(touch_t touch) {
 }
 
 // パーティクル用のスクリーンを生成する
-void PhysicusWorld::makeParticleScreen(int group, int fill_color, int edge_color) {
+void PhysicusWorld::makeParticleScreen(Effect::LiquidSetting setting) {
 	for(auto &itr: screen_) {
-		if(itr.getGroup() == group) {
+		if(itr.getGroup() == setting.group) {
 			return;
 		}
 	}
-	auto setting = Effect::LiquidSetting::init();
 	setting.setBlendMode(BlendMode::kAdd);
-	if(group != Particle::kNoGaussGroup) {
+	if(setting.group != Particle::kNoGaussGroup) {
 		screen_.push_back(Effect::Liquid(effect_screen_, setting));
 	}
 }

@@ -29,6 +29,7 @@ MainContent::MainContent() {
 	bmFontMgr_->load("GameFont_White");
 
 	auto setting = world_->getParticleSetting();
+	/*
 	int money = ComponentAssets::shared()->getImages().icons.at(0);
 	int jewery = ComponentAssets::shared()->getImages().icons.at(1);
 	int images[30];
@@ -41,10 +42,13 @@ MainContent::MainContent() {
 	}
 	setting.setImages(images, 30);
 	world_->setParticleSetting(setting);
+	*/
 	
 
     ChangeFont("07LogoTypeGothic7.ttf");
 	setDrawScreen(ScreenState::kBack);
+	// プレビューデータの作成
+	world_->makePreviewData();
 }
 
 MainContent::~MainContent() {

@@ -52,7 +52,7 @@ namespace Effect {
 		 */
 		static LiquidSetting init() {
 			auto setting = LiquidSetting();
-			setting.group = 0;
+			setting.group = 1;
 			setting.fill_color = Color::kNigelleBlue;
 			setting.edge_color = Color::kWhite;
 			setting.effect = false;

@@ -144,7 +144,7 @@ Particle::~Particle() {
 
 // グループを取得する
 int Particle::getGroup() {
-	return setting_.group;
+	return setting_.effect_setting.group;
 }
 
 // パーティクルの生成
@@ -162,7 +162,7 @@ void Particle::draw() {
 		int y = (int)(position.y / world_scale_);
 		int r = (int)(setting_.setting.radius / world_scale_);
 		// 楕円の描画を行う
-		if(setting_.group == kNoGaussGroup) {
+		if(setting_.effect_setting.group == kNoGaussGroup) {
 			// TODO: 回転させる。半径と画像のサイズから拡大率を算出し画像を合わせる。
 			const int image = setting_.images.at(i % setting_.images.size());
 			const float scale = ((float)r * 2.0 + setting_.draw_big_image_value) / (getImageWidth(image));

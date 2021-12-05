@@ -13,6 +13,7 @@
 #define PHYSICUS_PARTICLE_SETTING_H
 
 #include "../../OpenSource/Box2D/Box2D.h"
+#include "../../Effect/LiquidSetting.h"
 #include "PhysicusParticleType.h"
 #include "../../Utility/TypeExtensions/Color+Extensions.h"
 #include "../../Utility/TypeExtensions/Float+Extensions.h"
@@ -24,12 +25,8 @@ namespace Physicus {
 		ParticleType type;
 		// 設定
 		b2ParticleSystemDef setting;
-		// 描画用のスクリーンのグループ。0ならぼかし用のスクリーンを生成しない
-		int group;
-		// 線の色
-		int edge_color;
-		// 塗りつぶし色
-		int fill_color;
+		// エフェクトの設定
+		Effect::LiquidSetting effect_setting;
 		// エリアアウトしても生存するなら**true**
 		bool area_out_alive;
 		// 角の尖り具合(1.0でそのまま、０で辺の中心から次の辺の中心までベジェ曲線で描画する)
@@ -48,7 +45,7 @@ namespace Physicus {
 		static ParticleSetting init() {
 			b2ParticleSystemDef setting = b2ParticleSystemDef();
 			setting.density = 1.0;
-			return ParticleSetting({ ParticleType::kSingle, setting, 0, Color::kWhite, Color::kNigelleBlue, false, Float::kMax, Float::kQuarter, 2, 8, 5});
+			return ParticleSetting({ ParticleType::kSingle, setting, Effect::LiquidSetting::init(), false, Float::kMax, Float::kQuarter, 2, 8, 5});
 		}
 
 		/**

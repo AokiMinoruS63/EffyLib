@@ -162,11 +162,9 @@ class PhysicusWorld {
 	/**
 	 * @brief パーティクル用のスクリーンを生成する
 	 * 
-	 * @param group 描画用のスクリーンのグループ
-	 * @param fill_color 塗りつぶし色
-	 * @param edge_color 線の色
+	 * @param setting エフェクトの設定
 	 */
-	void makeParticleScreen(int group, int fill_color, int edge_color);
+	void makeParticleScreen(Effect::LiquidSetting setting);
 
 	public:
 
@@ -178,6 +176,14 @@ class PhysicusWorld {
 	 * @param body_type ボディタイプ
 	 */
 	void makeRectangle(b2Vec2 start, b2Vec2 end, b2BodyType body_type = b2_staticBody);
+
+	/**
+	 * @brief パーティクルの即時作成
+	 * 
+	 * @param position 生成座標
+	 * @param setting パーティクルの設定
+	 */
+	void makeParticle(b2Vec2 position, Physicus::ParticleSetting setting);
 
 	/**
 	 * @brief 時間を進める

@@ -63,6 +63,10 @@ void Liquid::postRender() {
 	Frame smallFrame = frame.toScale(EffectScreen::kGaussRatio);
 	effect_screen_->saveScreenState();
 	setDrawScreen(fill_screen);
+	clearDrawScreen();
+	setDrawScreen(edge_screen);
+	clearDrawScreen();
+	setDrawScreen(fill_screen);
 	setDrawMode(kBilinear);
 	setDrawBlendMode(BlendMode::kAlpha, 230);
 	drawExtendGraph(0, 0, frame.width, frame.height, render_screen_[current_screen_], FALSE);
@@ -75,7 +79,6 @@ void Liquid::postRender() {
 	graphFilterBlt(fill_screen, edge_screen, Filter::kGauss, 16, setting_.edge_gauss_rate);
 	graphFilter(edge_screen, Filter::kTwoColor, 20,  Color::kBlack, 0, Color::kWhite, 255);
 	if(setting_.effect) {
-		// GraphFilter( Handle, DX_GRAPH_FILTER_DOWN_SCALE, 4 ) ;
 		graphFilterBlt(edge_screen, gauss_screen, Filter::kDownScale, EffectScreen::kGaussRatio);
 		graphFilter(gauss_screen, Filter::kGauss, 16, 1400);
 		graphFilter(gauss_screen, Filter::kTwoColor, 20,  Color::kBlack, 0, Color::kWhite, 255);
