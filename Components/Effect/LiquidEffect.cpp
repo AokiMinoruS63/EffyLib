@@ -19,15 +19,15 @@ using namespace ScreenState;
 using namespace GraphEffect;
 
 // デフォルトの初期化
-Liquid Liquid::init(EffectScreen* screen) {
-	return Liquid(screen, LiquidSetting::init());
+Liquid Liquid::init() {
+	return Liquid(LiquidSetting::init());
 }
 
 // コンストラクタ
-Liquid::Liquid(EffectScreen* screen, LiquidSetting setting) {
+Liquid::Liquid(LiquidSetting setting) {
 	Frame frame =  getScreenState();
 	cnt_ = 0;
-	effect_screen_ = screen;
+	effect_screen_ = new EffectScreen();
 	current_screen_ = 0;
 	render_screen_[0] = -1;
 	render_screen_[1] = -1;
@@ -39,6 +39,7 @@ Liquid::Liquid(EffectScreen* screen, LiquidSetting setting) {
 
 // デストラクタ
 Liquid::~Liquid() {
+	//delete effect_screen_;
 	//DeleteGraph(edge_screen_);
 	//DeleteGraph(fill_screen_);
 }
@@ -56,16 +57,12 @@ void Liquid::preRender() {
 
 // 描画
 void Liquid::postRender() {
-	int edge_screen = effect_screen_->getEdgeScreen();
-	int fill_screen = effect_screen_->getFillScreen();
-	int gauss_screen = effect_screen_->getGaussScreen();
+	const int edge_screen = effect_screen_->getEdgeScreen();
+	const int fill_screen = effect_screen_->getFillScreen();
+	const int gauss_screen = effect_screen_->getGaussScreen();
 	Frame frame = getScreenState();
 	Frame smallFrame = frame.toScale(EffectScreen::kGaussRatio);
 	effect_screen_->saveScreenState();
-	setDrawScreen(fill_screen);
-	clearDrawScreen();
-	setDrawScreen(edge_screen);
-	clearDrawScreen();
 	setDrawScreen(fill_screen);
 	setDrawMode(kBilinear);
 	setDrawBlendMode(BlendMode::kAlpha, 230);

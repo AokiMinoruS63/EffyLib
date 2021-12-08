@@ -17,8 +17,6 @@ using namespace Physicus;
 
 // コンストラクタ
 PhysicusWorld::PhysicusWorld(b2Vec2 gravity, float scale, Frame alive_area, float tie_loop_range){
-	// エフェクトのスクリーンを作成する
-	effect_screen_ = new EffectScreen();
 	// 物理演算世界を初期化する
 	world_ = new b2World(gravity);
 	// 拡大率適用
@@ -238,7 +236,7 @@ void PhysicusWorld::makeParticleScreen(Effect::LiquidSetting setting) {
 	}
 	setting.setBlendMode(BlendMode::kAdd);
 	if(setting.group != Particle::kNoGaussGroup) {
-		screen_.push_back(Effect::Liquid(effect_screen_, setting));
+		screen_.push_back(Effect::Liquid(setting));
 	}
 }
 

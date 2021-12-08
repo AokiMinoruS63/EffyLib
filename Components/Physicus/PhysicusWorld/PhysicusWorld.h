@@ -53,8 +53,6 @@ class PhysicusWorld {
 	float tie_loop_range_;
 	// 操作の種類
 	Physicus::ControlType control_type_;
-	// エフェクト用の共用で使用するスクリーン
-	EffectScreen* effect_screen_;
 	// 液体エフェクトのスクリーン
 	std::vector<Effect::Liquid> screen_;
 

@@ -47,18 +47,16 @@ namespace Effect {
 		/**
 		 * @brief 
 		 * 
-		 * @param screen 
 		 * @return Liquid 
 		 */
-		Liquid init(EffectScreen *screen);
+		Liquid init();
 
 		/**
 		 * @brief コンストラクタ
 		 * 
-		 * @param screen 
 		 * @param setting セッティング
 		 */
-		Liquid(EffectScreen *screen, LiquidSetting setting);
+		Liquid(LiquidSetting setting);
 
 		/**
 		 * @brief Destroy the Liquid object
