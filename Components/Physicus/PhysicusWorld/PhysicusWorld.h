@@ -20,9 +20,6 @@
 #include "../../Effect/EffectScreen.h"
 #include "../../Effect/LiquidEffect.h"
 
-// 相互参照
-class Sprite;
-
 class PhysicusWorld {
 	// MARK: - 変数
 
@@ -31,8 +28,6 @@ class PhysicusWorld {
 	b2World* world_;
 	// ワールドの拡大率
 	float world_scale_;
-	// 物理演算を行うSprite配列
-	std::vector<Sprite *> sprites_;
 	// 物理演算を行うボディ配列
 	std::vector<Physicus::Object *> objects_;
 	// 現在生成・操作を行なっているオブジェクト
@@ -76,6 +71,22 @@ class PhysicusWorld {
 	~PhysicusWorld();
 
 	// MARK: - Getter, Setter
+
+	/**
+	 * @brief オブジェクトを参照キーから取得する
+	 * 
+	 * @param reference_key 
+	 * @return Physicus::Object* 
+	 */
+	Physicus::Object* getObject(std::string reference_key);
+
+	/**
+	 * @brief パーティクルを参照キーから取得する
+	 * 
+	 * @param reference_key 
+	 * @return Physicus::Particle* 
+	 */
+	Physicus::Particle* getParticle(std::string reference_key);
 
 	/**
 	 * @brief 操作の種類を取得する
@@ -188,13 +199,6 @@ class PhysicusWorld {
 	 * 
 	 */
 	void timeCalc();
-
-	/**
-	 * @brief スプライトに物理演算を適用する
-	 * 
-	 * @param sprite 適用するスプライト
-	 */
-	void applySprite(Sprite* sprite);
 
 	/**
 	 * @brief タッチによるオブジェクトの干渉（生成も含む）

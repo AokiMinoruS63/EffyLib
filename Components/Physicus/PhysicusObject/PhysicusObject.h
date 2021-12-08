@@ -21,6 +21,9 @@
 #include "Constant/PhysicusConstant.h"
 #include "PhysicusObjectSetting.h"
 
+// 相互参照
+class Sprite;
+
 namespace Physicus {
 
 	// オブジェクトの実体
@@ -50,6 +53,8 @@ namespace Physicus {
 		ObjectSetting setting_;
 		// ボディの頂点の順番変更フラグ（Box２D側で頂点の順番が調整されてしまうため、ここに保存）
 		std::vector<B2Body::VerticesChange> bodies_vertices_change_;
+		// 表示させるスプライト
+		Sprite* sprite_;
 
 		// MARK: - コンストラクタ・デストラクタ
 		public:
@@ -66,6 +71,20 @@ namespace Physicus {
 		~Object();
 
 		// MARK: - Getter, Setter
+
+		/**
+		 * @brief オブジェクトの参照キーを取得する
+		 * 
+		 * @return std::string 
+		 */
+		std::string getReferenceKey();
+
+		/**
+		 * @brief オブジェクトの参照キーをセットする
+		 * 
+		 * @param reference_key 
+		 */
+		void setReferenceKey(std::string reference_key);
 
 		/**
 		 * @brief 演算ワールドのスケールを取得する

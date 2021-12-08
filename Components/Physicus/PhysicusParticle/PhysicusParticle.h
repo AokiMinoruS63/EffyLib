@@ -16,6 +16,7 @@
 #include "../../Touch/TouchData.h"
 #include "PhysicusParticleSetting.h"
 #include <vector>
+#include <string>
 
 namespace Physicus {
 	class Particle {
@@ -49,6 +50,20 @@ namespace Physicus {
 		~Particle();
 
 		// MARK: - Getter, Setter
+
+		/**
+		 * @brief 参照キーを取得する
+		 * 
+		 * @return std::string 
+		 */
+		std::string getReferenceKey();
+
+		/**
+		 * @brief 参照キーをセットする
+		 * 
+		 * @param refenrece_key 
+		 */
+		void setReferenceKey(std::string refenrece_key);
 
 		/**
 		 * @brief グループを取得する

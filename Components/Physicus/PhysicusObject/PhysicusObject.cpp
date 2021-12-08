@@ -10,6 +10,7 @@
  */
 
 #include "PhysicusObject.h"
+#include "../../Sprite/Sprite.h"
 #include "Common/PhysicusObjectCommon.h"
 #include "LinkBoard/PhysicusLinkBoard.h"
 #include "HandWritten/PhysicusHandWritten.h"
@@ -26,15 +27,27 @@ Object::Object(touch_t touch, ObjectType type, b2World* world, float scale, Obje
 	world_scale_ = scale;
 	setting_ = setting;
 	locus_.push_back(vec);
+	sprite_ = new Sprite();
 }
 
 // デストラクタ
 Object::~Object() {
 	bodiesDestroy();
 	world_ = NULL;
+	delete sprite_;
 }
 
 // MARK: - Getter, Setter
+
+// オブジェクトの参照キーを取得する
+std::string Object::getReferenceKey() {
+	return setting_.reference_key;
+}
+
+// オブジェクトの参照キーをセットする
+void Object::setReferenceKey(std::string reference_key) {
+	setting_.reference_key = reference_key;
+}
 
 // 演算ワールドのスケールを取得する
 float Object::getWorldScale() {

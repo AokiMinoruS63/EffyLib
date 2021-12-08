@@ -10,7 +10,6 @@
  */
 
 #include "PhysicusWorld.h"
-#include "../../Sprite/Sprite.h"
 #include "../../Assets/ComponentAssets.h"
 
 using namespace Physicus;
@@ -27,7 +26,7 @@ PhysicusWorld::PhysicusWorld(b2Vec2 gravity, float scale, Frame alive_area, floa
 	// 数珠繋ぎにする距離
 	tie_loop_range_ = tie_loop_range;
 	const std::vector<int> images = ComponentAssets::shared()->getImages().brush_crayon;
-	current_object_setting_ = ObjectSetting::init(world_scale_, ObjectType::kLinkBoard, b2_dynamicBody, images);
+	current_object_setting_ = ObjectSetting::init("", world_scale_, ObjectType::kLinkBoard, b2_dynamicBody, images);
 	current_particle_setting_ = ParticleSetting::init();
 	// パーティクル生成クラスを初期化
 	particle_system_ =  world_->CreateParticleSystem(&current_particle_setting_.setting);
@@ -40,6 +39,26 @@ PhysicusWorld::PhysicusWorld(b2Vec2 gravity, float scale, Frame alive_area, floa
 PhysicusWorld::~PhysicusWorld(){
 	ForEach(objects_, [this](Object *item) { delete item; });
 	delete world_;
+}
+
+// オブジェクトを参照キーから取得する
+Physicus::Object* PhysicusWorld::getObject(std::string reference_key) {
+	for(int i = 0; i < objects_.size(); i++) {
+		if(objects_.at(i)->getReferenceKey() == reference_key) {
+			return objects_.at(i);
+		}
+	}
+	return NULL;
+}
+
+// パーティクルを参照キーから取得する
+Physicus::Particle* PhysicusWorld::getParticle(std::string reference_key) {
+	for(int i = 0; i < particles_.size(); i++) {
+		if(particles_.at(i)->getReferenceKey() == reference_key) {
+			return particles_.at(i);
+		}
+	}
+	return NULL;
 }
 
 // 操作の種類を取得する
@@ -161,11 +180,6 @@ void PhysicusWorld::timeCalc() {
 	static LONG cnt = 0;
 	ForEach(objects_, [this](Object* item) { item->setDrawAdvance(((float)(cnt%300)) / 300.0);});
 	cnt++;
-}
-
-// スプライトに物理演算を適用する
-void PhysicusWorld::applySprite(Sprite* sprite) {
-	sprites_.push_back(sprite);
 }
 
 // タッチによるオブジェクトの干渉（生成も含む）

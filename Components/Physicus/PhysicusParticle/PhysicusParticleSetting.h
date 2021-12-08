@@ -18,9 +18,12 @@
 #include "../../Utility/TypeExtensions/Color+Extensions.h"
 #include "../../Utility/TypeExtensions/Float+Extensions.h"
 #include <vector>
+#include <string>
 
 namespace Physicus {
 	struct ParticleSetting {
+		// 参照キー。一意であることは保証しない
+		std::string refenrence_key;
 		// タイプ
 		ParticleType type;
 		// 設定
@@ -42,10 +45,10 @@ namespace Physicus {
 		// 画像
 		std::vector<int> images;
 
-		static ParticleSetting init() {
+		static ParticleSetting init(std::string reference_key = "") {
 			b2ParticleSystemDef setting = b2ParticleSystemDef();
 			setting.density = 1.0;
-			return ParticleSetting({ ParticleType::kSingle, setting, Effect::LiquidSetting::init(), false, Float::kMax, Float::kQuarter, 2, 8, 5});
+			return ParticleSetting({ reference_key, ParticleType::kSingle, setting, Effect::LiquidSetting::init(), false, Float::kMax, Float::kQuarter, 2, 8, 5});
 		}
 
 		/**
