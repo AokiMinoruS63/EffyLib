@@ -32,9 +32,9 @@ EffectScreen::EffectScreen() {
  * 
  */
 EffectScreen::~EffectScreen() {
-	DeleteGraph(edge_screen_);
-	DeleteGraph(fill_screen_);
-	DeleteGraph(gauss_screen_);
+	deleteGraph(edge_screen_);
+	deleteGraph(fill_screen_);
+	deleteGraph(gauss_screen_);
 }
 
 // 縁を描画するためのスクリーンの取得

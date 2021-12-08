@@ -49,7 +49,7 @@ class PhysicusWorld {
 	// 操作の種類
 	Physicus::ControlType control_type_;
 	// 液体エフェクトのスクリーン
-	std::vector<Effect::Liquid> screen_;
+	std::vector<Effect::Liquid *> screen_;
 
 	// MARK: - コンストラクタ・デストラクタ
 

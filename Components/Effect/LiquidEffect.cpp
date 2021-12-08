@@ -39,9 +39,12 @@ Liquid::Liquid(LiquidSetting setting) {
 
 // デストラクタ
 Liquid::~Liquid() {
-	//delete effect_screen_;
-	//DeleteGraph(edge_screen_);
-	//DeleteGraph(fill_screen_);
+	delete effect_screen_;
+	for(int i = 0; i < 2; i++) {
+		if(render_screen_[i] != -1) {
+			deleteGraph(render_screen_[i]);
+		}
+	}
 }
 
 // グループを取得する

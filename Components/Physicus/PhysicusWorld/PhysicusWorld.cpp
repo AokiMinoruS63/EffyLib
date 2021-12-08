@@ -244,13 +244,13 @@ bool PhysicusWorld::touchParticleCreate(touch_t touch) {
 // パーティクル用のスクリーンを生成する
 void PhysicusWorld::makeParticleScreen(Effect::LiquidSetting setting) {
 	for(auto &itr: screen_) {
-		if(itr.getGroup() == setting.group) {
+		if(itr->getGroup() == setting.group) {
 			return;
 		}
 	}
 	setting.setBlendMode(BlendMode::kAdd);
 	if(setting.group != Particle::kNoGaussGroup) {
-		screen_.push_back(Effect::Liquid(setting));
+		screen_.push_back(new Effect::Liquid(setting));
 	}
 }
 
@@ -272,18 +272,18 @@ void PhysicusWorld::draw() {
 	}
 	// ぼかしを使用するパーティクル
 	for(auto& scr: screen_) {
-		const bool isGauss = scr.getGroup() != Particle::kNoGaussGroup;
+		const bool isGauss = scr->getGroup() != Particle::kNoGaussGroup;
 		if(isGauss) {
-			scr.preRender();
+			scr->preRender();
 		}
 		for(auto& itr: particles_) {
-			if(scr.getGroup() != itr->getGroup() || itr == current_particle_) {
+			if(scr->getGroup() != itr->getGroup() || itr == current_particle_) {
 				continue;
 			}
 			itr->draw();
 		}
 		if(isGauss) {
-			scr.postRender();
+			scr->postRender();
 		}
 	}
 	// 編集中のオブジェクト描画
