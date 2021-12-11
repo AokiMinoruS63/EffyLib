@@ -15,9 +15,8 @@
 
 using namespace Physicus;
 
-Particle::Particle(touch_t touch, b2ParticleSystem* particle_system, b2World* world, float scale, ParticleSetting setting) {
-	// TODO: タッチから生成する
-	//printfDx("生成メソッド\n");
+Particle::Particle(int handle, touch_t touch, b2ParticleSystem* particle_system, b2World* world, float scale, ParticleSetting setting) {
+	handle_ = handle;
 	world_ = world;
 	b2Vec2 vec = B2Vec2::fromTouch(touch, scale);
 	world_scale_ = scale;
@@ -50,16 +49,6 @@ Particle::Particle(touch_t touch, b2ParticleSystem* particle_system, b2World* wo
 
 Particle::~Particle() {
 
-}
-
-// 参照キーを取得する
-std::string Particle::getReferenceKey() {
-	return setting_.refenrence_key;
-}
-
-// 参照キーをセットする
-void Particle::setReferenceKey(std::string refenrece_key) {
-	setting_.refenrence_key = refenrece_key;
 }
 
 // グループを取得する

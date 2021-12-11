@@ -21,7 +21,8 @@
 using namespace Physicus;
 
 // コンストラクタ
-Object::Object(touch_t touch, ObjectType type, b2World* world, float scale, ObjectSetting setting) {
+Object::Object(int handle, touch_t touch, ObjectType type, b2World* world, float scale, ObjectSetting setting) {
+	handle_ = handle;
 	world_ = world;
 	b2Vec2 vec = B2Vec2::fromTouch(touch, scale);
 	world_scale_ = scale;
@@ -38,16 +39,6 @@ Object::~Object() {
 }
 
 // MARK: - Getter, Setter
-
-// オブジェクトの参照キーを取得する
-std::string Object::getReferenceKey() {
-	return setting_.reference_key;
-}
-
-// オブジェクトの参照キーをセットする
-void Object::setReferenceKey(std::string reference_key) {
-	setting_.reference_key = reference_key;
-}
 
 // 演算ワールドのスケールを取得する
 float Object::getWorldScale() {

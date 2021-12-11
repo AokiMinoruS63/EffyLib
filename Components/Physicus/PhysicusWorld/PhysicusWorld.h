@@ -24,6 +24,10 @@ class PhysicusWorld {
 	// MARK: - 変数
 
 	private:
+	// オブジェクトのハンドルのカウンタ
+	int object_handle_counter_;
+	// パーティクルのハンドルのカウンタ
+	int particle_handle_counter_;
 	// 物理演算を行うワールド
 	b2World* world_;
 	// ワールドの拡大率
@@ -46,8 +50,6 @@ class PhysicusWorld {
 	Physicus::Frame alive_area_;
 	// 数珠繋ぎにする距離
 	float tie_loop_range_;
-	// 操作の種類
-	Physicus::ControlType control_type_;
 	// 液体エフェクトのスクリーン
 	std::vector<Effect::Liquid *> screen_;
 
@@ -71,36 +73,6 @@ class PhysicusWorld {
 	~PhysicusWorld();
 
 	// MARK: - Getter, Setter
-
-	/**
-	 * @brief オブジェクトを参照キーから取得する
-	 * 
-	 * @param reference_key 
-	 * @return Physicus::Object* 
-	 */
-	Physicus::Object* getObject(std::string reference_key);
-
-	/**
-	 * @brief パーティクルを参照キーから取得する
-	 * 
-	 * @param reference_key 
-	 * @return Physicus::Particle* 
-	 */
-	Physicus::Particle* getParticle(std::string reference_key);
-
-	/**
-	 * @brief 操作の種類を取得する
-	 * 
-	 * @return Physicus::ControlType 
-	 */
-	Physicus::ControlType getControlType();
-
-	/**
-	 * @brief 操作の種類を設定する
-	 * 
-	 * @param type 
-	 */
-	void setControlType(Physicus::ControlType type);
 
 	/**
 	 * @brief オブジェクトのタイプを取得する
@@ -150,23 +122,37 @@ class PhysicusWorld {
 
 	// MARK: - 関数
 
+	private: 
+
+	/**
+	 * @brief オブジェクトのハンドルのカウンタを進める
+	 * 
+	 */
+	void addObjectHandleCounter();
+
+	/**
+	 * @brief パーティクルのハンドルのカウンタを進める
+	 * 
+	 */
+	void addParticleHandleCounter();
+
+	public:
+
 	/**
 	 * @brief タッチによってオブジェクトを生成する
 	 * 
 	 * @param touch タッチ情報
-	 * @return true オブジェクトが生成されるなら**true**
-	 * @return false 
+	 * @return int 生成されたオブジェクトハンドル
 	 */
-	bool touchObjectCreate(touch_t touch);
+	int touchObjectCreate(touch_t touch);
 
 	/**
 	 * @brief タッチによってパーティクルを生成する
 	 * 
 	 * @param touch タッチ情報
-	 * @return true パーティクルが生成されるなら**true**
-	 * @return false 
+	 * @return int 生成されたパーティクルハンドル。生成されなければ**NULL**を返す
 	 */
-	bool touchParticleCreate(touch_t touch);
+	int touchParticleCreate(touch_t touch);
 
 	/**
 	 * @brief パーティクル用のスクリーンを生成する
@@ -183,31 +169,24 @@ class PhysicusWorld {
 	 * @param start 始点
 	 * @param end 終点
 	 * @param body_type ボディタイプ
+	 * @return int 生成したオブジェクトのハンドル
 	 */
-	void makeRectangle(b2Vec2 start, b2Vec2 end, b2BodyType body_type = b2_staticBody);
+	int makeRectangle(b2Vec2 start, b2Vec2 end, b2BodyType body_type = b2_staticBody);
 
 	/**
 	 * @brief パーティクルの即時作成
 	 * 
 	 * @param position 生成座標
 	 * @param setting パーティクルの設定
+	 * @return int 生成したパーティクルのハンドル
 	 */
-	void makeParticle(b2Vec2 position, Physicus::ParticleSetting setting);
+	int makeParticle(b2Vec2 position, Physicus::ParticleSetting setting);
 
 	/**
 	 * @brief 時間を進める
 	 * 
 	 */
 	void timeCalc();
-
-	/**
-	 * @brief タッチによるオブジェクトの干渉（生成も含む）
-	 * 
-	 * @param touch 
-	 * @return true オブジェクトが生成
-	 * @return false オブジェクトが未生成
-	 */
-	bool touchCalc(touch_t touch);
 
 	/**
 	 * @brief オブジェクトとパーティクルを描画する

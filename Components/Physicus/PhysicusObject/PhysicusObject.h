@@ -33,6 +33,8 @@ namespace Physicus {
 
 		// MARK: - 変数
 		private:
+		// オブジェクトのアクセス用のハンドル
+		int handle_;
 		// オブジェクトの中に入っているボディ
 		std::vector<b2Body *> bodies_;
 		// 演算を行うワールド
@@ -61,30 +63,17 @@ namespace Physicus {
 		/**
 		 * @brief Construct a new Object object
 		 * 
+		 * @param handle ハンドル
 		 * @param touch タッチ情報
 		 * @param type オブジェクトの種類
 		 * @param world 演算を行うワールド
 		 * @param scale ワールドの拡大率
 		 * @param setting オブジェクトの設定
 		 */
-		Object(touch_t touch, ObjectType type, b2World* world, float scale, ObjectSetting setting);
+		Object(int handle, touch_t touch, ObjectType type, b2World* world, float scale, ObjectSetting setting);
 		~Object();
 
 		// MARK: - Getter, Setter
-
-		/**
-		 * @brief オブジェクトの参照キーを取得する
-		 * 
-		 * @return std::string 
-		 */
-		std::string getReferenceKey();
-
-		/**
-		 * @brief オブジェクトの参照キーをセットする
-		 * 
-		 * @param reference_key 
-		 */
-		void setReferenceKey(std::string reference_key);
 
 		/**
 		 * @brief 演算ワールドのスケールを取得する

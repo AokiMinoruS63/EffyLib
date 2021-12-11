@@ -22,8 +22,6 @@
 namespace Physicus {
 	// オブジェクトの設定
 	struct ObjectSetting {
-		// 参照キー。現状、一意のIDとしては使用しないため注意
-		std::string reference_key;
 		// オブジェクトのタイプ
 		ObjectType type;
 		// ボディの演算タイプ（動くか止まったままかなど）
@@ -48,7 +46,6 @@ namespace Physicus {
 		/**
 		 * @brief 初期化
 		 * 
-		 * @param reference_key 
 		 * @param world_scale 
 		 * @param type 
 		 * @param bodyType 
@@ -62,15 +59,14 @@ namespace Physicus {
 		 * @param fixture 
 		 * @return ObjectSetting 
 		 */
-		static ObjectSetting init(std::string reference_key, float world_scale, ObjectType type, b2BodyType bodyType, std::vector<int> line_images, float line_width = Constant::Object::kDefaultLineWidth, int color = Color::kWhite, bool rotate_fix = false, bool area_out_alive = false, float sharp = Constant::Object::kDefaultSharpness, float rough = Constant::Object::kBezieRoughness, b2FixtureDef fixture = B2Fixture::defaultSetting()) {
+		static ObjectSetting init(float world_scale, ObjectType type, b2BodyType bodyType, std::vector<int> line_images, float line_width = Constant::Object::kDefaultLineWidth, int color = Color::kWhite, bool rotate_fix = false, bool area_out_alive = false, float sharp = Constant::Object::kDefaultSharpness, float rough = Constant::Object::kBezieRoughness, b2FixtureDef fixture = B2Fixture::defaultSetting()) {
 			line_width *= world_scale;
-			return {reference_key, type, bodyType, line_width, line_images, color, rotate_fix, area_out_alive, sharp, rough, fixture};
+			return {type, bodyType, line_width, line_images, color, rotate_fix, area_out_alive, sharp, rough, fixture};
 		}
 
 		/**
 		 * @brief  初期化(画像を配列で渡す時の処理)
 		 * 
-		 * @param reference_key 
 		 * @param world_scale 
 		 * @param type 
 		 * @param bodyType 
@@ -85,13 +81,13 @@ namespace Physicus {
 		 * @param fixture 
 		 * @return ObjectSetting 
 		 */
-		static ObjectSetting init(std::string reference_key, float world_scale, ObjectType type, b2BodyType bodyType, int* line_images, int line_images_size, float line_width = Constant::Object::kDefaultLineWidth, int color = Color::kWhite, bool rotate_fix = false, bool area_out_alive = false, float sharp = Float::kMax, float rough = Constant::Object::kBezieRoughness, b2FixtureDef fixture = B2Fixture::defaultSetting()) {
+		static ObjectSetting init(float world_scale, ObjectType type, b2BodyType bodyType, int* line_images, int line_images_size, float line_width = Constant::Object::kDefaultLineWidth, int color = Color::kWhite, bool rotate_fix = false, bool area_out_alive = false, float sharp = Float::kMax, float rough = Constant::Object::kBezieRoughness, b2FixtureDef fixture = B2Fixture::defaultSetting()) {
 			line_width *= world_scale;
 			std::vector<int> images;
 			for(int i = 0; i < line_images_size; i++) {
 				images.push_back(line_images[i]);
 			}
-			return {reference_key, type, bodyType, line_width, images, color, rotate_fix, area_out_alive, sharp, rough, fixture};
+			return {type, bodyType, line_width, images, color, rotate_fix, area_out_alive, sharp, rough, fixture};
 		}
 	};
 }

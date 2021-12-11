@@ -64,10 +64,8 @@ void MainContent::run() {
 	world_->setParticleType(Physicus::ParticleType::kSingle);
 	// オブジェクトのタイプを手描き線に先行
 	//world_->setObjectType(Physicus::ObjectType::kHandWritten);
-	// 操作内容をパーティクル生成に変更
-	world_->setControlType(Physicus::ControlType::kParticleCreate);
 	// タッチを物理演算に適用
-	world_->touchCalc(touchMgr_->get());
+	world_->touchParticleCreate(touchMgr_->get());
 	// 時間を進める
 	world_->timeCalc();
 
