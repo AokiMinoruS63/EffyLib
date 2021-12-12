@@ -16,6 +16,7 @@
 using namespace Physicus;
 
 Particle::Particle(int handle, touch_t touch, b2ParticleSystem* particle_system, b2World* world, float scale, ParticleSetting setting) {
+	lifeObjectInit();
 	handle_ = handle;
 	world_ = world;
 	b2Vec2 vec = B2Vec2::fromTouch(touch, scale);

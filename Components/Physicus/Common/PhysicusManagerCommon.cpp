@@ -22,6 +22,11 @@ void PhysicusManagerCommon::checkFrameOut() {
 	printfDx("ERROR: 継承されずに\"PhysicusManagerCommon::checkFrameOut\"関数が呼ばれました。\n");
 }
 
+// 寿命がフレーム数を超えているかチェックする
+void PhysicusManagerCommon::checkLifeEnd() {
+	printfDx("ERROR: 継承されずに\"PhysicusManagerCommon::checkLifeEnd\"関数が呼ばれました。\n");
+}
+
 // タッチによってオブジェクト又はパーティクルを生成する
 int PhysicusManagerCommon::touchCreate(touch_t touch) {
 	printfDx("ERROR: 継承されずに\"PhysicusManagerCommon::touchCreate\"関数が呼ばれました。\n");

@@ -15,11 +15,12 @@
 #include "../../OpenSource/Box2D/Box2D.h"
 #include "../../Touch/TouchData.h"
 #include "PhysicusParticleSetting.h"
+#include "../../Common/LifeObject.h"
 #include <vector>
 #include <string>
 
 namespace Physicus {
-	class Particle {
+	class Particle: public LifeObject {
 		// MARK: - 定数
 
 		public:

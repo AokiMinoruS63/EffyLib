@@ -79,6 +79,7 @@
 				"build/b2WheelJoint.o",
 				// Component of EffyLib
 				"build/ComponentAssets.o",
+				"build/LifeObject.o",
 				"build/EffectScreen.o",
 				"build/LiquidEffect.o",
 				"build/PhysicusParticleManager.o",
@@ -205,6 +206,7 @@
 				"build/b2WheelJoint.o",
 				// Component of EffyLib
 				"build/ComponentAssets.o",
+				"build/LifeObject.o",
 				"build/EffectScreen.o",
 				"build/LiquidEffect.o",
 				"build/PhysicusParticleManager.o",

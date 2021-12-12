@@ -56,6 +56,16 @@ void PhysicusWorld::setObjectsDrawAdvanceAll(float advance) {
 	objects_->setDrawAdvanceAll(advance);
 }
 
+// 演算を静止させているかを取得する
+bool PhysicusWorld::getStop() {
+	return stop_;
+}
+
+// 演算の静止状態をセットする
+void PhysicusWorld::setStop(bool stop) {
+	stop_ = stop;
+}
+
 // タッチによってオブジェクトを生成する
 int PhysicusWorld::touchObjectCreate(touch_t touch) {
 	return objects_->touchCreate(touch);
@@ -93,6 +103,10 @@ int PhysicusWorld::makeParticleSingle(b2Vec2 position, Physicus::ParticleSetting
 
 // 時間を進める
 void PhysicusWorld::timeCalc() {
+	// 静止しているなら処理しない
+	if(stop_) {
+		return;
+	}
 	// 時間経過メソッド
 	const float timeStep = 1.0f / 10.0f;
 	const int velocityIterations = 6;
@@ -101,9 +115,13 @@ void PhysicusWorld::timeCalc() {
 	world_->Step(timeStep, velocityIterations, positionIterations);
 	// 生存可能エリアからオブジェクトが出ていたら消滅させる
 	objects_->checkFrameOut();
-
-	// TODO: パーティクルの削除も行う
 	particles_->checkFrameOut();
+	// 寿命を迎えていたら消滅させる
+	objects_->checkLifeEnd();
+	particles_->checkLifeEnd();
+	// カウントを進める
+	objects_->timeCalc();
+	particles_->timeCalc();
 }
 
 // オブジェクトとパーティクルを描画する

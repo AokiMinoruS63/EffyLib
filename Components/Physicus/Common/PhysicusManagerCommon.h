@@ -54,6 +54,12 @@ class PhysicusManagerCommon {
 	virtual void checkFrameOut();
 
 	/**
+	 * @brief 寿命がフレーム数を超えているかチェックする
+	 * 
+	 */
+	virtual void checkLifeEnd();
+
+	/**
 	 * @brief タッチによってオブジェクト又はパーティクルを生成する
 	 * 
 	 * @param touch タッチ情報

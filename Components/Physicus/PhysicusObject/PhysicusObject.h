@@ -20,6 +20,7 @@
 #include "../PhysicusWorld/Frame/PhysicusWorldFrame.h"
 #include "Constant/PhysicusConstant.h"
 #include "PhysicusObjectSetting.h"
+#include "../../Common/LifeObject.h"
 
 // 相互参照
 class Sprite;
@@ -27,7 +28,7 @@ class Sprite;
 namespace Physicus {
 
 	// オブジェクトの実体
-	class Object {
+	class Object: public LifeObject {
 		// MARK: - 定数
 		public:
 

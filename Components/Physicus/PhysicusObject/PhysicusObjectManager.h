@@ -71,6 +71,13 @@ class PhysicusObjectManager: public PhysicusManagerCommon {
 	 */
 	Physicus::Object* addObject(touch_t touch, Physicus::ObjectType type, b2World* world, float scale, Physicus::ObjectSetting setting);
 
+	/**
+	 * @brief オブジェクトの削除
+	 * 
+	 * @param remove_list 削除するオブジェクトのリスト
+	 */
+	void removeObjects(std::vector<Physicus::Object*> remove_list);
+
 	public:
 
 	/**
@@ -89,6 +96,14 @@ class PhysicusObjectManager: public PhysicusManagerCommon {
 	 * @param advance 
 	 */
 	void setDrawAdvanceAll(float advance);
+
+	// MARK: - 計算
+
+	/**
+	 * @brief 時間を進める
+	 * 
+	 */
+	void timeCalc();
 	
 	// MARK: 再定義
 
@@ -97,6 +112,12 @@ class PhysicusObjectManager: public PhysicusManagerCommon {
 	 * 
 	 */
 	virtual void checkFrameOut();
+
+	/**
+	 * @brief 寿命がフレーム数を超えているかチェックする
+	 * 
+	 */
+	virtual void checkLifeEnd();
 
 	/**
 	 * @brief タッチによってオブジェクト又はパーティクルを生成する

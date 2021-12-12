@@ -29,6 +29,8 @@ class PhysicusWorld {
 	b2World* world_;
 	// ワールドの拡大率
 	float world_scale_;
+	// 静止させるなら**true**
+	bool stop_;
 
 	// MARK: - コンストラクタ・デストラクタ
 
@@ -89,6 +91,21 @@ class PhysicusWorld {
 	 * @param advance 
 	 */
 	void setObjectsDrawAdvanceAll(float advance);
+
+	/**
+	 * @brief 演算を静止させているかを取得する
+	 * 
+	 * @return true 
+	 * @return false 
+	 */
+	bool getStop();
+
+	/**
+	 * @brief 演算の静止状態をセットする
+	 * 
+	 * @param stop 
+	 */
+	void setStop(bool stop);
 
 	// MARK: - プレビュー
 

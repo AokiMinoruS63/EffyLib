@@ -49,6 +49,19 @@ Object* PhysicusObjectManager::addObject(touch_t touch, ObjectType type, b2World
 	return addObject(object);
 }
 
+// オブジェクトの削除
+void PhysicusObjectManager::removeObjects(std::vector<Physicus::Object*> remove_list) {
+	auto itr = objects_.begin();
+	while(itr != objects_.end()) {
+		const int size = Filter(remove_list, [&remove_list, itr](Object* item){ return item == (*itr); }).size();
+		if(size > 0) {
+			itr = objects_.erase(itr);
+		} else {
+			++itr;
+		}
+	}
+}
+
 // 線で出来た矩形の即時生成
 int PhysicusObjectManager::makeRectangleLine(b2Vec2 start, b2Vec2 end, b2BodyType body_type) {
 	int generate = handle_counter_;
@@ -81,19 +94,25 @@ void PhysicusObjectManager::setDrawAdvanceAll(float advance) {
 	ForEach(objects_, [this, advance](Object* item) { item->setDrawAdvance(advance);});
 }
 
+// 時間を進める
+void PhysicusObjectManager::timeCalc() {
+	for(auto& itr: objects_) {
+		itr->timeCalc();
+	}
+}
+
 // フレームアウトしているかチェックする
 void PhysicusObjectManager::checkFrameOut() {
-	std::vector<Object*> removeList;
-	ForEach(objects_, [this, &removeList](Object* item) { if(item->judgeAreaOut(alive_area_)){ removeList.push_back(item);} });
-	auto itr = objects_.begin();
-	while(itr != objects_.end()) {
-		const int size = Filter(removeList, [&removeList, itr](Object* item){ return item == (*itr); }).size();
-		if(size > 0) {
-			itr = objects_.erase(itr);
-		} else {
-			++itr;
-		}
-	}
+	std::vector<Object*> remove_list;
+	ForEach(objects_, [this, &remove_list](Object* item) { if(item->judgeAreaOut(alive_area_)){ remove_list.push_back(item);} });
+	removeObjects(remove_list);
+}
+
+// 寿命がフレーム数を超えているかチェックする
+void PhysicusObjectManager::checkLifeEnd() {
+	std::vector<Object*> remove_list;
+	ForEach(objects_, [this, &remove_list](Object* item) { if(item->getLifeEnd()){ remove_list.push_back(item);} });
+	removeObjects(remove_list);
 }
 
 // タッチによってオブジェクトを生成する

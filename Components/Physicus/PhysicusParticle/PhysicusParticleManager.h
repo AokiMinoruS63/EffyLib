@@ -118,6 +118,13 @@ class PhysicusParticleManager: public PhysicusManagerCommon {
 	 */
 	Physicus::Particle* addParticle(touch_t touch, Physicus::ParticleSetting setting);
 
+	/**
+	 * @brief パーティクルを削除する
+	 * 
+	 * @param remove_list 削除するパーティクルのリスト
+	 */
+	void removeParticles(std::vector<Physicus::Particle*> remove_list);
+
 	public:
 	
 	/**
@@ -136,6 +143,12 @@ class PhysicusParticleManager: public PhysicusManagerCommon {
 	 */
 	void makeScreen(Effect::LiquidSetting setting);
 
+	/**
+	 * @brief 時間を進める
+	 * 
+	 */
+	void timeCalc();
+
 	public:
 	
 	// MARK: 再定義
@@ -145,6 +158,12 @@ class PhysicusParticleManager: public PhysicusManagerCommon {
 	 * 
 	 */
 	virtual void checkFrameOut();
+
+	/**
+	 * @brief 寿命がフレーム数を超えているかチェックする
+	 * 
+	 */
+	virtual void checkLifeEnd();
 
 	/**
 	 * @brief タッチによってオブジェクト又はパーティクルを生成する

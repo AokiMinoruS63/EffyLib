@@ -22,6 +22,7 @@ using namespace Physicus;
 
 // コンストラクタ
 Object::Object(int handle, touch_t touch, ObjectType type, b2World* world, float scale, ObjectSetting setting) {
+	lifeObjectInit();
 	handle_ = handle;
 	world_ = world;
 	b2Vec2 vec = B2Vec2::fromTouch(touch, scale);

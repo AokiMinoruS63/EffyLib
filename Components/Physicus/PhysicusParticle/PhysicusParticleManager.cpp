@@ -113,6 +113,19 @@ Physicus::Particle* PhysicusParticleManager::addParticle(touch_t touch, Physicus
 	return addParticle(particle);
 }
 
+// パーティクルを削除する
+void PhysicusParticleManager::removeParticles(std::vector<Physicus::Particle*> remove_list) {
+	auto itr = particles_.begin();
+	while(itr != particles_.end()) {
+		const int size = Filter(remove_list, [&remove_list, itr](Particle* item){ return item == (*itr); }).size();
+		if(size > 0) {
+			itr = particles_.erase(itr);
+		} else {
+			++itr;
+		}
+	}
+}
+
 // シングルパーティクルの生成
 int PhysicusParticleManager::makeParticleSingle(b2Vec2 position, Physicus::ParticleSetting setting) {
 	const int generate = handle_counter_;
@@ -129,6 +142,13 @@ int PhysicusParticleManager::makeParticleSingle(b2Vec2 position, Physicus::Parti
 // フレームアウトしているかチェックする
 void PhysicusParticleManager::checkFrameOut() {
 	// TODO: フレームアウト処理を作成する
+}
+
+// 寿命がフレーム数を超えているかチェックする
+void PhysicusParticleManager::checkLifeEnd() {
+	std::vector<Particle*> remove_list;
+	ForEach(particles_, [this, &remove_list](Particle* item) { if(item->getLifeEnd()){ remove_list.push_back(item);} });
+	removeParticles(remove_list);
 }
 
 // タッチによってパーティクルを生成する
@@ -167,6 +187,13 @@ void PhysicusParticleManager::makeScreen(Effect::LiquidSetting setting) {
 	setting.setBlendMode(BlendMode::kAdd);
 	if(setting.group != Particle::kNoGaussGroup) {
 		screen_.push_back(new Effect::Liquid(setting));
+	}
+}
+
+// 時間を進める
+void PhysicusParticleManager::timeCalc() {
+	for(auto& itr: particles_) {
+		itr->timeCalc();
 	}
 }
 
