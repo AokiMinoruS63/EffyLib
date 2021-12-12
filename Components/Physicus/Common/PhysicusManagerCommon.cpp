@@ -10,7 +10,7 @@
  */
 
 #include "PhysicusManagerCommon.h"
-#include "../Utility/DxLibWrap.h"
+#include "../../Utility/DxLibWrap.h"
 
 // ハンドルのカウンタを一つ進める
 void PhysicusManagerCommon::addHandleCounter() {

@@ -12,11 +12,17 @@
 #ifndef PHYSICUS_MANAGER_COMMON_H
 #define PHYSICUS_MANAGER_COMMON_H
 
-#include "PhysicusWorld/Frame/PhysicusWorldFrame.h"
-#include "../OpenSource/Box2D/Box2D.h"
-#include "../Touch/TouchData.h"
+#include "../PhysicusWorld/Frame/PhysicusWorldFrame.h"
+#include "../../OpenSource/Box2D/Box2D.h"
+#include "../../Touch/TouchData.h"
 
 class PhysicusManagerCommon {
+	// MARK: 定数
+	public:
+
+	// 新規生成中のオブジェクト・パーティクルを編集する場合のハンドルは０とする
+	static const int kCurrentHandle = 0;
+
 	// MARK: 変数
 
 	protected:

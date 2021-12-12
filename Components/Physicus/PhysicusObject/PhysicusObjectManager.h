@@ -12,7 +12,7 @@
 #ifndef PHYSICUS_OBJECT_MANAGER_H
 #define PHYSICUS_OBJECT_MANAGER_H
 
-#include "../PhysicusManagerCommon.h"
+#include "../Common/PhysicusManagerCommon.h"
 #include "PhysicusObject.h"
 
 class PhysicusObjectManager: public PhysicusManagerCommon {

@@ -14,10 +14,8 @@
 
 #include <vector>
 #include "../PhysicusObject/PhysicusObjectManager.h"
-#include "../PhysicusParticle/PhysicusParticle.h"
+#include "../PhysicusParticle/PhysicusParticleManager.h"
 #include "Frame/PhysicusWorldFrame.h"
-#include "../../Effect/EffectScreen.h"
-#include "../../Effect/LiquidEffect.h"
 
 class PhysicusWorld {
 	// MARK: - 変数
@@ -25,22 +23,12 @@ class PhysicusWorld {
 	private:
 	// オブジェクト管理クラス
 	PhysicusObjectManager* objects_;
-	// パーティクルのハンドルのカウンタ
-	int particle_handle_counter_;
+	// パーティクル管理クラス
+	PhysicusParticleManager* particles_;
 	// 物理演算を行うワールド
 	b2World* world_;
 	// ワールドの拡大率
 	float world_scale_;
-	// パーティクルの生成クラス
-	b2ParticleSystem* particle_system_;
-	// 現在生成・操作を行なっているパーティクル
-	Physicus::Particle* current_particle_;
-	// 物理演算を行うParticle配列
-	std::vector<Physicus::Particle *> particles_;
-	// パーティクルの設定
-	Physicus::ParticleSetting current_particle_setting_;
-	// 液体エフェクトのスクリーン
-	std::vector<Effect::Liquid *> screen_;
 
 	// MARK: - コンストラクタ・デストラクタ
 
@@ -66,30 +54,34 @@ class PhysicusWorld {
 	/**
 	 * @brief パーティクルのタイプを取得する
 	 * 
+	 * @param handle パーティクルハンドル
 	 * @return Physicus::ParticleType 
 	 */
-	Physicus::ParticleType getParticleType();
+	Physicus::ParticleType getParticleType(int handle = PhysicusParticleManager::kCurrentHandle);
 
 	/**
 	 * @brief パーティクルのタイプを設定する
 	 * 
 	 * @param type 
+	 * @param handle パーティクルハンドル
 	 */
-	void setParticleType(Physicus::ParticleType type);
+	void setParticleType(Physicus::ParticleType type, int handle = PhysicusParticleManager::kCurrentHandle);
 
 	/**
 	 * @brief パーティクルの設定を取得する
 	 * 
+	 * @param handle パーティクルハンドル
 	 * @return ParticleSetting 
 	 */
-	Physicus::ParticleSetting getParticleSetting();
+	Physicus::ParticleSetting getParticleSetting(int handle = PhysicusParticleManager::kCurrentHandle);
 
 	/**
 	 * @brief パーティクルの設定を設定する
 	 * 
-	 * @param setting 
+	 * @param setting 設定
+	 * @param handle パーティクルハンドル
 	 */
-	void setParticleSetting(Physicus::ParticleSetting setting);
+	void setParticleSetting(Physicus::ParticleSetting setting, int handle = PhysicusParticleManager::kCurrentHandle);
 
 	/**
 	 * @brief 全てのオブジェクトの描画進行率を設定する
@@ -103,20 +95,6 @@ class PhysicusWorld {
 	void makePreviewData();
 
 	// MARK: - 関数
-
-	private: 
-
-	/**
-	 * @brief オブジェクトのハンドルのカウンタを進める
-	 * 
-	 */
-	void addObjectHandleCounter();
-
-	/**
-	 * @brief パーティクルのハンドルのカウンタを進める
-	 * 
-	 */
-	void addParticleHandleCounter();
 
 	public:
 
@@ -137,16 +115,7 @@ class PhysicusWorld {
 	int touchParticleCreate(touch_t touch);
 
 	/**
-	 * @brief パーティクル用のスクリーンを生成する
-	 * 
-	 * @param setting エフェクトの設定
-	 */
-	void makeParticleScreen(Effect::LiquidSetting setting);
-
-	public:
-
-	/**
-	 * @brief 矩形の即時作成
+	 * @brief 矩形の即時生成
 	 * 
 	 * @param start 始点
 	 * @param end 終点
@@ -156,13 +125,13 @@ class PhysicusWorld {
 	int makeRectangleLine(b2Vec2 start, b2Vec2 end, b2BodyType body_type = b2_staticBody);
 
 	/**
-	 * @brief パーティクルの即時作成
+	 * @brief パーティクルの即時生成
 	 * 
 	 * @param position 生成座標
 	 * @param setting パーティクルの設定
 	 * @return int 生成したパーティクルのハンドル
 	 */
-	int makeParticle(b2Vec2 position, Physicus::ParticleSetting setting);
+	int makeParticleSingle(b2Vec2 position, Physicus::ParticleSetting setting);
 
 	/**
 	 * @brief 時間を進める

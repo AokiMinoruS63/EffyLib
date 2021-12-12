@@ -51,9 +51,34 @@ Particle::~Particle() {
 
 }
 
+// ハンドルを取得する
+int Particle::getHandle() {
+	return handle_;
+}
+
 // グループを取得する
 int Particle::getGroup() {
 	return setting_.effect_setting.group;
+}
+
+// パーティクルのタイプを取得する
+Physicus::ParticleType Particle::getType() {
+	return setting_.type;
+}
+
+// パーティクルのタイプを設定する
+void Particle::setType(Physicus::ParticleType type) {
+	setting_.type = type;
+}
+
+// パーティクルの設定を取得する
+ParticleSetting Particle::getSetting() {
+	return setting_;
+}
+
+// パーティクルの設定をセットする
+void Particle::setSetting(ParticleSetting setting) {
+	setting_ = setting;
 }
 
 // パーティクルの生成

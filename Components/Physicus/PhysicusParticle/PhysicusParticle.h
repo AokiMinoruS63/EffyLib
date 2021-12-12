@@ -54,11 +54,46 @@ namespace Physicus {
 		// MARK: - Getter, Setter
 
 		/**
+		 * @brief ハンドルを取得する
+		 * 
+		 * @return int 
+		 */
+		int getHandle();
+
+		/**
 		 * @brief グループを取得する
 		 * 
 		 * @return int 
 		 */
 		int getGroup();
+
+		/**
+		 * @brief パーティクルのタイプを取得する
+		 * 
+		 * @return Physicus::ParticleType 
+		 */
+		Physicus::ParticleType getType();
+
+		/**
+		 * @brief パーティクルのタイプを設定する
+		 * 
+		 * @param type 
+		 */
+		void setType(Physicus::ParticleType type);
+
+		/**
+		 * @brief パーティクルの設定を取得する
+		 * 
+		 * @return ParticleSetting 
+		 */
+		ParticleSetting getSetting();
+
+		/**
+		 * @brief パーティクルの設定をセットする
+		 * 
+		 * @param setting 
+		 */
+		void setSetting(ParticleSetting setting);
 
 		// MARK: - 生成
 

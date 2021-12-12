@@ -97,13 +97,13 @@ em++ "${file}" -c -o "../../build/${file%.*}.o" -O0 -std=c++17 -g4 -IDxLibForHTM
 done
 
 cd ../
-cd Physicus
+cd Physicus/Common
 for file in *.cpp
 do
-em++ "${file}" -c -o "../../build/${file%.*}.o" -O0 -std=c++17 -g4 -IDxLibForHTML5/include -IComponents -IComponents/OpenSource/
+em++ "${file}" -c -o "../../../build/${file%.*}.o" -O0 -std=c++17 -g4 -IDxLibForHTML5/include -IComponents -IComponents/OpenSource/
 done
 
-cd PhysicusWorld
+cd ../PhysicusWorld
 for file in *.cpp
 do
 em++ "${file}" -c -o "../../../build/${file%.*}.o" -O0 -std=c++17 -g4 -IDxLibForHTML5/include -IComponents -IComponents/OpenSource/
