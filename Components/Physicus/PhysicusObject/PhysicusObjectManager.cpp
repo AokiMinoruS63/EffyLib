@@ -49,7 +49,7 @@ Object* PhysicusObjectManager::addObject(touch_t touch, ObjectType type, b2World
 	return addObject(object);
 }
 
-// 線で出来た矩形の即時作成
+// 線で出来た矩形の即時生成
 int PhysicusObjectManager::makeRectangleLine(b2Vec2 start, b2Vec2 end, b2BodyType body_type) {
 	int generate = handle_counter_;
 	auto tmp = current_setting_;

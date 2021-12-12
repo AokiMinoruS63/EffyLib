@@ -125,7 +125,7 @@ class PhysicusWorld {
 	int makeRectangleLine(b2Vec2 start, b2Vec2 end, b2BodyType body_type = b2_staticBody);
 
 	/**
-	 * @brief パーティクルの即時生成
+	 * @brief シングルパーティクルの即時生成
 	 * 
 	 * @param position 生成座標
 	 * @param setting パーティクルの設定

@@ -74,7 +74,7 @@ class PhysicusObjectManager: public PhysicusManagerCommon {
 	public:
 
 	/**
-	 * @brief 線で出来た矩形の即時作成
+	 * @brief 線で出来た矩形の即時生成
 	 * 
 	 * @param start 始点
 	 * @param end 終点

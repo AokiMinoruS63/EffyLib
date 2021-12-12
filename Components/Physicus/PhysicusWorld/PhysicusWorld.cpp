@@ -86,7 +86,7 @@ int PhysicusWorld::makeRectangleLine(b2Vec2 start, b2Vec2 end, b2BodyType body_t
 	return objects_->makeRectangleLine(start, end, body_type);
 }
 
-// パーティクルの即時生成
+// シングルパーティクルの即時生成
 int PhysicusWorld::makeParticleSingle(b2Vec2 position, Physicus::ParticleSetting setting) {
 	return particles_->makeParticleSingle(position, setting);
 }
