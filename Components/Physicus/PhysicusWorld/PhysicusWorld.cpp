@@ -17,42 +17,26 @@ using namespace Physicus;
 // コンストラクタ
 PhysicusWorld::PhysicusWorld(b2Vec2 gravity, float scale, Frame alive_area, float tie_loop_range){
 	// カウンタを初期化する
-	object_handle_counter_ = 1;
 	particle_handle_counter_ = 1;
 	// 物理演算世界を初期化する
 	world_ = new b2World(gravity);
+	// インスタンス生成
+	objects_ = new PhysicusObjectManager(world_, scale, alive_area);
 	// 拡大率適用
 	world_scale_ = scale;
-	// オブジェクト生存エリア適用
-	alive_area.applyScale(world_scale_);
-	alive_area_ = alive_area;
-	// 数珠繋ぎにする距離
-	tie_loop_range_ = tie_loop_range;
-	const std::vector<int> images = ComponentAssets::shared()->getImages().brush_crayon;
-	current_object_setting_ = ObjectSetting::init(world_scale_, ObjectType::kLinkBoard, b2_dynamicBody, images);
+
 	current_particle_setting_ = ParticleSetting::init();
 	// パーティクル生成クラスを初期化
 	particle_system_ =  world_->CreateParticleSystem(&current_particle_setting_.setting);
 	// NULL代入する
-	current_object_ = NULL;
 	current_particle_ = NULL;
 }
 
 // デストラクタ
 PhysicusWorld::~PhysicusWorld(){
-	ForEach(objects_, [this](Object *item) { delete item; });
+	delete objects_;
 	ForEach(particles_, [this](Particle *item) { delete item; });
 	delete world_;
-}
-
-// オブジェクトのタイプを取得する
-Physicus::ObjectType PhysicusWorld::getObjectType() {
-	return current_object_setting_.type;
-}
-
-// オブジェクトのタイプを設定する
-void PhysicusWorld::setObjectType(Physicus::ObjectType type) {
-	current_object_setting_.type = type;
 }
 
 // パーティクルのタイプを取得する
@@ -74,13 +58,18 @@ void PhysicusWorld::setParticleSetting(ParticleSetting setting) {
 	current_particle_setting_ = setting;
 }
 
+// 全てのオブジェクトの描画進行率を設定する
+void PhysicusWorld::setObjectsDrawAdvanceAll(float advance) {
+	objects_->setDrawAdvanceAll(advance);
+}
+
 // プレビューの作成
 void PhysicusWorld::makePreviewData() {
-	makeRectangle(b2Vec2(0, 580), b2Vec2(880, 600));
-	makeRectangle(b2Vec2(0, 200), b2Vec2(20, 600));
-	makeRectangle(b2Vec2(860, 200), b2Vec2(880, 600));	
+	makeRectangleLine(b2Vec2(0, 580), b2Vec2(880, 600));
+	makeRectangleLine(b2Vec2(0, 200), b2Vec2(20, 600));
+	makeRectangleLine(b2Vec2(860, 200), b2Vec2(880, 600));	
 
-	makeRectangle(b2Vec2(0, 200), b2Vec2(300, 230));
+	makeRectangleLine(b2Vec2(0, 200), b2Vec2(300, 230));
 
 	auto setting = Physicus::ParticleSetting::init();
 	setting.effect_setting.group = 2;
@@ -90,30 +79,8 @@ void PhysicusWorld::makePreviewData() {
 }
 
 // 矩形の即時作成
-int PhysicusWorld::makeRectangle(b2Vec2 start, b2Vec2 end, b2BodyType body_type) {
-	auto tmp = current_object_setting_;
-	current_object_setting_.bodyType = body_type;
-	current_object_setting_.type = ObjectType::kRectangle;
-
-	touch_t touch;
-	touch.pos_log_x.push_back(end.x);
-	touch.pos_log_x.push_back(start.x);
-	touch.pos_log_y.push_back(end.y);
-	touch.pos_log_y.push_back(start.y);
-	touch.input_log.push_back(false);
-	touch.input_log.push_back(true);
-	touch.x = start.x;
-	touch.y = start.y;
-	touch.status = TouchStatus::kJustRelease;
-	auto body = new Object(object_handle_counter_, touch, ObjectType::kRectangle, world_, world_scale_, current_object_setting_);
-	addObjectHandleCounter();
-	objects_.push_back(body);
-	touch.x = end.x;
-	touch.y = end.y;
-	body->generation(touch, tie_loop_range_);
-
-	current_object_setting_ = tmp;
-	return object_handle_counter_ - 1;
+int PhysicusWorld::makeRectangleLine(b2Vec2 start, b2Vec2 end, b2BodyType body_type) {
+	return objects_->makeRectangleLine(start, end, body_type);
 }
 
 // パーティクルの即時作成
@@ -139,27 +106,9 @@ void PhysicusWorld::timeCalc() {
 	// 時間を進める
 	world_->Step(timeStep, velocityIterations, positionIterations);
 	// 生存可能エリアからオブジェクトが出ていたら消滅させる
-	std::vector<Object*> removeList;
-	ForEach(objects_, [this, &removeList](Object* item) { if(item->judgeAreaOut(alive_area_)){ removeList.push_back(item);} });
-	auto itr = objects_.begin();
-	while(itr != objects_.end()) {
-		const int size = Filter(removeList, [&removeList, itr](Object* item){ return item == (*itr); }).size();
-		if(size > 0) {
-			itr = objects_.erase(itr);
-		} else {
-			++itr;
-		}
-	}
+	objects_->checkFrameOut();
 
-	// TODO: 描画進行率テスト。後で消す
-	static LONG cnt = 0;
-	ForEach(objects_, [this](Object* item) { item->setDrawAdvance(((float)(cnt%300)) / 300.0);});
-	cnt++;
-}
-
-// オブジェクトのハンドルのカウンタを進める
-void PhysicusWorld::addObjectHandleCounter() {
-	object_handle_counter_++;
+	// TODO: パーティクルの削除も行う
 }
 
 // パーティクルのハンドルのカウンタを進める
@@ -169,24 +118,7 @@ void PhysicusWorld::addParticleHandleCounter() {
 
 // タッチによってオブジェクトを生成する
 int PhysicusWorld::touchObjectCreate(touch_t touch) {
-	int generate = NULL;
-	// 生成開始
-	if(touch.status == TouchStatus::kJustTouch && current_object_ == NULL) {
-		current_object_ = new Object(object_handle_counter_, touch, current_object_setting_.type, world_, world_scale_, current_object_setting_);
-		objects_.push_back(current_object_);
-		generate = object_handle_counter_;
-		addParticleHandleCounter();
-	}
-
-	if(current_object_ != NULL) {
-		// 生成中
-		if(current_object_->generation(touch, tie_loop_range_)) {
-			// 生成完了
-			current_object_->setAwake();
-			current_object_ = NULL;
-		}
-	}
-	return generate;
+	return objects_->touchCreate(touch);
 }
 
 // タッチによってパーティクルを生成する
@@ -231,11 +163,8 @@ void PhysicusWorld::makeParticleScreen(Effect::LiquidSetting setting) {
 // オブジェクトとパーティクルを描画する
 void PhysicusWorld::draw() {
 	// オブジェクト描画
-	for(auto& itr: objects_) {
-		if(itr != current_object_) {
-			itr->draw();
-		}
-	}
+	objects_->draw();
+
 	// パーティクル描画
 	// ぼかしを使用しないパーティクル
 	for(auto& itr: particles_) {
@@ -261,7 +190,7 @@ void PhysicusWorld::draw() {
 		}
 	}
 	// 編集中のオブジェクト描画
-	current_object_->drawEditing();
+	objects_->drawEditing();
 	// 編集中のパーティクル描画
 	current_particle_->drawEditing();
 }
@@ -270,11 +199,8 @@ void PhysicusWorld::draw() {
 // オブジェクトとパーティクルのフレームを描画する
 void PhysicusWorld::drawDebugFrame() {
 	// オブジェクト描画
-	for(auto& itr: objects_) {
-		if(itr != current_object_) {
-			itr->drawDebugFrame();
-		}
-	}
+	objects_->drawDebugFrame();
+
 	// パーティクル描画
 	for(auto& itr: particles_) {
 		if(itr != current_particle_) {
@@ -282,9 +208,8 @@ void PhysicusWorld::drawDebugFrame() {
 		}
 	}
 	// 編集中のオブジェクト描画
-	if(current_object_ != NULL) {
-		current_object_->drawEditingDebugFrame();
-	}
+	objects_->drawEditingDebugFrame();
+
 	// 編集中のパーティクル描画
 	if(current_particle_ != NULL) {
 		current_particle_->drawEditingDebugFrame();

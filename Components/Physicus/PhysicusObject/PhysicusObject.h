@@ -422,16 +422,16 @@ namespace Physicus {
 		// MARK: - オブジェクトの描画
 
 		/**
-		 * @brief 現在生成しているオブジェクトのボーンを描画する
-		 * 
-		 */
-		void drawEditing();
-
-		/**
 		 * @brief オブジェクトの描画
 		 * 
 		 */
 		void draw();
+
+		/**
+		 * @brief 現在生成しているオブジェクトを描画する
+		 * 
+		 */
+		void drawEditing();
 
 		/**
 		 * @brief オブジェクトのフレームを描画

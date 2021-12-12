@@ -13,10 +13,9 @@
 #define PHYSICUS_WORLD_H
 
 #include <vector>
-#include "../PhysicusObject/PhysicusObject.h"
+#include "../PhysicusObject/PhysicusObjectManager.h"
 #include "../PhysicusParticle/PhysicusParticle.h"
 #include "Frame/PhysicusWorldFrame.h"
-#include "PhysicusControlType.h"
 #include "../../Effect/EffectScreen.h"
 #include "../../Effect/LiquidEffect.h"
 
@@ -24,32 +23,22 @@ class PhysicusWorld {
 	// MARK: - 変数
 
 	private:
-	// オブジェクトのハンドルのカウンタ
-	int object_handle_counter_;
+	// オブジェクト管理クラス
+	PhysicusObjectManager* objects_;
 	// パーティクルのハンドルのカウンタ
 	int particle_handle_counter_;
 	// 物理演算を行うワールド
 	b2World* world_;
 	// ワールドの拡大率
 	float world_scale_;
-	// 物理演算を行うボディ配列
-	std::vector<Physicus::Object *> objects_;
-	// 現在生成・操作を行なっているオブジェクト
-	Physicus::Object* current_object_;
 	// パーティクルの生成クラス
 	b2ParticleSystem* particle_system_;
 	// 現在生成・操作を行なっているパーティクル
 	Physicus::Particle* current_particle_;
 	// 物理演算を行うParticle配列
 	std::vector<Physicus::Particle *> particles_;
-	// オブジェクトの設定
-	Physicus::ObjectSetting current_object_setting_;
 	// パーティクルの設定
 	Physicus::ParticleSetting current_particle_setting_;
-	// オブジェクト・パーティクルが生存できるエリア
-	Physicus::Frame alive_area_;
-	// 数珠繋ぎにする距離
-	float tie_loop_range_;
 	// 液体エフェクトのスクリーン
 	std::vector<Effect::Liquid *> screen_;
 
@@ -73,20 +62,6 @@ class PhysicusWorld {
 	~PhysicusWorld();
 
 	// MARK: - Getter, Setter
-
-	/**
-	 * @brief オブジェクトのタイプを取得する
-	 * 
-	 * @return Physicus::ObjectType 
-	 */
-	Physicus::ObjectType getObjectType();
-
-	/**
-	 * @brief オブジェクトのタイプを設定する
-	 * 
-	 * @param type 
-	 */
-	void setObjectType(Physicus::ObjectType type);
 
 	/**
 	 * @brief パーティクルのタイプを取得する
@@ -115,6 +90,13 @@ class PhysicusWorld {
 	 * @param setting 
 	 */
 	void setParticleSetting(Physicus::ParticleSetting setting);
+
+	/**
+	 * @brief 全てのオブジェクトの描画進行率を設定する
+	 * 
+	 * @param advance 
+	 */
+	void setObjectsDrawAdvanceAll(float advance);
 
 	// MARK: - プレビュー
 
@@ -171,7 +153,7 @@ class PhysicusWorld {
 	 * @param body_type ボディタイプ
 	 * @return int 生成したオブジェクトのハンドル
 	 */
-	int makeRectangle(b2Vec2 start, b2Vec2 end, b2BodyType body_type = b2_staticBody);
+	int makeRectangleLine(b2Vec2 start, b2Vec2 end, b2BodyType body_type = b2_staticBody);
 
 	/**
 	 * @brief パーティクルの即時作成

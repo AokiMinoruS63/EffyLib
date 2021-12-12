@@ -25,9 +25,10 @@ Object::Object(int handle, touch_t touch, ObjectType type, b2World* world, float
 	handle_ = handle;
 	world_ = world;
 	b2Vec2 vec = B2Vec2::fromTouch(touch, scale);
+	locus_.push_back(vec);
+	draw_advance_ = Float::kMax;
 	world_scale_ = scale;
 	setting_ = setting;
-	locus_.push_back(vec);
 	sprite_ = new Sprite();
 }
 
