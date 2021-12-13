@@ -84,7 +84,7 @@ void createLineLocus(Physicus::Object* obj) {
 int drawSeparateLine(Physicus::Object* obj, b2Vec2 vec[4], float drawAdvance, int imageIndex) {
 	int loopNum;
 	float lastAdvance;
-	auto images = obj->getLineImages();
+	auto images = obj->getImages();
 	const float roughness = obj->getRoughness();
 	const int separateNum = (int)(Float::kMax / roughness);
 	float t;
@@ -118,7 +118,7 @@ int drawSeparateLine(Physicus::Object* obj, b2Vec2 vec[4], float drawAdvance, in
 
 // 編集中の手描き線・リンクボードオブジェクトを描画する
 void drawEditingLine(Physicus::Object* obj) {
-	const auto images = obj->getLineImages();
+	const auto images = obj->getImages();
 	const auto locus = obj->getLocus();
 	const float roughness = obj->getRoughness();
 	const float drawAdvance = obj->getDrawAdvance();

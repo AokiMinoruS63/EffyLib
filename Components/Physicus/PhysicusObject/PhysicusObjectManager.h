@@ -90,6 +90,36 @@ class PhysicusObjectManager: public PhysicusManagerCommon {
 	 */
 	int makeRectangleLine(b2Vec2 start, b2Vec2 end, b2BodyType body_type = b2_staticBody);
 
+	// MARK: - Getter, Setter
+
+	private:
+
+	/**
+	 * @brief オブジェクトを取得する
+	 * 
+	 * @param handle 
+	 * @return Physicus::Particle* 
+	 */
+	Physicus::Object* getObject(int handle);
+
+	public:
+
+	/**
+	 * @brief オブジェクトのスプライトのタイプを取得する
+	 * 
+	 * @param handle オブジェクトハンドル
+	 * @return SpriteType 
+	 */
+	SpriteType getObjectSpriteType(int handle = PhysicusObjectManager::kCurrentHandle);
+
+	/**
+	 * @brief オブジェクトのスプライトのタイプを設定する
+	 * 
+	 * @param sprite_type 
+	 * @param handle オブジェクトハンドル
+	 */
+	void setObjectSpriteType(SpriteType sprite_type, int handle = PhysicusObjectManager::kCurrentHandle);
+
 	/**
 	 * @brief 全てのオブジェクトの描画進行率を設定する
 	 * 

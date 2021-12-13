@@ -123,7 +123,7 @@ void createLinkBoardBody(Object* obj, int index) {
 // リンクボードオブジェクトを描画する
 void drawLinkBoard(Object* obj) {
 	// 画像ハンドルがなければ処理しない
-	const auto images = obj->getLineImages();
+	const auto images = obj->getImages();
 	const auto bodies = obj->getBodies();
 	const float roughness = obj->getRoughness();
 	const float drawAdvance = obj->getDrawAdvance();

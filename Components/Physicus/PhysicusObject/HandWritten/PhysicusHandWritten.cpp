@@ -67,7 +67,7 @@ void createHandwrittenBody(Physicus::Object* obj, int index) {
 
 // 手描き線オブジェクトを描画する
 void drawHandwritten(Physicus::Object* obj) {
-	const auto images = obj->getLineImages();
+	const auto images = obj->getImages();
 	const auto bodies = obj->getBodies();
 	const float roughness = obj->getRoughness();
 	const float drawAdvance = obj->getDrawAdvance();

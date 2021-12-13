@@ -51,6 +51,16 @@ void PhysicusWorld::setParticleSetting(ParticleSetting setting, int handle) {
 	particles_->setSetting(setting, handle);
 }
 
+// オブジェクトのスプライトのタイプを取得する
+SpriteType PhysicusWorld::getObjectSpriteType(int handle) {
+	return objects_->getObjectSpriteType(handle);
+}
+
+// オブジェクトのスプライトのタイプを設定する
+void PhysicusWorld::setObjectSpriteType(SpriteType sprite_type, int handle) {
+	objects_->setObjectSpriteType(sprite_type, handle);
+}
+
 // 全てのオブジェクトの描画進行率を設定する
 void PhysicusWorld::setObjectsDrawAdvanceAll(float advance) {
 	objects_->setDrawAdvanceAll(advance);

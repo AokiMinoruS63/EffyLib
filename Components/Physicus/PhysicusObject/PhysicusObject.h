@@ -77,6 +77,13 @@ namespace Physicus {
 		// MARK: - Getter, Setter
 
 		/**
+		 * @brief ハンドルを取得する
+		 * 
+		 * @return int 
+		 */
+		int getHandle();
+
+		/**
 		 * @brief 演算ワールドのスケールを取得する
 		 * 
 		 * @return float 
@@ -183,18 +190,18 @@ namespace Physicus {
 		void setColor(int color);
 
 		/**
-		 * @brief 線の画像を取得する
+		 * @brief 画像を取得する
 		 * 
 		 * @return std::vector<int> 
 		 */
-		std::vector<int> getLineImages();
+		std::vector<int> getImages();
 
 		/**
 		 * @brief std::vectorから線の画像をセットする
 		 * 
 		 * @param images 画像ハンドル
 		 */
-		void setLineImages(std::vector<int> images);
+		void setImages(std::vector<int> images);
 
 		/**
 		 * @brief int配列から線の画像をセットする
@@ -202,7 +209,21 @@ namespace Physicus {
 		 * @param images 画像ハンドル
 		 * @param size 配列の要素数
 		 */
-		void setLineImages(int* images, int size);
+		void setImages(int* images, int size);
+
+		/**
+		 * @brief スプライトのタイプを取得する
+		 * 
+		 * @return SpriteType 
+		 */
+		SpriteType getSpriteType();
+
+		/**
+		 * @brief スプライトのタイプを設定する
+		 * 
+		 * @param sprite_type 
+		 */
+		void setSpriteType(SpriteType sprite_type);
 
 		/**
 		 * @brief オブジェクトの回転がロックされているかどうかを取得する

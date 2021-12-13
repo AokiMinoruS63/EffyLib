@@ -88,6 +88,43 @@ int PhysicusObjectManager::makeRectangleLine(b2Vec2 start, b2Vec2 end, b2BodyTyp
 	return generate;
 }
 
+// オブジェクトを取得する
+Physicus::Object* PhysicusObjectManager::getObject(int handle) {
+	for(auto& itr: objects_) {
+		if(itr->getHandle() == handle) {
+			return itr;
+		}
+	}
+	return NULL;
+}
+
+// オブジェクトのスプライトのタイプを取得する
+SpriteType PhysicusObjectManager::getObjectSpriteType(int handle) {
+	if(handle == kCurrentHandle) {
+		return current_setting_.sprite_type;
+	}
+	auto object = getObject(handle);
+	if(object == NULL) {
+		printfDx("ERROR: \"PhysicusObjectManager::getObjectSpriteType\"関数でオブジェクトのスプライトタイプの取得に失敗しました。\n");
+		return SpriteType::kStroke;
+	}
+	return object->getSpriteType();
+}
+
+// オブジェクトのスプライトのタイプを設定する
+void PhysicusObjectManager::setObjectSpriteType(SpriteType sprite_type, int handle) {
+	if(handle == kCurrentHandle) {
+		current_setting_.sprite_type = sprite_type;
+		return;
+	}
+	auto object = getObject(handle);
+	if(object == NULL) {
+		printfDx("ERROR: \"PhysicusObjectManager::setObjectSpriteType\"関数でオブジェクトのスプライトタイプの設定に失敗しました。\n");
+		return;
+	}
+	object->setSpriteType(sprite_type);
+}
+
 // 全てのオブジェクトの描画進行率を設定する
 void PhysicusObjectManager::setDrawAdvanceAll(float advance) {
 	advance = Float::clamp(advance, Float::kMin, Float::kMax);

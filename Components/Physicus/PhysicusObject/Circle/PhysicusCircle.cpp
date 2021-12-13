@@ -88,7 +88,7 @@ void setDrawPos(b2Vec2& si, b2Vec2& so, b2Vec2& gi, b2Vec2& go, b2Vec2 position,
 void drawCircleLine(Physicus::Object* obj, float angle, b2Vec2 position, float drawAdvance = Float::kMax, bool edgeDraw = false) {
 	const auto inside = obj->getLocusInsideLines();
 	const auto outside = obj->getLocusOutsideLines();
-	auto images = obj->getLineImages();
+	auto images = obj->getImages();
 
 	if(inside.size() < 2 || IsEmpty(images)) {
 		return;

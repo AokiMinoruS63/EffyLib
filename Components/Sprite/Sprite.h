@@ -28,6 +28,8 @@
 #include "SpriteTimeline.h"
 #include "SpriteParameters.h"
 #include "SpriteCommon.h"
+#include "SpriteType.h"
+
 /*
 #ifdef EMSCRIPTEN
 

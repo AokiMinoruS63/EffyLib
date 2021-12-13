@@ -42,6 +42,11 @@ Object::~Object() {
 
 // MARK: - Getter, Setter
 
+// ハンドルを取得する
+int Object::getHandle() {
+	return handle_;
+}
+
 // 演算ワールドのスケールを取得する
 float Object::getWorldScale() {
 	return world_scale_;
@@ -125,22 +130,32 @@ void Object::setColor(int color) {
 	setting_.color = color;
 }
 
-// 線の画像を取得する
-std::vector<int> Object::getLineImages() {
-	return setting_.line_images;
+// 画像を取得する
+std::vector<int> Object::getImages() {
+	return setting_.images;
 }
 
-// std::vectorから線の画像をセットする
-void Object::setLineImages(std::vector<int> images) {
-	setting_.line_images = images;
+// std::vectorから画像をセットする
+void Object::setImages(std::vector<int> images) {
+	setting_.images = images;
 }
 
 // int配列から線の画像をセットする
-void Object::setLineImages(int* images, int size) {
-	setting_.line_images.clear();
+void Object::setImages(int* images, int size) {
+	setting_.images.clear();
 	for(int i = 0; i < size; i++) {
-		setting_.line_images.push_back(images[i]);
+		setting_.images.push_back(images[i]);
 	}
+}
+
+// スプライトのタイプを取得する
+SpriteType Object::getSpriteType() {
+	return setting_.sprite_type;
+}
+
+// スプライトのタイプを設定する
+void Object::setSpriteType(SpriteType sprite_type) {
+	setting_.sprite_type = sprite_type;
 }
 
 // オブジェクトの回転がロックされているかどうかを取得する

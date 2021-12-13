@@ -73,7 +73,7 @@ bool createRectangleBody(Object* obj) {
  */
 void draw(Object* obj, b2Vec2 outside[4], b2Vec2 inside[4], float drawAdvance = Float::kMax) {
 	// 画像ハンドルがなければ処理しない
-	const auto images = obj->getLineImages();
+	const auto images = obj->getImages();
 	if(IsEmpty(images)) {
 		return;
 	}
@@ -170,7 +170,7 @@ void drawRectangle(Object* obj) {
 void drawEditingRectangle(Object* obj) {
 	// ボディ自体は作成されていないが、シミュレーションとして表示させる
 	// 画像ハンドルがなければ処理しない
-	const auto images = obj->getLineImages();
+	const auto images = obj->getImages();
 	if(IsEmpty(images)) {
 		return;
 	}

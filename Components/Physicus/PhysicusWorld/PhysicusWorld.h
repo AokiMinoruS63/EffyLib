@@ -86,6 +86,22 @@ class PhysicusWorld {
 	void setParticleSetting(Physicus::ParticleSetting setting, int handle = PhysicusParticleManager::kCurrentHandle);
 
 	/**
+	 * @brief オブジェクトのスプライトのタイプを取得する
+	 * 
+	 * @param handle オブジェクトハンドル
+	 * @return SpriteType 
+	 */
+	SpriteType getObjectSpriteType(int handle = PhysicusParticleManager::kCurrentHandle);
+
+	/**
+	 * @brief オブジェクトのスプライトのタイプを設定する
+	 * 
+	 * @param sprite_type 
+	 * @param handle オブジェクトハンドル
+	 */
+	void setObjectSpriteType(SpriteType sprite_type, int handle = PhysicusParticleManager::kCurrentHandle);
+
+	/**
 	 * @brief 全てのオブジェクトの描画進行率を設定する
 	 * 
 	 * @param advance 

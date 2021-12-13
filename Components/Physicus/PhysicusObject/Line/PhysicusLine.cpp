@@ -52,7 +52,7 @@ void createStaticLineBody(Physicus::Object* obj) {
 
 // 生成した直線オブジェクトを描画する
 void drawStaticLine(Physicus::Object* obj) {
-	const auto images = obj->getLineImages();
+	const auto images = obj->getImages();
 	const auto bodies = obj->getBodies();
 	const float roughness = obj->getRoughness();
 	const float drawAdvance = obj->getDrawAdvance();
