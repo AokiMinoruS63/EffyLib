@@ -512,6 +512,19 @@ int drawModiGraph( int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y
     return DrawModiGraph(x1, y1, x2, y2, x3, y3, x4, y4, graph_handle, trans_flag);
 }
 
+// メモリに読みこんだグラフィックの自由変形描画
+int drawModiGraph( b2Vec2 leftUp, b2Vec2 rightUp, b2Vec2 rightBottom, b2Vec2 leftBottom, int graph_handle , int trans_flag, int global_pos) {
+    return drawModiGraph((int)leftUp.x, (int)leftUp.y, (int)rightUp.x, (int)rightUp.y, (int)rightBottom.x, (int)rightBottom.y, (int)leftBottom.x, (int)leftBottom.y, graph_handle, trans_flag, global_pos);
+}
+
+// メモリに読みこんだグラフィックの自由変形描画
+int drawModiGraph( std::vector<b2Vec2> vec, int graph_handle , int trans_flag, int global_pos) {
+	if(vec.size() < 4) {
+		return kErrorCode;
+	}
+	return drawModiGraph(vec.at(0), vec.at(1), vec.at(2), vec.at(3), graph_handle, trans_flag, global_pos);
+}
+
 // メモリに読みこんだグラフィックの自由変形描画(float)
 int drawModiGraphF( float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4, int graph_handle , int trans_flag, int global_pos) {
 	if (global_pos == FALSE) {

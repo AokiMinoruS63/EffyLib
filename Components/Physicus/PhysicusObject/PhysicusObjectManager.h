@@ -78,6 +78,19 @@ class PhysicusObjectManager: public PhysicusManagerCommon {
 	 */
 	void removeObjects(std::vector<Physicus::Object*> remove_list);
 
+	private:
+
+	/**
+	 * @brief 矩形の即時作成
+	 * 
+	 * @param start 始点
+	 * @param end 終点
+	 * @param sprite_type スプライトの種類
+	 * @param body_type ボディタイプ
+	 * @return int 生成したオブジェクトのハンドル
+	 */
+	int makeRectangle(b2Vec2 start, b2Vec2 end, SpriteType sprite_type, b2BodyType body_type = b2_staticBody);
+
 	public:
 
 	/**
@@ -88,7 +101,17 @@ class PhysicusObjectManager: public PhysicusManagerCommon {
 	 * @param body_type ボディタイプ
 	 * @return int 生成したオブジェクトのハンドル
 	 */
-	int makeRectangleLine(b2Vec2 start, b2Vec2 end, b2BodyType body_type = b2_staticBody);
+	int makeRectangleStroke(b2Vec2 start, b2Vec2 end, b2BodyType body_type = b2_staticBody);
+
+	/**
+	 * @brief 塗りつぶし矩形の即時生成
+	 * 
+	 * @param start 始点
+	 * @param end 終点
+	 * @param body_type ボディタイプ
+	 * @return int 生成したオブジェクトのハンドル
+	 */
+	int makeRectangleFill(b2Vec2 start, b2Vec2 end, b2BodyType body_type = b2_staticBody);
 
 	// MARK: - Getter, Setter
 
@@ -103,6 +126,31 @@ class PhysicusObjectManager: public PhysicusManagerCommon {
 	Physicus::Object* getObject(int handle);
 
 	public:
+
+	/**
+	 * @brief 画像を取得する
+	 * 
+	 * @param handle オブジェクトのハンドル
+	 * @return std::vector<int> 
+	 */
+	std::vector<int> getImages(int handle = PhysicusObjectManager::kCurrentHandle);
+
+	/**
+	 * @brief std::vectorから線の画像をセットする
+	 * 
+	 * @param images 画像ハンドル
+	 * @param handle オブジェクトのハンドル
+	 */
+	void setImages(std::vector<int> images, int handle = PhysicusObjectManager::kCurrentHandle);
+
+	/**
+	 * @brief int配列から線の画像をセットする
+	 * 
+	 * @param images 画像ハンドル
+	 * @param size 配列の要素数
+	 * @param handle オブジェクトのハンドル
+	 */
+	void setImages(int* images, int size, int handle = PhysicusObjectManager::kCurrentHandle);
 
 	/**
 	 * @brief オブジェクトのスプライトのタイプを取得する

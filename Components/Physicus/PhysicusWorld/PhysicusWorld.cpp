@@ -88,11 +88,22 @@ int PhysicusWorld::touchParticleCreate(touch_t touch) {
 
 // プレビューの作成
 void PhysicusWorld::makePreviewData() {
-	makeRectangleLine(b2Vec2(0, 580), b2Vec2(880, 600));
-	makeRectangleLine(b2Vec2(0, 200), b2Vec2(20, 600));
-	makeRectangleLine(b2Vec2(860, 200), b2Vec2(880, 600));	
+	makeRectangleStroke(b2Vec2(0, 580), b2Vec2(880, 600));
+	makeRectangleStroke(b2Vec2(0, 200), b2Vec2(20, 600));
+	makeRectangleStroke(b2Vec2(860, 200), b2Vec2(880, 600));	
 
-	makeRectangleLine(b2Vec2(0, 200), b2Vec2(300, 230));
+	makeRectangleStroke(b2Vec2(0, 200), b2Vec2(300, 230));
+
+	int image = ComponentAssets::shared()->getImages().icons.at(2);
+	objects_->setImages(&image, 1);
+	const int kDistance = 150;
+	for(int i = 0; i  < 5; i++) {
+		for(int j = 0; j  < 5; j++) {
+			makeRectangleFill(b2Vec2(100 + i * kDistance, 300 + j * kDistance), b2Vec2(130 + i * kDistance, 330 + j * kDistance));
+			makeRectangleFill(b2Vec2(150 + i * kDistance, 350 + j * kDistance), b2Vec2(180 + i * kDistance, 380 + j * kDistance));
+		}
+	}
+	
 
 	auto setting = Physicus::ParticleSetting::init();
 	setting.effect_setting.group = 2;
@@ -101,9 +112,14 @@ void PhysicusWorld::makePreviewData() {
 	makeParticleSingle(b2Vec2(200, 200), setting);
 }
 
-// 矩形の即時生成
-int PhysicusWorld::makeRectangleLine(b2Vec2 start, b2Vec2 end, b2BodyType body_type) {
-	return objects_->makeRectangleLine(start, end, body_type);
+// 縁取りした矩形の即時生成
+int PhysicusWorld::makeRectangleStroke(b2Vec2 start, b2Vec2 end, b2BodyType body_type) {
+	return objects_->makeRectangleStroke(start, end, body_type);
+}
+
+// 塗りつぶし矩形の即時生成
+int PhysicusWorld::makeRectangleFill(b2Vec2 start, b2Vec2 end, b2BodyType body_type) {
+	return objects_->makeRectangleFill(start, end, body_type);
 }
 
 // シングルパーティクルの即時生成

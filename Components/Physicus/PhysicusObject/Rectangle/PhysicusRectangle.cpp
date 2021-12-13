@@ -161,9 +161,23 @@ void drawRectangle(Object* obj) {
 	}
 	const auto body = bodies.front();
 	const auto vertices = B2Body::vertices(body, 1.0 / obj->getWorldScale());
-	b2Vec2 outside[4], inside[4];
-	getVertices(obj, vertices, outside, inside);
-	draw(obj, outside, inside, obj->getDrawAdvance());
+	switch(obj->getSpriteType()) {
+		case SpriteType::kStroke:
+		{
+			b2Vec2 outside[4], inside[4];
+			getVertices(obj, vertices, outside, inside);
+			draw(obj, outside, inside, obj->getDrawAdvance());
+		}
+		break;
+		case SpriteType::kFill:
+			drawModiGraph(vertices, obj->getImages().front(), TRUE);
+		break;
+		case SpriteType::kSpriteStudio5:
+		case SpriteType::kSpine:
+		default:
+		printfDx("Physicus Object drawRectangle を使用しましたが、スプライトタイプが未実装のため、実行出来ませんでした。%d", obj->getSpriteType());
+		break;
+	}
 }
 
 // 編集中の矩形オブジェクトを描画する

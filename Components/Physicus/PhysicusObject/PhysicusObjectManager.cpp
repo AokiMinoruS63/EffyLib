@@ -62,12 +62,13 @@ void PhysicusObjectManager::removeObjects(std::vector<Physicus::Object*> remove_
 	}
 }
 
-// 線で出来た矩形の即時生成
-int PhysicusObjectManager::makeRectangleLine(b2Vec2 start, b2Vec2 end, b2BodyType body_type) {
+// 矩形の即時作成
+int PhysicusObjectManager::makeRectangle(b2Vec2 start, b2Vec2 end, SpriteType sprite_type, b2BodyType body_type) {
 	int generate = handle_counter_;
 	auto tmp = current_setting_;
 	current_setting_.bodyType = body_type;
 	current_setting_.type = ObjectType::kRectangle;
+	current_setting_.sprite_type = sprite_type;
 
 	touch_t touch;
 	touch.pos_log_x.push_back(end.x);
@@ -88,6 +89,16 @@ int PhysicusObjectManager::makeRectangleLine(b2Vec2 start, b2Vec2 end, b2BodyTyp
 	return generate;
 }
 
+// 線で出来た矩形の即時生成
+int PhysicusObjectManager::makeRectangleStroke(b2Vec2 start, b2Vec2 end, b2BodyType body_type) {
+	return makeRectangle(start, end, SpriteType::kStroke, body_type);
+}
+
+// 塗りつぶし矩形の即時生成
+int PhysicusObjectManager::makeRectangleFill(b2Vec2 start, b2Vec2 end, b2BodyType body_type) {
+	return makeRectangle(start, end, SpriteType::kFill, body_type);
+}
+
 // オブジェクトを取得する
 Physicus::Object* PhysicusObjectManager::getObject(int handle) {
 	for(auto& itr: objects_) {
@@ -96,6 +107,51 @@ Physicus::Object* PhysicusObjectManager::getObject(int handle) {
 		}
 	}
 	return NULL;
+}
+
+// 画像を取得する
+std::vector<int> PhysicusObjectManager::getImages(int handle) {
+	if(handle == kCurrentHandle) {
+		return current_setting_.images;
+	}
+	auto object = getObject(handle);
+	if(object == NULL) {
+		printfDx("ERROR: \"PhysicusObjectManager::getImages\"関数で画像の取得に失敗しました。\n");
+		std::vector<int> none;
+		return none;
+	}
+	return object->getImages();
+}
+
+// std::vectorから線の画像をセットする
+void PhysicusObjectManager::setImages(std::vector<int> images, int handle) {
+	if(handle == kCurrentHandle) {
+		current_setting_.images = images;
+		return;
+	}
+	auto object = getObject(handle);
+	if(object == NULL) {
+		printfDx("ERROR: \"PhysicusObjectManager::setImages\"関数で画像の設定に失敗しました。\n");
+		return;
+	}
+	return object->setImages(images);
+}
+
+// int配列から線の画像をセットする
+void PhysicusObjectManager::setImages(int* images, int size, int handle) {
+	if(handle == kCurrentHandle) {
+		current_setting_.images.clear();
+		for(int i = 0; i < size; i++) {
+			current_setting_.images.push_back(images[i]);
+		}
+		return;
+	}
+	auto object = getObject(handle);
+	if(object == NULL) {
+		printfDx("ERROR: \"PhysicusObjectManager::setImages\"関数で画像の設定に失敗しました。\n");
+		return;
+	}
+	return object->setImages(images, size);
 }
 
 // オブジェクトのスプライトのタイプを取得する

@@ -507,6 +507,33 @@ int drawModiGraph( int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y
 /**
  * @brief メモリに読みこんだグラフィックの自由変形描画
  * 
+ * @param leftUp 左上の座標
+ * @param rightUp 右上の座標
+ * @param rightBottom 右下の座標
+ * @param leftBottom 左下の座標
+ * @param graph_handle 描画するグラフィックのハンドル
+ * @param trans_flag 画像の透明度を有効にするかどうか( TRUE：有効にする　FALSE：無効にする )
+ * @param global_pos パーティションを考慮したグローバル座標で描画するか、のフラグ。TRUEでグローバル座標描画
+ * @return int 0: 成功、-1: エラー発生
+ */
+int drawModiGraph( b2Vec2 leftUp, b2Vec2 rightUp, b2Vec2 rightBottom, b2Vec2 leftBottom,
+                    int graph_handle , int trans_flag, int global_pos = FALSE);
+
+/**
+ * @brief メモリに読みこんだグラフィックの自由変形描画
+ * 
+ * @param vec 座標vector（左上、右上、右下、左下）
+ * @param graph_handle 描画するグラフィックのハンドル
+ * @param trans_flag 画像の透明度を有効にするかどうか( TRUE：有効にする　FALSE：無効にする )
+ * @param global_pos パーティションを考慮したグローバル座標で描画するか、のフラグ。TRUEでグローバル座標描画
+ * @return int 0: 成功、-1: エラー発生
+ */
+int drawModiGraph( std::vector<b2Vec2> vec,
+                    int graph_handle , int trans_flag, int global_pos = FALSE);
+
+/**
+ * @brief メモリに読みこんだグラフィックの自由変形描画
+ * 
  * @param x1 左上の頂点のX座標
  * @param y1 左上の頂点のY座標
  * @param x2 右上の頂点のX座標
