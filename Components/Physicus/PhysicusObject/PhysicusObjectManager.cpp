@@ -17,7 +17,7 @@ using namespace Physicus;
 
 // コンストラクタ
 PhysicusObjectManager::PhysicusObjectManager(b2World* world, float scale, Frame alive_area, float tie_loop_range) {
-	handle_counter_ = 1;
+	hashInit();
 	world_ = world;
 	world_scale_ = scale;
 	alive_area_ = alive_area;
@@ -38,14 +38,14 @@ PhysicusObjectManager::~PhysicusObjectManager() {
 
 // オブジェクトの追加
 Object* PhysicusObjectManager::addObject(Object* object) {
-	addHandleCounter();
 	objects_.push_back(object);
+	setHashData(object);
 	return object;
 }
 
 // オブジェクトの追加
 Object* PhysicusObjectManager::addObject(touch_t touch, ObjectType type, b2World* world, float scale, ObjectSetting setting) {
-	auto object = new Object(handle_counter_, touch, ObjectType::kRectangle, world_, world_scale_, current_setting_);
+	auto object = new Object(touch, ObjectType::kRectangle, world_, world_scale_, current_setting_);
 	return addObject(object);
 }
 
@@ -64,7 +64,6 @@ void PhysicusObjectManager::removeObjects(std::vector<Physicus::Object*> remove_
 
 // 矩形の即時作成
 int PhysicusObjectManager::makeRectangle(b2Vec2 start, b2Vec2 end, SpriteType sprite_type, b2BodyType body_type) {
-	int generate = handle_counter_;
 	auto tmp = current_setting_;
 	current_setting_.bodyType = body_type;
 	current_setting_.type = ObjectType::kRectangle;
@@ -86,7 +85,7 @@ int PhysicusObjectManager::makeRectangle(b2Vec2 start, b2Vec2 end, SpriteType sp
 	body->generation(touch, tie_loop_range_);
 
 	current_setting_ = tmp;
-	return generate;
+	return getHandle();
 }
 
 // 線で出来た矩形の即時生成
@@ -101,12 +100,7 @@ int PhysicusObjectManager::makeRectangleFill(b2Vec2 start, b2Vec2 end, b2BodyTyp
 
 // オブジェクトを取得する
 Physicus::Object* PhysicusObjectManager::getObject(int handle) {
-	for(auto& itr: objects_) {
-		if(itr->getHandle() == handle) {
-			return itr;
-		}
-	}
-	return NULL;
+	return (Physicus::Object*)getDataFromHash(handle);
 }
 
 // 画像を取得する
@@ -213,10 +207,9 @@ int PhysicusObjectManager::touchCreate(touch_t touch) {
 	int generate = NULL;
 	// 生成開始
 	if(touch.status == TouchStatus::kJustTouch && current_ == NULL) {
-		current_ = new Object(handle_counter_, touch, current_setting_.type, world_, world_scale_, current_setting_);
-		objects_.push_back(current_);
-		generate = handle_counter_;
-		addHandleCounter();
+		current_ = new Object(touch, current_setting_.type, world_, world_scale_, current_setting_);
+		addObject(current_);
+		generate = getHandle();
 	}
 
 	if(current_ != NULL) {

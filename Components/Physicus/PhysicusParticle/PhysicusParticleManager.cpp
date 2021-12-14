@@ -16,7 +16,7 @@ using namespace Physicus;
 
 // コンストラクタ
 PhysicusParticleManager::PhysicusParticleManager(b2World* world, float scale, Physicus::Frame alive_area) {
-	handle_counter_ = 1;
+	hashInit();
 	world_ = world;
 	world_scale_ = scale;
 	alive_area_ = alive_area;
@@ -38,12 +38,7 @@ PhysicusParticleManager::~PhysicusParticleManager() {
 
 // パーティクルを取得する
 Physicus::Particle* PhysicusParticleManager::getParticle(int handle) {
-	for(auto& itr: particles_) {
-		if(itr->getHandle() == handle) {
-			return itr;
-		}
-	}
-	return NULL;
+	return (Physicus::Particle*)getDataFromHash(handle);
 }
 
 // パーティクルのタイプを取得する
@@ -102,14 +97,14 @@ void PhysicusParticleManager::setSetting(Physicus::ParticleSetting setting, int 
 
 // パーティクルの追加
 Physicus::Particle* PhysicusParticleManager::addParticle(Physicus::Particle* particle) {
-	addHandleCounter();
 	particles_.push_back(particle);
+	setHashData(particle);
 	return particle;
 }
 
 // オブジェクトの追加
 Physicus::Particle* PhysicusParticleManager::addParticle(touch_t touch, Physicus::ParticleSetting setting) {
-	auto particle = new Particle(handle_counter_, touch, system_, world_, world_scale_, setting);
+	auto particle = new Particle(touch, system_, world_, world_scale_, setting);
 	return addParticle(particle);
 }
 
@@ -128,7 +123,6 @@ void PhysicusParticleManager::removeParticles(std::vector<Physicus::Particle*> r
 
 // シングルパーティクルの生成
 int PhysicusParticleManager::makeParticleSingle(b2Vec2 position, Physicus::ParticleSetting setting) {
-	const int generate = handle_counter_;
 	makeScreen(setting.effect_setting);
 	// 生成開始
 	touch_t touch = touch_t();
@@ -136,7 +130,7 @@ int PhysicusParticleManager::makeParticleSingle(b2Vec2 position, Physicus::Parti
 	touch.y = position.y;
 	touch.status = TouchStatus::kJustRelease;
 	addParticle(touch, setting);
-	return generate;
+	return getHandle();
 }
 
 // フレームアウトしているかチェックする
@@ -157,10 +151,9 @@ int PhysicusParticleManager::touchCreate(touch_t touch) {
 	makeScreen(current_setting_.effect_setting);
 	// 生成開始
 	if(touch.status == TouchStatus::kJustTouch && current_ == NULL) {
-		current_ = new Particle(handle_counter_, touch, system_, world_, world_scale_, current_setting_);
-		particles_.push_back(current_);
-		generate = handle_counter_;
-		addHandleCounter();
+		current_ = new Particle(touch, system_, world_, world_scale_, current_setting_);
+		addParticle(current_);
+		generate = getHandle();
 	}
 
 	// TODO: 後で変える

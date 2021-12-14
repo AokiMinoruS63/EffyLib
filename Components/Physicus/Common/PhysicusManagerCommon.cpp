@@ -12,11 +12,6 @@
 #include "PhysicusManagerCommon.h"
 #include "../../Utility/DxLibWrap.h"
 
-// ハンドルのカウンタを一つ進める
-void PhysicusManagerCommon::addHandleCounter() {
-	handle_counter_++;
-}
-
 // フレームアウトしているかチェックする
 void PhysicusManagerCommon::checkFrameOut() {
 	printfDx("ERROR: 継承されずに\"PhysicusManagerCommon::checkFrameOut\"関数が呼ばれました。\n");

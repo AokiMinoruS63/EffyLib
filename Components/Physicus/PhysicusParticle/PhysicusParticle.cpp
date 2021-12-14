@@ -15,9 +15,8 @@
 
 using namespace Physicus;
 
-Particle::Particle(int handle, touch_t touch, b2ParticleSystem* particle_system, b2World* world, float scale, ParticleSetting setting) {
+Particle::Particle(touch_t touch, b2ParticleSystem* particle_system, b2World* world, float scale, ParticleSetting setting) {
 	lifeObjectInit();
-	handle_ = handle;
 	world_ = world;
 	b2Vec2 vec = B2Vec2::fromTouch(touch, scale);
 	world_scale_ = scale;
@@ -50,11 +49,6 @@ Particle::Particle(int handle, touch_t touch, b2ParticleSystem* particle_system,
 
 Particle::~Particle() {
 
-}
-
-// ハンドルを取得する
-int Particle::getHandle() {
-	return handle_;
 }
 
 // グループを取得する

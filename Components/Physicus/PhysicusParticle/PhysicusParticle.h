@@ -30,8 +30,6 @@ namespace Physicus {
 		// MARK: - 変数
 
 		private:
-		// パーティクルのアクセス用のハンドル
-		int handle_;
 		// パーティクルの管理クラス
 		b2ParticleSystem* particle_system_;
 		// パーティクル
@@ -49,7 +47,7 @@ namespace Physicus {
 
 		public:
 
-		Particle(int handle, touch_t touch, b2ParticleSystem* particle_system, b2World* world, float scale, ParticleSetting setting);
+		Particle(touch_t touch, b2ParticleSystem* particle_system, b2World* world, float scale, ParticleSetting setting);
 		~Particle();
 
 		// MARK: - Getter, Setter

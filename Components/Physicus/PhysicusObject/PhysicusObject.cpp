@@ -21,9 +21,8 @@
 using namespace Physicus;
 
 // コンストラクタ
-Object::Object(int handle, touch_t touch, ObjectType type, b2World* world, float scale, ObjectSetting setting) {
+Object::Object(touch_t touch, ObjectType type, b2World* world, float scale, ObjectSetting setting) {
 	lifeObjectInit();
-	handle_ = handle;
 	world_ = world;
 	b2Vec2 vec = B2Vec2::fromTouch(touch, scale);
 	locus_.push_back(vec);
@@ -41,11 +40,6 @@ Object::~Object() {
 }
 
 // MARK: - Getter, Setter
-
-// ハンドルを取得する
-int Object::getHandle() {
-	return handle_;
-}
 
 // 演算ワールドのスケールを取得する
 float Object::getWorldScale() {

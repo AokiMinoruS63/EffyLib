@@ -15,8 +15,9 @@
 #include "../PhysicusWorld/Frame/PhysicusWorldFrame.h"
 #include "../../OpenSource/Box2D/Box2D.h"
 #include "../../Touch/TouchData.h"
+#include "../../Common/HashObject.h"
 
-class PhysicusManagerCommon {
+class PhysicusManagerCommon: public HashObject {
 	// MARK: 定数
 	public:
 
@@ -26,8 +27,6 @@ class PhysicusManagerCommon {
 	// MARK: 変数
 
 	protected:
-	// ハンドルのカウンタ
-	int handle_counter_;
 	// 物理演算を行うワールド
 	b2World* world_;
 	// ワールドの拡大率
@@ -36,14 +35,6 @@ class PhysicusManagerCommon {
 	Physicus::Frame alive_area_;
 
 	// MARK: - 関数
-
-	protected:
-
-	/**
-	 * @brief ハンドルのカウンタを一つ進める
-	 * 
-	 */
-	void addHandleCounter();
 
 	public:
 

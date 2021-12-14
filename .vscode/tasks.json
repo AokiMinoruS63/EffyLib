@@ -80,6 +80,7 @@
 				// Component of EffyLib
 				"build/ComponentAssets.o",
 				"build/LifeObject.o",
+				"build/HashObject.o",
 				"build/EffectScreen.o",
 				"build/LiquidEffect.o",
 				"build/PhysicusParticleManager.o",
@@ -207,6 +208,7 @@
 				// Component of EffyLib
 				"build/ComponentAssets.o",
 				"build/LifeObject.o",
+				"build/HashObject.o",
 				"build/EffectScreen.o",
 				"build/LiquidEffect.o",
 				"build/PhysicusParticleManager.o",
