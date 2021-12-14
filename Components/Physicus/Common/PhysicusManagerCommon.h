@@ -16,6 +16,7 @@
 #include "../../OpenSource/Box2D/Box2D.h"
 #include "../../Touch/TouchData.h"
 #include "../../Common/HashObject.h"
+#include "PhysicusEvent.h"
 
 class PhysicusManagerCommon: public HashObject {
 	// MARK: 定数
@@ -33,6 +34,8 @@ class PhysicusManagerCommon: public HashObject {
 	float world_scale_;
 	// オブジェクト・パーティクルが生存できるエリア
 	Physicus::Frame alive_area_;
+	// 所持しているイベント
+	std::vector<Physicus::Event> events;
 
 	// MARK: - 関数
 
