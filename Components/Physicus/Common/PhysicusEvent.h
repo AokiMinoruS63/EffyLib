@@ -12,6 +12,8 @@
 #ifndef PHYSICUS_EVENT_H
 #define PHYSICUS_EVENT_H
 
+#include <functional>
+
 namespace Physicus {
 	enum EventTrigger {
 		// 生まれた時
@@ -19,52 +21,37 @@ namespace Physicus {
 		// 寿命を迎えた時
 		kDestroy,
 		// 衝突した時
-		kCollision
+		kCollision,
+		// オブジェクト・パーティクルのカウントがあるカウントに達した時
+		kTimePassed
 	};
 
-	// 生まれた時の処理
-	// 寿命を迎えた時
-	// 衝突した時
-	// 検査するハンドルが必要
-
-	// 衝突した時
-	// 衝突する相手のハンドルもしくはグループが必要
-	// 変化した時の処理が必要
-
-	// 何をするか
-	// Physicusでないパーティクルの生成
-	// パーティクルからObject の変更
-	// 	
-
-	// 結論。ぶっちゃけコールバックでいいよ。
-	// コールバックをstd::vecdtorでまとめてそれを処理する感じでOK
-
-	// コールバック関数
-	typedef void (*CallBackFunction)();
 	struct Event {
-		// 条件を成立した時に行うコールバック関数
-		CallBackFunction func;
-		// イベントのトリガー
-		EventTrigger trigger;
 		// イベントの監視対象のハンドル
 		int handle;
+		// 条件を成立した時に行うコールバック関数
+		std::function<void()> func;
+		// イベントのトリガー
+		EventTrigger trigger;
+		// 条件となる時間
+		LONG targetCount;
+		// 条件となるターゲットのハンドル
+		int targetHandle;
+		// 条件となるターゲットのグループ
+		int targetGroup;
 		// 条件が満たした時に何度も行うなら**true**
 		bool no_destroy;
-
 	};
+
+	/*
+	// コールバック関数の使い方
+	Event ev;
+	// 通常の関数を代入したい時
+	ev.func = [&]() { return hoge(); };
+	// インスタンスの関数を代入したい時
+	HogeClass* hoge_class = new HogeClass();
+	ev.func = [&]() { return hoge_class->hoge(); };
+	*/
 }
-
-//struct PhysicusParticleEvent {
-	// TODO: 衝突判定するグループ、作用するグループ
-	// TODO: トリガーも書く
-	// トリガー何ある？　コリジョン、
-	// イベント何ある？　グループの変更、パーティクルからオブジェクトの変更と変更時のパーティクルの発生
-	// オブジェクトクラスにも画像（Sprite）を参照出来る様にする必要がある。その画像をどのように適用する必要があるか
-	// 使い方？　とりあえず、スタックに積もう
-	// このスタックを置く場所。とりあえず、ワールドクラスに置くしかないか？
-
-	// 例、入れ替え変数
-	// void changeParticleToObject(int particleHandle, ObjectSetting setting/*, ここにエフェクトスプライトを表示  */)
-//}
 
 #endif
