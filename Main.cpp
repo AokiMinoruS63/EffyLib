@@ -7,7 +7,7 @@
  * DxLibToHTML5雛形ファイル
  */
 
-#include <DxLib.h>
+#include <EffyLib.h>
 #include "MainContent.h"
 #ifdef EMSCRIPTEN
 #  include <emscripten.h>

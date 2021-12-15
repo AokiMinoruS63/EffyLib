@@ -13,32 +13,24 @@
 #define PHYSICUS_WORLD_H
 
 #include <vector>
-#include "../PhysicusObject/PhysicusObject.h"
+#include "../PhysicusObject/PhysicusObjectManager.h"
+#include "../PhysicusParticle/PhysicusParticleManager.h"
 #include "Frame/PhysicusWorldFrame.h"
-
-// 相互参照
-class Sprite;
 
 class PhysicusWorld {
 	// MARK: - 変数
 
 	private:
+	// オブジェクト管理クラス
+	PhysicusObjectManager* objects_;
+	// パーティクル管理クラス
+	PhysicusParticleManager* particles_;
 	// 物理演算を行うワールド
 	b2World* world_;
 	// ワールドの拡大率
 	float world_scale_;
-	// 物理演算を行うSprite配列
-	std::vector<Sprite *> sprites_;
-	// 物理演算を行うボディ配列
-	std::vector<Physicus::Object *> objects_;
-	// 現在生成・操作を行なっているボディ
-	Physicus::Object* current_;
-	// オブジェクトの設定
-	Physicus::ObjectSetting current_setting_;
-	// オブジェクトが生存できるエリア
-	Physicus::Frame alive_area_;
-	// 数珠繋ぎにする距離
-	float tie_loop_range_;
+	// 静止させるなら**true**
+	bool stop_;
 
 	// MARK: - コンストラクタ・デストラクタ
 
@@ -59,9 +51,130 @@ class PhysicusWorld {
 	 */
 	~PhysicusWorld();
 
+	// MARK: - Getter, Setter
+
+	/**
+	 * @brief パーティクルのタイプを取得する
+	 * 
+	 * @param handle パーティクルハンドル
+	 * @return Physicus::ParticleType 
+	 */
+	Physicus::ParticleType getParticleType(int handle = PhysicusParticleManager::kCurrentHandle);
+
+	/**
+	 * @brief パーティクルのタイプを設定する
+	 * 
+	 * @param type 
+	 * @param handle パーティクルハンドル
+	 */
+	void setParticleType(Physicus::ParticleType type, int handle = PhysicusParticleManager::kCurrentHandle);
+
+	/**
+	 * @brief パーティクルの設定を取得する
+	 * 
+	 * @param handle パーティクルハンドル
+	 * @return ParticleSetting 
+	 */
+	Physicus::ParticleSetting getParticleSetting(int handle = PhysicusParticleManager::kCurrentHandle);
+
+	/**
+	 * @brief パーティクルの設定を設定する
+	 * 
+	 * @param setting 設定
+	 * @param handle パーティクルハンドル
+	 */
+	void setParticleSetting(Physicus::ParticleSetting setting, int handle = PhysicusParticleManager::kCurrentHandle);
+
+	/**
+	 * @brief オブジェクトのスプライトのタイプを取得する
+	 * 
+	 * @param handle オブジェクトハンドル
+	 * @return SpriteType 
+	 */
+	SpriteType getObjectSpriteType(int handle = PhysicusParticleManager::kCurrentHandle);
+
+	/**
+	 * @brief オブジェクトのスプライトのタイプを設定する
+	 * 
+	 * @param sprite_type 
+	 * @param handle オブジェクトハンドル
+	 */
+	void setObjectSpriteType(SpriteType sprite_type, int handle = PhysicusParticleManager::kCurrentHandle);
+
+	/**
+	 * @brief 全てのオブジェクトの描画進行率を設定する
+	 * 
+	 * @param advance 
+	 */
+	void setObjectsDrawAdvanceAll(float advance);
+
+	/**
+	 * @brief 演算を静止させているかを取得する
+	 * 
+	 * @return true 
+	 * @return false 
+	 */
+	bool getStop();
+
+	/**
+	 * @brief 演算の静止状態をセットする
+	 * 
+	 * @param stop 
+	 */
+	void setStop(bool stop);
+
+	// MARK: - プレビュー
+
+	void makePreviewData();
+
 	// MARK: - 関数
 
 	public:
+
+	/**
+	 * @brief タッチによってオブジェクトを生成する
+	 * 
+	 * @param touch タッチ情報
+	 * @return int 生成されたオブジェクトハンドル
+	 */
+	int touchObjectCreate(touch_t touch);
+
+	/**
+	 * @brief タッチによってパーティクルを生成する
+	 * 
+	 * @param touch タッチ情報
+	 * @return int 生成されたパーティクルハンドル。生成されなければ**NULL**を返す
+	 */
+	int touchParticleCreate(touch_t touch);
+
+	/**
+	 * @brief 縁取りした矩形の即時生成
+	 * 
+	 * @param start 始点
+	 * @param end 終点
+	 * @param body_type ボディタイプ
+	 * @return int 生成したオブジェクトのハンドル
+	 */
+	int makeRectangleStroke(b2Vec2 start, b2Vec2 end, b2BodyType body_type = b2_staticBody);
+
+	/**
+	 * @brief 塗りつぶし矩形の即時生成
+	 * 
+	 * @param start 始点
+	 * @param end 終点
+	 * @param body_type ボディタイプ
+	 * @return int 生成したオブジェクトのハンドル
+	 */
+	int makeRectangleFill(b2Vec2 start, b2Vec2 end, b2BodyType body_type = b2_staticBody);
+
+	/**
+	 * @brief シングルパーティクルの即時生成
+	 * 
+	 * @param position 生成座標
+	 * @param setting パーティクルの設定
+	 * @return int 生成したパーティクルのハンドル
+	 */
+	int makeParticleSingle(b2Vec2 position, Physicus::ParticleSetting setting);
 
 	/**
 	 * @brief 時間を進める
@@ -70,30 +183,13 @@ class PhysicusWorld {
 	void timeCalc();
 
 	/**
-	 * @brief スプライトに物理演算を適用する
-	 * 
-	 * @param sprite 適用するスプライト
-	 */
-	void applySprite(Sprite* sprite);
-
-	/**
-	 * @brief タッチによるオブジェクトの干渉（生成も含む）
-	 * 
-	 * @param touch 
-	 * @param type 
-	 * @return true オブジェクトが生成
-	 * @return false オブジェクトが未生成
-	 */
-	bool touchCalc(touch_t touch, Physicus::Type type);
-
-	/**
-	 * @brief オブジェクトを描画する
+	 * @brief オブジェクトとパーティクルを描画する
 	 * 
 	 */
 	void draw();
 
 	/**
-	 * @brief オブジェクトのフレームを描画する
+	 * @brief オブジェクトとパーティクルのフレームを描画する
 	 * 
 	 */
 	void drawDebugFrame();

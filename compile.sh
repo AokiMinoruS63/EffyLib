@@ -1,35 +1,65 @@
 cd Components
 
 << COMMENTOUT
-cd OpenSource/Box2D/src/collision
 
+cd OpenSource/Box2D/Collision
 
 for file in *.cpp
 do
-em++ "${file}" -c -o "../../../../../build/${file%.*}.o" -O0 -std=c++17 -g4 -IDxLibForHTML5/include -IComponents -IComponents/Box2D/box2d
+em++ "${file}" -c -o "../../../../build/${file%.*}.o" -O0 -std=c++17 -g4 -IDxLibForHTML5/include -IComponents -IComponents/OpenSource/
 done
 
-cd ../common
+cd Shapes
+
 for file in *.cpp
 do
-em++ "${file}" -c -o "../../../../../build/${file%.*}.o" -O0 -std=c++17 -g4 -IDxLibForHTML5/include -IComponents -IComponents/Box2D/box2d
+em++ "${file}" -c -o "../../../../../build/${file%.*}.o" -O0 -std=c++17 -g4 -IDxLibForHTML5/include -IComponents -IComponents/OpenSource/
 done
 
-cd ../dynamics
+cd ../
+
+cd ../Common
 for file in *.cpp
 do
-em++ "${file}" -c -o "../../../../../build/${file%.*}.o" -O0 -std=c++17 -g4 -IDxLibForHTML5/include -IComponents -IComponents/Box2D/box2d
+em++ "${file}" -c -o "../../../../build/${file%.*}.o" -O0 -std=c++17 -g4 -IDxLibForHTML5/include -IComponents -IComponents/OpenSource/
 done
 
-cd ../rope
+cd ../Dynamics
 for file in *.cpp
 do
-em++ "${file}" -c -o "../../../../../build/${file%.*}.o" -O0 -std=c++17 -g4 -IDxLibForHTML5/include -IComponents -IComponents/Box2D/box2d
+em++ "${file}" -c -o "../../../../build/${file%.*}.o" -O0 -std=c++17 -g4 -IDxLibForHTML5/include -IComponents -IComponents/OpenSource/
+done
+
+cd Contacts
+
+for file in *.cpp
+do
+em++ "${file}" -c -o "../../../../../build/${file%.*}.o" -O0 -std=c++17 -g4 -IDxLibForHTML5/include -IComponents -IComponents/OpenSource/
+done
+
+cd ../Joints
+
+for file in *.cpp
+do
+em++ "${file}" -c -o "../../../../../build/${file%.*}.o" -O0 -std=c++17 -g4 -IDxLibForHTML5/include -IComponents -IComponents/OpenSource/
+done
+
+cd ../
+
+cd ../Rope
+for file in *.cpp
+do
+em++ "${file}" -c -o "../../../../build/${file%.*}.o" -O0 -std=c++17 -g4 -IDxLibForHTML5/include -IComponents -IComponents/OpenSource/
+done
+
+cd ../Particle
+for file in *.cpp
+do
+em++ "${file}" -c -o "../../../../build/${file%.*}.o" -O0 -std=c++17 -g4 -IDxLibForHTML5/include -IComponents -IComponents/OpenSource/
 done
 
 
-cd ../../../../
-
+cd ../../../
 COMMENTOUT
 
 cd Assets
@@ -39,61 +69,111 @@ em++ "${file}" -c -o "../../build/${file%.*}.o" -O0 -std=c++17 -g4 -IDxLibForHTM
 done
 
 cd ..
+cd Common
+for file in *.cpp
+do
+em++ "${file}" -c -o "../../build/${file%.*}.o" -O0 -std=c++17 -g4 -IDxLibForHTML5/include -IComponents
+done
+
+cd ..
 cd BMFont
 for file in *.cpp
 do
-em++ "${file}" -c -o "../../build/${file%.*}.o" -O0 -std=c++17 -g4 -IDxLibForHTML5/include -IComponents -IComponents/Box2D/box2d
+em++ "${file}" -c -o "../../build/${file%.*}.o" -O0 -std=c++17 -g4 -IDxLibForHTML5/include -IComponents -IComponents/OpenSource/
+done
+
+cd ..
+cd Effect
+for file in *.cpp
+do
+em++ "${file}" -c -o "../../build/${file%.*}.o" -O0 -std=c++17 -g4 -IDxLibForHTML5/include -IComponents -IComponents/OpenSource/
 done
 
 cd ..
 cd Touch
 for file in *.cpp
 do
-em++ "${file}" -c -o "../../build/${file%.*}.o" -O0 -std=c++17 -g4 -IDxLibForHTML5/include -IComponents -IComponents/Box2D/box2d
+em++ "${file}" -c -o "../../build/${file%.*}.o" -O0 -std=c++17 -g4 -IDxLibForHTML5/include -IComponents -IComponents/OpenSource/
 done
 
 cd ..
 cd Utility
 for file in *.cpp
 do
-em++ "${file}" -c -o "../../build/${file%.*}.o" -O0 -std=c++17 -g4 -IDxLibForHTML5/include -IComponents -IComponents/Box2D/box2d
+em++ "${file}" -c -o "../../build/${file%.*}.o" -O0 -std=c++17 -g4 -IDxLibForHTML5/include -IComponents -IComponents/OpenSource/
 done
 
 cd ../
-cd Physicus/PhysicusWorld
+cd Physicus/Common
 for file in *.cpp
 do
-em++ "${file}" -c -o "../../../build/${file%.*}.o" -O0 -std=c++17 -g4 -IDxLibForHTML5/include -IComponents -IComponents/Box2D/box2d
+em++ "${file}" -c -o "../../../build/${file%.*}.o" -O0 -std=c++17 -g4 -IDxLibForHTML5/include -IComponents -IComponents/OpenSource/
+done
+
+cd ../PhysicusWorld
+for file in *.cpp
+do
+em++ "${file}" -c -o "../../../build/${file%.*}.o" -O0 -std=c++17 -g4 -IDxLibForHTML5/include -IComponents -IComponents/OpenSource/
+done
+
+cd ../PhysicusParticle
+for file in *.cpp
+do
+em++ "${file}" -c -o "../../../build/${file%.*}.o" -O0 -std=c++17 -g4 -IDxLibForHTML5/include -IComponents -IComponents/OpenSource/
 done
 
 cd ../PhysicusObject
 for file in *.cpp
 do
-em++ "${file}" -c -o "../../../build/${file%.*}.o" -O0 -std=c++17 -g4 -IDxLibForHTML5/include -IComponents -IComponents/Box2D/box2d
+em++ "${file}" -c -o "../../../build/${file%.*}.o" -O0 -std=c++17 -g4 -IDxLibForHTML5/include -IComponents -IComponents/OpenSource/
 done
 
 cd LinkBoard
 for file in *.cpp
 do
-em++ "${file}" -c -o "../../../../build/${file%.*}.o" -O0 -std=c++17 -g4 -IDxLibForHTML5/include -IComponents -IComponents/Box2D/box2d
+em++ "${file}" -c -o "../../../../build/${file%.*}.o" -O0 -std=c++17 -g4 -IDxLibForHTML5/include -IComponents -IComponents/OpenSource/
+done
+
+cd ../HandWritten
+for file in *.cpp
+do
+em++ "${file}" -c -o "../../../../build/${file%.*}.o" -O0 -std=c++17 -g4 -IDxLibForHTML5/include -IComponents -IComponents/OpenSource/
+done
+
+cd ../Line
+for file in *.cpp
+do
+em++ "${file}" -c -o "../../../../build/${file%.*}.o" -O0 -std=c++17 -g4 -IDxLibForHTML5/include -IComponents -IComponents/OpenSource/
 done
 
 cd ../Rectangle
 for file in *.cpp
 do
-em++ "${file}" -c -o "../../../../build/${file%.*}.o" -O0 -std=c++17 -g4 -IDxLibForHTML5/include -IComponents -IComponents/Box2D/box2d
+em++ "${file}" -c -o "../../../../build/${file%.*}.o" -O0 -std=c++17 -g4 -IDxLibForHTML5/include -IComponents -IComponents/OpenSource/
+done
+
+cd ../Circle
+for file in *.cpp
+do
+em++ "${file}" -c -o "../../../../build/${file%.*}.o" -O0 -std=c++17 -g4 -IDxLibForHTML5/include -IComponents -IComponents/OpenSource/
+done
+
+cd ../Common
+for file in *.cpp
+do
+em++ "${file}" -c -o "../../../../build/${file%.*}.o" -O0 -std=c++17 -g4 -IDxLibForHTML5/include -IComponents -IComponents/OpenSource/
 done
 
 cd ../../../
 cd Sprite
 for file in *.cpp
 do
-em++ "${file}" -c -o "../../build/${file%.*}.o" -O0 -std=c++17 -g4 -IDxLibForHTML5/include -IComponents -IComponents/Box2D/box2d
+em++ "${file}" -c -o "../../build/${file%.*}.o" -O0 -std=c++17 -g4 -IDxLibForHTML5/include -IComponents -IComponents/OpenSource/
 done
 
 cd ..
 cd ..
 for file in *.cpp
 do
-em++ "${file}" -c -o "build/${file%.*}.o" -O0 -std=c++17 -g4 -IDxLibForHTML5/include -IComponents -IComponents/Box2D/box2d
+em++ "${file}" -c -o "build/${file%.*}.o" -O0 -std=c++17 -g4 -IDxLibForHTML5/include -IComponents -IComponents/OpenSource/
 done

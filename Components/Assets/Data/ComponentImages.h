@@ -20,6 +20,8 @@ namespace Components {
 	struct Images {
 		// クレヨンの画像
 		std::vector<int> brush_crayon;
+		// ゴールドのアイコン、宝石のアイコン
+		std::vector<int> icons;
 
 		/* 初期化関数 */
 
@@ -30,8 +32,12 @@ namespace Components {
 		 */
 		static Images init() {
 			int crayon_images[3];
+			std::vector<int> icons;
 			LoadDivGraph("Components/Texture/crayon.png", 3, 1, 3, 128, 128, crayon_images);
-			return { Array::toVector(crayon_images, 3) };
+			icons.push_back( LoadGraph("Components/Texture/gold.png") );
+			icons.push_back( LoadGraph("Components/Texture/jewel.png") );
+			icons.push_back( LoadGraph("Components/Texture/charcoal.png") );
+			return { Array::toVector(crayon_images, 3), icons };
 		}
 	};
 }

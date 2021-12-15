@@ -10,7 +10,6 @@
  */
 
 #include "PhysicusWorld.h"
-#include "../../Sprite/Sprite.h"
 #include "../../Assets/ComponentAssets.h"
 
 using namespace Physicus;
@@ -19,27 +18,121 @@ using namespace Physicus;
 PhysicusWorld::PhysicusWorld(b2Vec2 gravity, float scale, Frame alive_area, float tie_loop_range){
 	// 物理演算世界を初期化する
 	world_ = new b2World(gravity);
+	// インスタンス生成
+	objects_ = new PhysicusObjectManager(world_, scale, alive_area);
+	particles_ = new PhysicusParticleManager(world_, scale, alive_area);
 	// 拡大率適用
 	world_scale_ = scale;
-	// オブジェクト生存エリア適用
-	alive_area.applyScale(world_scale_);
-	alive_area_ = alive_area;
-	// 数珠繋ぎにする距離
-	tie_loop_range_ = tie_loop_range;
-	const std::vector<int> images = ComponentAssets::shared()->getImages().brush_crayon;
-	current_setting_ = ObjectSetting::init(world_scale_, Type::kLinkBoard, images);
-	// NULL代入する
-	current_ = NULL;
 }
 
 // デストラクタ
 PhysicusWorld::~PhysicusWorld(){
-	ForEach(objects_, [this](Object *item) { delete item; });
+	delete objects_;
+	delete particles_;
 	delete world_;
+}
+
+// パーティクルのタイプを取得する
+Physicus::ParticleType PhysicusWorld::getParticleType(int handle) {
+	return particles_->getType(handle);
+}
+// パーティクルのタイプを設定する
+void PhysicusWorld::setParticleType(Physicus::ParticleType type, int handle) {
+	particles_->setType(type, handle);
+}
+
+// パーティクルの設定を取得する
+ParticleSetting PhysicusWorld::getParticleSetting(int handle) {
+	return particles_->getSetting(handle);
+}
+
+// パーティクルの設定を設定する
+void PhysicusWorld::setParticleSetting(ParticleSetting setting, int handle) {
+	particles_->setSetting(setting, handle);
+}
+
+// オブジェクトのスプライトのタイプを取得する
+SpriteType PhysicusWorld::getObjectSpriteType(int handle) {
+	return objects_->getObjectSpriteType(handle);
+}
+
+// オブジェクトのスプライトのタイプを設定する
+void PhysicusWorld::setObjectSpriteType(SpriteType sprite_type, int handle) {
+	objects_->setObjectSpriteType(sprite_type, handle);
+}
+
+// 全てのオブジェクトの描画進行率を設定する
+void PhysicusWorld::setObjectsDrawAdvanceAll(float advance) {
+	objects_->setDrawAdvanceAll(advance);
+}
+
+// 演算を静止させているかを取得する
+bool PhysicusWorld::getStop() {
+	return stop_;
+}
+
+// 演算の静止状態をセットする
+void PhysicusWorld::setStop(bool stop) {
+	stop_ = stop;
+}
+
+// タッチによってオブジェクトを生成する
+int PhysicusWorld::touchObjectCreate(touch_t touch) {
+	return objects_->touchCreate(touch);
+}
+
+// タッチによってパーティクルを生成する
+int PhysicusWorld::touchParticleCreate(touch_t touch) {
+	return particles_->touchCreate(touch);
+}
+
+// プレビューの作成
+void PhysicusWorld::makePreviewData() {
+	makeRectangleStroke(b2Vec2(0, 580), b2Vec2(880, 600));
+	makeRectangleStroke(b2Vec2(0, 200), b2Vec2(20, 600));
+	makeRectangleStroke(b2Vec2(860, 200), b2Vec2(880, 600));	
+
+	makeRectangleStroke(b2Vec2(0, 200), b2Vec2(300, 230));
+
+	int image = ComponentAssets::shared()->getImages().icons.at(2);
+	objects_->setImages(&image, 1);
+	const int kDistance = 150;
+	for(int i = 0; i  < 5; i++) {
+		for(int j = 0; j  < 5; j++) {
+			makeRectangleFill(b2Vec2(100 + i * kDistance, 300 + j * kDistance), b2Vec2(130 + i * kDistance, 330 + j * kDistance));
+			makeRectangleFill(b2Vec2(150 + i * kDistance, 350 + j * kDistance), b2Vec2(180 + i * kDistance, 380 + j * kDistance));
+		}
+	}
+	
+
+	auto setting = Physicus::ParticleSetting::init();
+	setting.effect_setting.group = 2;
+	setting.effect_setting.fill_color = Color::kDeepOrange;
+	setting.effect_setting.effect = true;
+	makeParticleSingle(b2Vec2(200, 200), setting);
+}
+
+// 縁取りした矩形の即時生成
+int PhysicusWorld::makeRectangleStroke(b2Vec2 start, b2Vec2 end, b2BodyType body_type) {
+	return objects_->makeRectangleStroke(start, end, body_type);
+}
+
+// 塗りつぶし矩形の即時生成
+int PhysicusWorld::makeRectangleFill(b2Vec2 start, b2Vec2 end, b2BodyType body_type) {
+	return objects_->makeRectangleFill(start, end, body_type);
+}
+
+// シングルパーティクルの即時生成
+int PhysicusWorld::makeParticleSingle(b2Vec2 position, Physicus::ParticleSetting setting) {
+	return particles_->makeParticleSingle(position, setting);
 }
 
 // 時間を進める
 void PhysicusWorld::timeCalc() {
+	// 静止しているなら処理しない
+	if(stop_) {
+		return;
+	}
 	// 時間経過メソッド
 	const float timeStep = 1.0f / 10.0f;
 	const int velocityIterations = 6;
@@ -47,67 +140,37 @@ void PhysicusWorld::timeCalc() {
 	// 時間を進める
 	world_->Step(timeStep, velocityIterations, positionIterations);
 	// 生存可能エリアからオブジェクトが出ていたら消滅させる
-	std::vector<Object*> removeList;
-	ForEach(objects_, [this, &removeList](Object* item) { if(item->judgeAreaOut(alive_area_)){ removeList.push_back(item);} });
-	auto itr = objects_.begin();
-	while(itr != objects_.end()) {
-		const int size = Filter(removeList, [&removeList, itr](Object* item){ return item == (*itr); }).size();
-		if(size > 0) {
-			itr = objects_.erase(itr);
-		} else {
-			++itr;
-		}
-	}
+	objects_->checkFrameOut();
+	particles_->checkFrameOut();
+	// 寿命を迎えていたら消滅させる
+	objects_->checkLifeEnd();
+	particles_->checkLifeEnd();
+	// カウントを進める
+	objects_->timeCalc();
+	particles_->timeCalc();
 }
 
-// スプライトに物理演算を適用する
-void PhysicusWorld::applySprite(Sprite* sprite) {
-	sprites_.push_back(sprite);
-}
-
-// タッチによるオブジェクトの干渉（生成も含む）
-bool PhysicusWorld::touchCalc(touch_t touch, Type type) {
-	bool generate = false;
-	current_setting_.type = type;
-	// 生成開始
-	if(touch.status == TouchStatus::kJustTouch && current_ == NULL) {
-		current_ = new Object(touch, type, world_, world_scale_, current_setting_);
-		objects_.push_back(current_);
-		generate = true;
-	}
-
-	if(current_ != NULL) {
-		// 生成中
-		if(current_->generation(touch, tie_loop_range_)) {
-			// 生成完了
-			current_->setAwake();
-			current_ = NULL;
-		}
-	}
-
-	return generate;
-}
-
-
-// オブジェクトを描画する
+// オブジェクトとパーティクルを描画する
 void PhysicusWorld::draw() {
-	for(auto& itr: objects_) {
-		if(itr != current_) {
-			itr->draw();
-		}
-	}
-	current_->drawEditing();
+	// オブジェクト描画
+	objects_->draw();
+	// パーティクル描画
+	particles_->draw();
+	// 編集中のオブジェクト描画
+	objects_->drawEditing();
+	// 編集中のパーティクル描画
+	particles_->drawEditing();
 }
 
 
-// オブジェクトのフレームを描画する
+// オブジェクトとパーティクルのフレームを描画する
 void PhysicusWorld::drawDebugFrame() {
-	for(auto& itr: objects_) {
-		if(itr != current_) {
-			itr->drawDebugFrame();
-		}
-	}
-	if(current_ != NULL) {
-		current_->drawEditingDebugFrame();
-	}
+	// オブジェクト描画
+	objects_->drawDebugFrame();
+	// パーティクル描画
+	particles_->drawDebugFrame();
+	// 編集中のオブジェクト描画
+	objects_->drawEditingDebugFrame();
+	// 編集中のパーティクル描画
+	particles_->drawEditingDebugFrame();
 }

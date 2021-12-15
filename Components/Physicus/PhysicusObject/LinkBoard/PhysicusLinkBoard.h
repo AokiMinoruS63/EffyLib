@@ -19,19 +19,15 @@ namespace Physicus {
 /**
  * @brief リンクボードオブジェクトを作成する
  * 
+ * @param obj 
+ * @param index 
  */
-void createLinkBoardBody(Physicus::Object*);
+void createLinkBoardBody(Physicus::Object* obj, int index);
 
 /**
  * @brief リンクボードオブジェクトを描画する
  * 
  */
 void drawLinkBoard(Physicus::Object*);
-
-/**
- * @brief 編集中のリンクボードオブジェクトを描画する
- * 
- */
-void drawEditingLinkBoard(Physicus::Object*);
 
 #endif

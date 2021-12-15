@@ -18,9 +18,13 @@
 #include "TypeExtensions/B2Vec2+Extensions.h"
 #include "TypeExtensions/B2BodyDef+Extensions.h"
 #include "TypeExtensions/B2Body+Extensions.h"
+#include "TypeExtensions/B2Fixture+Extensions.h"
 #include "TypeExtensions/B2Joint+Extensions.h"
 #include "TypeExtensions/VectorOrArray+Extension.h"
 #include "TypeExtensions/Vector+Extension.h"
 #include "TypeExtensions/Array+Extensions.h"
+#include "TypeExtensions/BlendMode+Extension.h"
+#include "TypeExtensions/ScreenState+Extensions.h"
+#include "TypeExtensions/GraphEffect+Extensions.h"
 
 #endif

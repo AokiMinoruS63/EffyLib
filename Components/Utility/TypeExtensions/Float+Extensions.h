@@ -13,6 +13,7 @@
 #define FLOAT_EXTENSION_H
 
 #include "../../Utility/DxLibWrap.h"
+#include <vector>
 
 namespace Float {
 
@@ -20,8 +21,12 @@ namespace Float {
 	static const float kMinima = FLT_MIN;
 	// 最小値
 	static const float kMin = 0.0;
+	// 4分の1
+	static const float kQuarter = 0.25;
 	// 中間値
 	static const float kHalf = 0.5;
+	// 4分の3
+	static const float kThreeQuarters = 0.75;
 	// 最大値
 	static const float kMax = 1.0;
 
@@ -42,6 +47,119 @@ namespace Float {
 		static const float kBottom = -DX_PI_F / 2.0;
 		// 右下角度
 		static const float kRightBottom = -DX_PI_F * 2.0  / 3.0;
+
+		// 0度
+		static const float kZeroDegree = 0.0;
+		// 90度
+		static const float kNinetyDegree = DX_PI_F * 0.5;
+		// 180度
+		static const float kOneEightyDegree = DX_PI_F;
+		// 270度
+		static const float kTwoSeventyDegree = DX_PI_F * 1.5;
+		// 360度
+		static const float kThreeSixtyDegree = DX_PI_F * 2.0;
+
+		/**
+		 * @brief レートから角度への変換
+		 * 
+		 * @param rate 1.0が最大
+		 * @return float 角度(radian)
+		 */
+		static float fromRate(float rate) {
+			return rate * DX_PI_F * 2.0;
+		}
+	}
+
+	// ベジェ曲線に使用する円の方向
+	namespace BezieCircle {
+		// 左上
+		const float kLeftUp = kMin;
+		// 右上
+		const float kRightUp = kQuarter;
+		// 右下
+		const float kRightBottom = kHalf;
+		// 左下
+		const float kLeftBottom = kThreeQuarters;
+
+		// ベジェの制御点が４つの時に使用する円の係数
+		static const float kBezieCircleRate = 0.55228;
+
+		// 円のベジェ曲線における進行率を取得する
+		static float bezieRate(float t) {
+			if(t < Float::kQuarter) {
+				return t * 4.0;
+			} else if (t < Float::kHalf) {
+				return (t - Float::kQuarter) * 4.0;
+			} else if (t < Float::kThreeQuarters) {
+				return (t - Float::kHalf) * 4.0;
+			} else {
+				return (t - Float::kThreeQuarters) * 4.0;
+			}
+		}
+
+		// 円のベジェ曲線における適用後の回転角度を取得する
+		static float plusAngle(float t) {
+			if(t < Float::kQuarter) {
+				return Angle::kZeroDegree;
+			} else if (t < Float::kHalf) {
+				return Angle::kNinetyDegree;
+			} else if (t < Float::kThreeQuarters) {
+				return Angle::kOneEightyDegree;
+			} else {
+				return Angle::kTwoSeventyDegree;
+			}
+		}
+	};
+
+	/**
+	 * @brief 合算値を返す
+	 * 
+	 * @param vec 
+	 * @return float 
+	 */
+	static float total(std::vector<float> vec) {
+		float num = 0;
+		for(auto &itr: vec) {
+			num += itr;
+		}
+		return num;
+	}
+
+	/**
+	 * @brief 長さの等しい節における進行率と進行回数を全体の進行率からセットする
+	 * 
+	 * @param loopNum 現在何番目の節を進行しているか
+	 * @param lastAdvance 進行している最後の節の進行率
+	 * @param totalAdvance 全体の進行率。0.0〜1.0
+	 * @param size 節の個数
+	 */
+	static void setAdvance(int& separateNum, float& lastAdvance, float totalAdvance, int size) {
+		const float advance = totalAdvance * (float)size;
+		separateNum = (int)advance;
+		lastAdvance = totalAdvance == kMax ? kMax : fmodf(advance, 1.0 );
+	}
+
+	/**
+	 * @brief 長さの違う節における進行率と進行回数を全体の進行率からセットする
+	 * 
+	 * @param separateNum 現在何番目の節を進行しているか
+	 * @param lastAdvance 進行している最後の節の進行率
+	 * @param sections 節の長さの配列
+	 * @param totalAdvance 全体の進行率。0.0〜1.0
+	 */
+	static void setAdvance(int& separateNum, float& lastAdvance, std::vector<float> sections, float totalAdvance) {
+		const float totalLimit = total(sections);
+		totalAdvance *= totalLimit;
+		separateNum = 0;
+		lastAdvance = 0.0;
+		for(auto& itr: sections) {
+			if(itr > totalAdvance) {
+				lastAdvance = totalAdvance / itr;
+				break;
+			}
+			totalAdvance -= itr;
+			separateNum++;
+		}
 	}
 
 	/**
@@ -136,6 +254,19 @@ namespace Float {
 	}
 
 	/**
+	 * @brief 4つの制御点のベジェの計算を行う
+	 * 
+	 * @param value 
+	 * @param t 
+	 * @return float 
+	 */
+	static float bezieFourValue(const float value[4], float t) {
+		t = clamp(t, kMin, kMax);
+		const float tt = (kMax - t);
+		return value[0] * tt * tt * tt + value[1] * 3 * t * tt * tt + value[2] * 3 * t * t * tt + value[3] * t * t * t;
+	}
+
+	/**
 	 * @brief ２つの値を交換する
 	 * 
 	 * @param val1 
@@ -145,6 +276,20 @@ namespace Float {
 		const float tmp = *val1;
 		*val1 = *val2;
 		*val2 = tmp;
+	}
+
+	/**
+	 * @brief ２つの値の内小さい方を返す
+	 * 
+	 * @param num1 
+	 * @param num2 
+	 * @return float 
+	 */
+	static float smaller(float num1, float num2) {
+		if(num1 < num2) {
+			return num1;
+		}
+		return num2;
 	}
 }
 

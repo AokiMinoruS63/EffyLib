@@ -12,21 +12,23 @@
 #ifndef PHYSICUS_OBJECT_H
 #define PHYSICUS_OBJECT_H
 
-// TODO: include vector, Touch.h, box2d.h
-#include "../../OpenSource/Box2D/box2d/box2d.h"
+#include "../../OpenSource/Box2D/Box2D.h"
 #include <vector>
 #include "../../Touch/TouchData.h"
-#include "Enum/PhysicusObjectType.h"
+#include "PhysicusObjectType.h"
 #include "../../Utility/TypeExtensions.h"
 #include "../PhysicusWorld/Frame/PhysicusWorldFrame.h"
 #include "Constant/PhysicusConstant.h"
-#include "Setting/PhysicusObjectSetting.h"
-#include "../PhysicusWorld/Frame/PhysicusWorldFrame.h"
+#include "PhysicusObjectSetting.h"
+#include "../../Common/LifeObject.h"
+
+// 相互参照
+class Sprite;
 
 namespace Physicus {
 
 	// オブジェクトの実体
-	class Object {
+	class Object: public LifeObject {
 		// MARK: - 定数
 		public:
 
@@ -38,14 +40,22 @@ namespace Physicus {
 		b2World* world_;
 		// タッチの軌跡
 		std::vector<b2Vec2> locus_;
+		// 軌跡の外側の線(回転は考慮しない座標)
+		std::vector<b2Vec2> locus_line_outside_;
+		// 軌跡の内側の線(回転は考慮しない座標)
+		std::vector<b2Vec2> locus_line_inside_;
 		// 軌跡の線のログ
 		std::vector<Physicus::Frame> locus_frame_log_;
+		// 描画の進行率
+		float draw_advance_;
 		// 拡大率
 		float world_scale_;
 		// オブジェクトの設定
 		ObjectSetting setting_;
 		// ボディの頂点の順番変更フラグ（Box２D側で頂点の順番が調整されてしまうため、ここに保存）
 		std::vector<B2Body::VerticesChange> bodies_vertices_change_;
+		// 表示させるスプライト
+		Sprite* sprite_;
 
 		// MARK: - コンストラクタ・デストラクタ
 		public:
@@ -58,10 +68,17 @@ namespace Physicus {
 		 * @param scale ワールドの拡大率
 		 * @param setting オブジェクトの設定
 		 */
-		Object(touch_t touch, Type type, b2World* world, float scale, ObjectSetting setting);
+		Object(touch_t touch, ObjectType type, b2World* world, float scale, ObjectSetting setting);
 		~Object();
 
 		// MARK: - Getter, Setter
+
+		/**
+		 * @brief ハンドルを取得する
+		 * 
+		 * @return int 
+		 */
+		int getHandle();
 
 		/**
 		 * @brief 演算ワールドのスケールを取得する
@@ -83,6 +100,14 @@ namespace Physicus {
 		 * @return b2World* 
 		 */
 		b2World* getWorld();
+
+		/**
+		 * @brief 座標を取得する
+		 * 
+		 * @param isDraw 描画時の座標なら**true**
+		 * @return b2Vec2 
+		 */
+		b2Vec2 getPosition(bool isDraw);
 
 		/**
 		 * @brief 軌跡を取得する
@@ -120,6 +145,27 @@ namespace Physicus {
 		float getLineWidth();
 
 		/**
+		 * @brief 線の半分の太さを取得する
+		 * 
+		 * @return float 
+		 */
+		float getLineHalfWidth();
+
+		/**
+		 * @brief 描画時の線の太さを取得する
+		 * 
+		 * @return float 
+		 */
+		float getDrawLineWidth();
+
+		/**
+		 * @brief 描画時の線の半分の太さを取得する
+		 * 
+		 * @return float 
+		 */
+		float getDrawLineHalfWidth();
+
+		/**
 		 * @brief 線の太さをセットする
 		 * 
 		 * @param width 
@@ -141,18 +187,18 @@ namespace Physicus {
 		void setColor(int color);
 
 		/**
-		 * @brief 線の画像を取得する
+		 * @brief 画像を取得する
 		 * 
 		 * @return std::vector<int> 
 		 */
-		std::vector<int> getLineImages();
+		std::vector<int> getImages();
 
 		/**
 		 * @brief std::vectorから線の画像をセットする
 		 * 
 		 * @param images 画像ハンドル
 		 */
-		void setLineImages(std::vector<int> images);
+		void setImages(std::vector<int> images);
 
 		/**
 		 * @brief int配列から線の画像をセットする
@@ -160,7 +206,21 @@ namespace Physicus {
 		 * @param images 画像ハンドル
 		 * @param size 配列の要素数
 		 */
-		void setLineImages(int* images, int size);
+		void setImages(int* images, int size);
+
+		/**
+		 * @brief スプライトのタイプを取得する
+		 * 
+		 * @return SpriteType 
+		 */
+		SpriteType getSpriteType();
+
+		/**
+		 * @brief スプライトのタイプを設定する
+		 * 
+		 * @param sprite_type 
+		 */
+		void setSpriteType(SpriteType sprite_type);
 
 		/**
 		 * @brief オブジェクトの回転がロックされているかどうかを取得する
@@ -227,7 +287,21 @@ namespace Physicus {
 		 * 
 		 * @return Type 
 		 */
-		Type getType();
+		ObjectType getType();
+
+		/**
+		 * @brief 描画の進行率を設定する
+		 * 
+		 * @param advance 0.0〜1.0。1.0で全て表示
+		 */
+		void setDrawAdvance(float advance);
+
+		/**
+		 * @brief 描画の進行率を取得する
+		 * 
+		 * @return float 0.0〜1.0。1.0で全て表示
+		 */
+		float getDrawAdvance();
 
 		/**
 		 * @brief オブジェクトのタイプが矩形なら**true**
@@ -283,6 +357,12 @@ namespace Physicus {
 		bool judgeAreaOut(Frame alive_area);
 
 		/**
+		 * @brief 軌跡を相対座標に変換する
+		 * 
+		 */
+		void locusLineToRelative();
+
+		/**
 		 * @brief 演算を行うボディを全て削除する
 		 * 
 		 */
@@ -323,19 +403,54 @@ namespace Physicus {
 		 */
 		std::vector<Physicus::Frame> getLocusFrames();
 
-		// MARK: - オブジェクトの描画
+		/**
+		 * @brief 軌跡の線を追加する
+		 * 
+		 * @param outside 外側の線の頂点座標
+		 */
+		void appendDrawLocusLine(b2Vec2 outside);
 
 		/**
-		 * @brief 現在生成しているオブジェクトのボーンを描画する
+		 * @brief 軌跡の線を追加する
+		 * 
+		 * @param outside 外側の線の頂点座標
+		 * @param inside 内側の線の頂点座標
+		 */
+		void appendDrawLocusLine(b2Vec2 outside, b2Vec2 inside);
+
+		/**
+		 * @brief 軌跡の線を削除する
 		 * 
 		 */
-		void drawEditing();
+		void removeLocusLines();
+
+		/**
+		 * @brief 軌跡の内側の線を取得する
+		 * 
+		 * @return std::vector<b2Vec2> 
+		 */
+		std::vector<b2Vec2> getLocusInsideLines(); 
+
+		/**
+		 * @brief 軌跡の外側の線を取得する
+		 * 
+		 * @return std::vector<b2Vec2> 
+		 */
+		std::vector<b2Vec2> getLocusOutsideLines(); 
+
+		// MARK: - オブジェクトの描画
 
 		/**
 		 * @brief オブジェクトの描画
 		 * 
 		 */
 		void draw();
+
+		/**
+		 * @brief 現在生成しているオブジェクトを描画する
+		 * 
+		 */
+		void drawEditing();
 
 		/**
 		 * @brief オブジェクトのフレームを描画

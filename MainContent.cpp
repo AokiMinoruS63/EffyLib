@@ -16,7 +16,6 @@
 #include <emscripten.h>
 #endif
 
-
 MainContent::MainContent() {
 	SetGraphMode(getScreenWidthWithPartition(), getScreenHeightWithPartition(), 32);
     if (DxLib_Init() == -1) {
@@ -28,10 +27,28 @@ MainContent::MainContent() {
 	bmFontMgr_->load("GameFont_Blue");
 	bmFontMgr_->load("GameFont_Orange");
 	bmFontMgr_->load("GameFont_White");
+
+	auto setting = world_->getParticleSetting();
+	/*
+	int money = ComponentAssets::shared()->getImages().icons.at(0);
+	int jewery = ComponentAssets::shared()->getImages().icons.at(1);
+	int images[30];
+	for(int i = 0; i < 30; i++) {
+		if(i % 5 == 0) {
+			images[i] = jewery;
+		} else {
+			images[i] = money;
+		}
+	}
+	setting.setImages(images, 30);
+	world_->setParticleSetting(setting);
+	*/
 	
 
     ChangeFont("07LogoTypeGothic7.ttf");
-	SetDrawScreen(DX_SCREEN_BACK);
+	setDrawScreen(ScreenState::kBack);
+	// プレビューデータの作成
+	world_->makePreviewData();
 }
 
 MainContent::~MainContent() {
@@ -39,12 +56,16 @@ MainContent::~MainContent() {
 }
 
 void MainContent::run() {
-	ClearDrawScreen();
+	clearDrawScreen();
 
 	// タッチ計算
 	touchMgr_->calc();
+	// パーティクルのタイプをシングルに
+	world_->setParticleType(Physicus::ParticleType::kSingle);
+	// オブジェクトのタイプを手描き線に先行
+	//world_->setObjectType(Physicus::ObjectType::kHandWritten);
 	// タッチを物理演算に適用
-	world_->touchCalc(touchMgr_->get(), Physicus::Type::kRectangle);
+	world_->touchParticleCreate(touchMgr_->get());
 	// 時間を進める
 	world_->timeCalc();
 
@@ -57,7 +78,7 @@ void MainContent::run() {
 	// オブジェクトの描画
 	world_->draw();
 	// ボーンの描画
-	world_->drawDebugFrame();
+	//world_->drawDebugFrame();
 
 	ScreenFlip();
 }

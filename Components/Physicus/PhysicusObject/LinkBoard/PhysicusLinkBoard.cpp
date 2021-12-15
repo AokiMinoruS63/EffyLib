@@ -11,24 +11,27 @@
 
 #include "PhysicusLinkBoard.h"
 #include "../PhysicusObject.h"
+#include "../Common/PhysicusObjectCommon.h"
 #include "../../../Utility/DxLibWrap.h"
 #include "../../PhysicusWorld/Frame/PhysicusWorldFrame.h"
 #include <vector>
 
 using namespace Physicus;
 
-// 中身がスカスカなオブジェクトの作成
-void createLinkBoardBody(Object* obj) {
+// リンクボードオブジェクトの作成
+void createLinkBoardBody(Object* obj, int index) {
 	// 線の太さが一定以下なら処理を行わない
 	if(obj->getLineWidth() < B2Body::kMinCreateVertexRange) {
 		return;
 	}
 	b2Vec2 current, last, lastLast;
 	const auto locus = obj->getLocus();
-	B2Vec2::recentLocus(locus, &current, &last, &lastLast);
+	current = locus.at(index);
+	last = locus.at(Int::clamp(index - 1, 0, locus.size()));
+	lastLast = locus.at(Int::clamp(index - 2, 0, locus.size()));
 	
 	b2Vec2 center = B2Vec2::halfWay(last, current);
-	const float width = obj->getLineWidth();
+	const float width = obj->getLineHalfWidth();
 	const float angle = B2Vec2::angle(last, current);
 	std::vector<Frame> locus_frame = obj->getLocusFrames();
 	float lastAngle = locus.size() <= 2 ? angle :  B2Vec2::angle(lastLast, last);
@@ -71,7 +74,7 @@ void createLinkBoardBody(Object* obj) {
 	}
 	
 	// 動体オブジェクトの参照値
-	b2BodyDef bodyDef = B2BodyDef::dynamic(center, 1.0);
+	b2BodyDef bodyDef = B2BodyDef::generate(obj->getSetting().bodyType, center, Float::kMax, obj->getRotateFix());
 	// まだ物理演算を適用させない
 	bodyDef.awake = false;
 	// ボディの作成
@@ -80,18 +83,12 @@ void createLinkBoardBody(Object* obj) {
 	obj->append(body);
 
 	// 動体オブジェクトの形を定義する
-	b2PolygonShape dynamicBox;
-	dynamicBox.Set(vertices, 4);
+	b2PolygonShape shape;
+	shape.Set(vertices, 4);
 
 	// 動体オブジェクトの密度・摩擦の関連付け
-	b2FixtureDef fixtureDef;
-	fixtureDef.shape = &dynamicBox;
-	// 密度を設定
-	fixtureDef.density = 1.00f;
-	// 摩擦を設定
-	fixtureDef.friction = 0.1f;
-	// 反発を設定
-	fixtureDef.restitution = 0.0;
+	b2FixtureDef fixtureDef = obj->getSetting().fixture;
+	fixtureDef.shape = &shape;
 	// 動体に適用
 	body->CreateFixture(&fixtureDef);
 	
@@ -126,16 +123,22 @@ void createLinkBoardBody(Object* obj) {
 // リンクボードオブジェクトを描画する
 void drawLinkBoard(Object* obj) {
 	// 画像ハンドルがなければ処理しない
-	const auto images = obj->getLineImages();
-	if(IsEmpty(images)) {
+	const auto images = obj->getImages();
+	const auto bodies = obj->getBodies();
+	const float roughness = obj->getRoughness();
+	const float drawAdvance = obj->getDrawAdvance();
+	if(IsEmpty(images) || IsEmpty(bodies) || roughness <= Float::kMin || drawAdvance == Float::kMin) {
 		return;
 	}
-	const auto bodies = obj->getBodies();
 	const int color = obj->getColor();
 	int loopCount = 0;
 	b2Vec2 currentRect[4];
 	b2Vec2 lastRect[4], lastHalf[2];
-	const float roughness = obj->getRoughness();
+
+	// 進行度を決定する	
+	int loopNum;
+	float lastAdvance;
+	Float::setAdvance(loopNum, lastAdvance, drawAdvance, bodies.size());
 	for(auto& itr: bodies) {		
 		// 描画メソッド
 		const auto vertices = B2Body::vertices(itr, 1.0 / obj->getWorldScale());
@@ -165,20 +168,50 @@ void drawLinkBoard(Object* obj) {
 
 			// ボディが一つだけならそのまま描画
 			if(bodies.size() == 1) {
-				drawModiGraphF( vertices.at(indices[0]), vertices.at(indices[1]), vertices.at(indices[2]), vertices.at(indices[3]), images.front() , TRUE);
+				b2Vec2 vec[4] = {vertices.at(indices[2]), vertices.at(indices[3]), vertices.at(indices[0]), vertices.at(indices[1])};
+				drawSeparateLine(obj, vec, lastAdvance, 0);
 			} else {
 				// それ以外ならベジェ曲線を描く
 				if(itr == bodies.front()) {
 					// 半分まで描く
-					drawModiGraphF( currentRect[0], currentRect[1], halfRight, halfLeft, images.front() , TRUE);
+					float rate;
+					if(loopCount < loopNum) {
+						rate = Float::kMax;
+					} else if(loopCount > loopNum) {
+						rate = Float::kMin;
+					} else {
+						rate = lastAdvance;
+					}
+					b2Vec2 vec[2] = {
+						B2Vec2::between(currentRect[1], halfRight, rate),
+						B2Vec2::between(currentRect[0], halfLeft, rate)
+					};
+					drawModiGraphF( currentRect[0], currentRect[1], vec[0], vec[1], images.front() , TRUE);
 				} else {
 					// 前のボディの半分から現在のボディの半分までベジェ曲線を描く
-					b2Vec2 leftVec[3] = {lastHalf[0], B2Vec2::halfWay(lastRect[3], currentRect[0]), halfLeft};
-					b2Vec2 rightVec[3] = {lastHalf[1], B2Vec2::halfWay(lastRect[2], currentRect[1]), halfRight};
-					drawBezie(leftVec, rightVec, roughness, images, true, false, Array::kUnspecified );
+					float rate;
+					if(loopCount < loopNum) {
+						rate = Float::kMax;
+					} else if(loopCount > loopNum) {
+						rate = Float::kMin;
+					} else {
+						rate = itr == bodies.back() ? Float::clamp(lastAdvance * 2.0, Float::kMin, Float::kMax) : lastAdvance;
+					}
+					if(rate > Float::kMin) {
+						b2Vec2 leftVec[3] = {lastHalf[0], B2Vec2::halfWay(lastRect[3], currentRect[0]), halfLeft};
+						b2Vec2 rightVec[3] = {lastHalf[1], B2Vec2::halfWay(lastRect[2], currentRect[1]), halfRight};
+						drawBezie(leftVec, rightVec, roughness, images, true, false, Array::kUnspecified, rate );
+					}
 				}
 				// 最後なら半分から最後まで描く
 				if(itr == bodies.back()) {
+					// TODO: 進行率設定
+					if(loopCount != loopNum || lastAdvance < Float::kHalf) {
+						return;
+					}
+					const float rate =  (lastAdvance - Float::kHalf) * 2.0;
+					currentRect[3] = B2Vec2::between(halfLeft, currentRect[3], rate);
+					currentRect[2] = B2Vec2::between(halfRight, currentRect[2], rate);
 					drawModiGraphF( halfRight, halfLeft, currentRect[3], currentRect[2], images.back() , TRUE);
 				}
 			}
@@ -191,9 +224,4 @@ void drawLinkBoard(Object* obj) {
 		}
 		loopCount++;
 	}
-}
-
-// 編集中のリンクボードオブジェクトを描画する
-void drawEditingLinkBoard(Object* obj) {
-	drawLinkBoard(obj);
 }

@@ -14,7 +14,7 @@
 
 #include "Float+Extensions.h"
 #include "Array+Extensions.h"
-#include "../../OpenSource/Box2D/box2d/b2_math.h"
+#include "../../OpenSource/Box2D/Common/b2Math.h"
 #include "../../Utility/DxLibWrap.h"
 #include "../../Touch/TouchData.h"
 #include <cmath>
@@ -23,6 +23,10 @@
 namespace B2Vec2 {
 	// 頂点作成の追加が可能な最低限の距離。ジョイント繋がりの強さに直結する
 	static const float kCreateVertexDistance = 3.0;
+	// 手描き線の頂点の追加が可能な最低限の距離。
+	static const float kHandwrittenVertexDistance = 0.5;
+	// ０
+	static const b2Vec2 kZero = b2Vec2(0.0, 0.0);
 	// 半分
 	static const b2Vec2 kHalf = b2Vec2(0.5, 0.5);
 
@@ -132,6 +136,21 @@ namespace B2Vec2 {
 	 */
 	static float distance(b2Vec2 start, b2Vec2 end) {
 		return distance(start.x, start.y, end.x, end.y);
+	}
+
+	/**
+	 * @brief ２つの座標のX値とY値の低い方を返す
+	 * 
+	 * @param start 
+	 * @param end 
+	 * @return float 
+	 */
+	static float xyShortDistance(b2Vec2 start, b2Vec2 end) {
+		float x = start.x - end.x;
+		float y = start.y - end.y;
+		x = x < 0 ? -x : x; 
+		y = y < 0 ? -y : y;
+		return x < y ? x : y;
 	}
 
 	/**
@@ -420,7 +439,7 @@ namespace B2Vec2 {
 	 * @return b2Vec2 
 	 */
 	static b2Vec2 unitVector(b2Vec2 vec) {
-		float length = powf((vec.x * vec.x) + (vec.y + vec.y), 0.5);
+		const float length = distance(kZero, vec);
 		if(length == 0) {
 			return vec;
 		}
@@ -485,6 +504,44 @@ namespace B2Vec2 {
 			Float::bezieValue(x, t),
 			Float::bezieValue(y, t)
 		);
+	}
+
+	/**
+	 * @brief ４つの制御点のベジェの座標を取得する
+	 * 
+	 * @param pos 制御点
+	 * @param t 進行率(0.0 〜 1.0)
+	 * @return b2Vec2 
+	 */
+	static b2Vec2 bezieFourValue(b2Vec2 pos[4], float t) {
+		const float x[4] = { pos[0].x, pos[1].x, pos[2].x, pos[3].x };
+		const float y[4] = { pos[0].y, pos[1].y, pos[2].y, pos[3].y };
+		return b2Vec2(
+			Float::bezieFourValue(x, t),
+			Float::bezieFourValue(y, t)
+		);
+	}
+
+	/**
+	 * @brief ベジェ曲線の座標を返す
+	 * 
+	 * @param center 中心座標
+	 * @param radian 角度
+	 * @param t ベジェの進行率（ただし、0.25で区切る曲線が４つある）
+	 * @return b2Vec2 
+	 */
+	static b2Vec2 bezieCirclePos(b2Vec2 center, float radian, float t) {
+		// 進行度と回転角度を求める
+		const float plusAngle = Float::BezieCircle::plusAngle(t);
+		t = Float::BezieCircle::bezieRate(t);
+		b2Vec2 base[4] = {
+			b2Vec2(-radian, 0),
+			b2Vec2(-radian, -radian * Float::BezieCircle::kBezieCircleRate),
+			b2Vec2(-radian * Float::BezieCircle::kBezieCircleRate, -radian),
+			b2Vec2(0, -radian)
+		};
+		const b2Vec2 position = bezieFourValue(base, t);
+		return add(center, rotate(position, plusAngle));
 	}
 
 	/**
@@ -576,6 +633,18 @@ namespace B2Vec2 {
 		if(start->y > end->y) {
 			Float::swap(&start->y, &end->y);
 		}
+	}
+
+	/**
+	 * @brief ある座標からある座標へ指定距離行った座標を取得する
+	 * 
+	 * @param start 始点
+	 * @param end 終点
+	 * @param distance 始点から終点にどれだけ進むか
+	 * @return b2Vec2 
+	 */
+	static b2Vec2 betweenFromDistance(b2Vec2 start, b2Vec2 end, float distance) {
+		return add(start, multiplication( unitVector(sub(end, start)), distance));
 	}
 }
 

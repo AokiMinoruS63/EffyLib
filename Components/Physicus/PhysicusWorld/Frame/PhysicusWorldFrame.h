@@ -12,7 +12,7 @@
 #ifndef PHYSICUS_WORLD_FRAME_H
 #define PHYSICUS_WORLD_FRAME_H
 
-#include "../../../OpenSource/Box2D/box2d/box2d.h"
+#include "../../../OpenSource/Box2D/Box2D.h"
 #include "../../../Utility/TypeExtensions/B2Vec2+Extensions.h"
 #include <vector>
 

@@ -14,7 +14,7 @@
 
 #include "Float+Extensions.h"
 #include "B2Vec2+Extensions.h"
-#include "../../OpenSource/Box2D/box2d/box2d.h"
+#include "../../OpenSource/Box2D/Box2D.h"
 #include "../DxLibWrap.h"
 #include "../../Physicus/PhysicusWorld/Frame/PhysicusWorldFrame.h"
 
@@ -56,7 +56,15 @@ namespace B2Body {
 			printfDx("e_chain");
 			break;
 			case b2Shape::e_edge:
-			printfDx("e_edge");
+			{
+				b2EdgeShape* shape = (b2EdgeShape*)fixture->GetShape();
+				b2Vec2 pos1 = B2Vec2::add(position, B2Vec2::rotate(shape->m_vertex1, body->GetAngle()));
+				b2Vec2 pos2 = B2Vec2::add(position, B2Vec2::rotate(shape->m_vertex2, body->GetAngle()));
+				B2Vec2::applyScale(&pos1, scale);
+				B2Vec2::applyScale(&pos2, scale);
+				vertices.push_back(pos1);
+				vertices.push_back(pos2);
+			}
 			break;
 			case b2Shape::e_polygon:
 			{
@@ -104,16 +112,33 @@ namespace B2Body {
 			printfDx("e_chain");
 			break;
 			case b2Shape::e_edge:
-			printfDx("e_edge");
+			{
+				auto itr = fixture;
+				b2EdgeShape* shape = (b2EdgeShape*)fixture->GetShape();
+				while(itr != NULL) {
+					b2Vec2 pos1 = B2Vec2::add(position, shape->m_vertex1);
+					b2Vec2 pos2 = B2Vec2::add(position, shape->m_vertex2);
+					if(area.areaIn(pos1) || area.areaIn(pos2)) {
+						return false;
+					}
+					itr = itr->GetNext();
+					shape = (b2EdgeShape*)itr->GetShape();
+				}			
+			}
 			break;
 			case b2Shape::e_polygon:
 			{
+				auto itr = fixture;
 				b2PolygonShape* shape = (b2PolygonShape*)fixture->GetShape();
-				for(int i = 0; i < shape->m_count; i++) {
-					const b2Vec2 pos = B2Vec2::add(position, shape->m_vertices[i]);
-					if(area.areaIn(pos)) {
-						return false;
+				while(itr != NULL) {
+					for(int i = 0; i < shape->m_count; i++) {
+						const b2Vec2 pos = B2Vec2::add(position, shape->m_vertices[i]);
+						if(area.areaIn(pos)) {
+							return false;
+						}
 					}
+					itr = itr->GetNext();
+					shape = (b2PolygonShape*)itr->GetShape();
 				}
 			}
 			break;
@@ -144,29 +169,38 @@ namespace B2Body {
 			{
 				b2CircleShape* shape = (b2CircleShape*)fixture->GetShape();
 				auto pos = fixture->GetBody()->GetPosition();
-				drawCircle(pos.x / scale, pos.y / scale, shape->m_radius / scale, color);
-				//for (b2Fixture* f = body->GetFixtureList(); f; f = f->GetNext()) {
-				//	f->GetBody()->GetWorldPoint(b2Vec2(0.0, 0.0)).x;
-				//}
-				
+				drawCircle(pos.x / scale, pos.y / scale, shape->m_radius / scale, color);				
 			}
 			break;
 			case b2Shape::e_chain:
 			printfDx("e_chain");
 			break;
 			case b2Shape::e_edge:
-			printfDx("e_edge");
+			{
+				auto nowFixture = fixture;
+				while(nowFixture != NULL) {
+					b2EdgeShape* shape = (b2EdgeShape*)nowFixture->GetShape();
+					b2Vec2 start = B2Vec2::multiplication(B2Vec2::add(shape->m_vertex1, position), 1.0 / scale);
+					b2Vec2 end = B2Vec2::multiplication(B2Vec2::add(shape->m_vertex2, position), 1.0 / scale);
+					drawLine(start.x , start.y, end.x, end.y, color);
+					nowFixture = nowFixture->GetNext();
+				}
+			}
 			break;
 			case b2Shape::e_polygon:
-			//printfDx("e_polygon");
 			{
+				auto itr = fixture;
 				b2PolygonShape* shape = (b2PolygonShape*)fixture->GetShape();
-				for(int i = 0; i < shape->m_count; i++) {
-					auto localStart = shape->m_vertices[i];
-					auto localEnd = shape->m_vertices[(i + 1) % shape->m_count];
-					auto start = fixture->GetBody()->GetWorldPoint(localStart);
-					auto end = fixture->GetBody()->GetWorldPoint(localEnd);
-					drawLine(start.x / scale, start.y / scale, end.x / scale, end.y / scale, color);
+				while(itr != NULL && shape != NULL) {
+					for(int i = 0; i < shape->m_count; i++) {
+						auto localStart = shape->m_vertices[i];
+						auto localEnd = shape->m_vertices[(i + 1) % shape->m_count];
+						auto start = fixture->GetBody()->GetWorldPoint(localStart);
+						auto end = fixture->GetBody()->GetWorldPoint(localEnd);
+						drawLine(start.x / scale, start.y / scale, end.x / scale, end.y / scale, color);
+					}
+					itr = itr->GetNext();
+					shape = (b2PolygonShape*)itr->GetShape();
 				}
 			}
 			break;
