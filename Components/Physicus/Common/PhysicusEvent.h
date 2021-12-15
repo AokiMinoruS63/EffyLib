@@ -34,11 +34,11 @@ namespace Physicus {
 		// イベントのトリガー
 		EventTrigger trigger;
 		// 条件となる時間
-		LONG targetCount;
+		LONG target_count;
 		// 条件となるターゲットのハンドル
-		int targetHandle;
+		int target_handle;
 		// 条件となるターゲットのグループ
-		int targetGroup;
+		int target_group;
 		// 条件が満たした時に何度も行うなら**true**
 		bool no_destroy;
 	};
