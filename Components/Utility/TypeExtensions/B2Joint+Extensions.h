@@ -49,7 +49,7 @@ namespace B2Joint {
 	 * @param collide_connected ジョイントで繋がれた同士のボディが互いに貫通しないなら**true**
 	 * @return b2Joint* 
 	 */
-	static b2Joint* weldJoint(b2World* world, b2Body* body1, b2Body* body2, b2Vec2 joint_position, bool collide_connected = false) {
+	inline b2Joint* weldJoint(b2World* world, b2Body* body1, b2Body* body2, b2Vec2 joint_position, bool collide_connected = false) {
 		// ジョイントの定義
 		b2WeldJointDef jointDef;
 		jointDef.Initialize(body1, body2, joint_position);
@@ -66,7 +66,7 @@ namespace B2Joint {
 	 * @param collide_connected ジョイントで繋がれた同士のボディが互いに貫通しないなら**true**
 	 * @return b2Joint* 
 	 */
-	static b2Joint* weldJointCurrent(b2World* world, std::vector<b2Body*> bodies, bool collide_connected = false) {
+	inline b2Joint* weldJointCurrent(b2World* world, std::vector<b2Body*> bodies, bool collide_connected = false) {
 		// ボディが一つなら処理しない
 		if(bodies.size() < 2) {
 			return NULL;
@@ -84,7 +84,7 @@ namespace B2Joint {
 	 * @param collide_connected ジョイントで繋がれた同士のボディが互いに貫通しないなら**true**
 	 * @return b2Joint* 
 	 */
-	static b2Joint* weldJointTieLoop(b2World* world, std::vector<b2Body*> bodies, bool collide_connected = false) {
+	inline b2Joint* weldJointTieLoop(b2World* world, std::vector<b2Body*> bodies, bool collide_connected = false) {
 		// ボディが一つなら処理しない
 		if(bodies.size() < 2) {
 			return NULL;
@@ -105,7 +105,7 @@ namespace B2Joint {
 	 * @param collide_connected ジョイントで繋がれた同士のボディが互いに貫通しないなら**true**
 	 * @return b2Joint* 
 	 */
-	static b2Joint* distanceJoint(b2World* world, b2Body* body1, b2Body* body2, b2Vec2 joint_position, bool collide_connected = false) {
+	inline b2Joint* distanceJoint(b2World* world, b2Body* body1, b2Body* body2, b2Vec2 joint_position, bool collide_connected = false) {
 		// ジョイントの定義
 		b2DistanceJointDef jointDef;
 		jointDef.Initialize(body1, body2, joint_position, joint_position);
@@ -125,7 +125,7 @@ namespace B2Joint {
 	 * @param collide_connected ジョイントで繋がれた同士のボディが互いに貫通しないなら**true**
 	 * @return b2Joint* 
 	 */
-	static b2Joint* revoluteJoint(b2World* world, b2Body* body1, b2Body* body2, b2Vec2 joint_position, bool collide_connected = false) {
+	inline b2Joint* revoluteJoint(b2World* world, b2Body* body1, b2Body* body2, b2Vec2 joint_position, bool collide_connected = false) {
 		// ジョイントの定義
 		b2RevoluteJointDef jointDef;
 		jointDef.Initialize(body1, body2, joint_position);
@@ -145,7 +145,7 @@ namespace B2Joint {
 	 * @param collide_connected ジョイントで繋がれた同士のボディが互いに貫通しないなら**true**
 	 * @return b2Joint* 
 	 */
-	static b2Joint* prismaticJoint(b2World* world, b2Body* body1, b2Body* body2, b2Vec2 joint_position, b2Vec2 axis = b2Vec2(1.0, 0), bool collide_connected = false) {
+	inline b2Joint* prismaticJoint(b2World* world, b2Body* body1, b2Body* body2, b2Vec2 joint_position, b2Vec2 axis = b2Vec2(1.0, 0), bool collide_connected = false) {
 		// ジョイントの定義
 		b2PrismaticJointDef jointDef;
 		jointDef.Initialize(body1, body2, joint_position, axis);

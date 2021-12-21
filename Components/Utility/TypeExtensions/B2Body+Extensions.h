@@ -39,7 +39,7 @@ namespace B2Body {
 	 * @param body 
 	 * @return const std::vector<b2Vec2> 
 	 */
-	static const std::vector<b2Vec2> vertices(const b2Body* body, float scale = 1.0) {
+	inline const std::vector<b2Vec2> vertices(const b2Body* body, float scale = 1.0) {
 		std::vector<b2Vec2> vertices;
 		const auto fixture = body->GetFixtureList();
 		const auto type = fixture->GetType();
@@ -94,7 +94,7 @@ namespace B2Body {
 	 * @return true 
 	 * @return false 
 	 */
-	static bool areaOut(b2Body* body, Physicus::Frame area) {
+	inline bool areaOut(b2Body* body, Physicus::Frame area) {
 		const auto fixture = body->GetFixtureList();
 		const auto type = fixture->GetType();
 		const auto position = fixture->GetBody()->GetPosition();
@@ -159,7 +159,7 @@ namespace B2Body {
 	 * @param scale 
 	 * @param color 
 	 */
-	static void drawFrame(b2Body* body, float scale, int color = Color::kWhite) {
+	inline void drawFrame(b2Body* body, float scale, int color = Color::kWhite) {
 		const b2Vec2 position = body->GetPosition();
 		const float angle = body->GetAngle();
 		const auto fixture = body->GetFixtureList();

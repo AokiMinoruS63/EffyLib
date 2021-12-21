@@ -53,7 +53,7 @@ namespace BlendMode {
 	 * @param prm パラメータ(0〜255)
 	 * @return Property 
 	 */
-	static Property init(Mode mode = kNoBlend, int prm = kMin) {
+	inline Property init(Mode mode = kNoBlend, int prm = kMin) {
 		return Property { mode, prm };
 	}
 
@@ -64,7 +64,7 @@ namespace BlendMode {
 	 * @param rate パラメータ(0.0〜1.0)
 	 * @return Property 
 	 */
-	static Property init(Mode mode = Mode::kNoBlend, float rate = 0.0) {
+	inline Property init(Mode mode = Mode::kNoBlend, float rate = 0.0) {
 		return Property { mode, (int)(rate * 255.0) };
 	}
 }

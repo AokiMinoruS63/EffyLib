@@ -30,6 +30,7 @@
 #include "TypeExtensions/BlendMode+Extension.h"
 #include "TypeExtensions/ScreenState+Extensions.h"
 #include <stdarg.h>
+#include "../Common/Vec2.h"
 
 #ifdef EMSCRIPTEN
 #include "ScreenSizeGenerator.h"
@@ -315,7 +316,7 @@ int drawCircleAA(float x, float y, float r, int posnum, unsigned int color, int 
  * @param line_chickness 縁の太さ
  * @return int 0: 成功、-1: エラー発生
  */
-int drawCircleAA(b2Vec2 center, float r, int posnum, unsigned int color, int global_pos = FALSE, int fill_flag = TRUE, 
+int drawCircleAA(Vec2 center, float r, int posnum, unsigned int color, int global_pos = FALSE, int fill_flag = TRUE, 
                     int line_chickness = 1);
 
 /**
@@ -516,7 +517,7 @@ int drawModiGraph( int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y
  * @param global_pos パーティションを考慮したグローバル座標で描画するか、のフラグ。TRUEでグローバル座標描画
  * @return int 0: 成功、-1: エラー発生
  */
-int drawModiGraph( b2Vec2 leftUp, b2Vec2 rightUp, b2Vec2 rightBottom, b2Vec2 leftBottom,
+int drawModiGraph( Vec2 leftUp, Vec2 rightUp, Vec2 rightBottom, Vec2 leftBottom,
                     int graph_handle , int trans_flag, int global_pos = FALSE);
 
 /**
@@ -528,7 +529,7 @@ int drawModiGraph( b2Vec2 leftUp, b2Vec2 rightUp, b2Vec2 rightBottom, b2Vec2 lef
  * @param global_pos パーティションを考慮したグローバル座標で描画するか、のフラグ。TRUEでグローバル座標描画
  * @return int 0: 成功、-1: エラー発生
  */
-int drawModiGraph( std::vector<b2Vec2> vec,
+int drawModiGraph( std::vector<Vec2> vec,
                     int graph_handle , int trans_flag, int global_pos = FALSE);
 
 /**
@@ -562,7 +563,7 @@ int drawModiGraphF( float x1, float y1, float x2, float y2, float x3, float y3, 
  * @param global_pos パーティションを考慮したグローバル座標で描画するか、のフラグ。TRUEでグローバル座標描画
  * @return int 0: 成功、-1: エラー発生
  */
-int drawModiGraphF( b2Vec2 pos1, b2Vec2 pos2, b2Vec2 pos3, b2Vec2 pos4, 
+int drawModiGraphF( Vec2 pos1, Vec2 pos2, Vec2 pos3, Vec2 pos4, 
 					int graph_handle , int trans_flag, int global_pos = FALSE);
 
 /**
@@ -601,7 +602,7 @@ float nextBezieAdvance(float now_advance, float roughness, bool loop, bool init 
  * @param global_pos パーティションを考慮したグローバル座標で描画するか、のフラグ。TRUEでグローバル座標描画
  * @return int 終了後のインデックス
  */
-int drawBezie(b2Vec2 left[3], b2Vec2 right[3], float roughness, std::vector<int> images, bool loop, bool edge_draw, int first_index, float advance = 1.0, int global_pos = FALSE);
+int drawBezie(Vec2 left[3], Vec2 right[3], float roughness, std::vector<int> images, bool loop, bool edge_draw, int first_index, float advance = 1.0, int global_pos = FALSE);
 
 /**
  * @brief グラフィックの指定矩形部分のみを描画

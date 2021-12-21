@@ -403,7 +403,7 @@ int drawCircleAA(float x, float y, float r, int posnum, unsigned int color, int 
 }
 
 // 円の描画(アンチエイリアス付き)
-int drawCircleAA(b2Vec2 center, float r, int posnum, unsigned int color, int global_pos, int fill_flag, int line_chickness) {
+int drawCircleAA(Vec2 center, float r, int posnum, unsigned int color, int global_pos, int fill_flag, int line_chickness) {
     if (global_pos == FALSE)
         setScreenPosToGlobal(&center.x, &center.y);
     return drawCircleAA(center.x, center.y, r, posnum, color, global_pos, fill_flag, line_chickness);
@@ -513,12 +513,12 @@ int drawModiGraph( int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y
 }
 
 // メモリに読みこんだグラフィックの自由変形描画
-int drawModiGraph( b2Vec2 leftUp, b2Vec2 rightUp, b2Vec2 rightBottom, b2Vec2 leftBottom, int graph_handle , int trans_flag, int global_pos) {
+int drawModiGraph( Vec2 leftUp, Vec2 rightUp, Vec2 rightBottom, Vec2 leftBottom, int graph_handle , int trans_flag, int global_pos) {
     return drawModiGraph((int)leftUp.x, (int)leftUp.y, (int)rightUp.x, (int)rightUp.y, (int)rightBottom.x, (int)rightBottom.y, (int)leftBottom.x, (int)leftBottom.y, graph_handle, trans_flag, global_pos);
 }
 
 // メモリに読みこんだグラフィックの自由変形描画
-int drawModiGraph( std::vector<b2Vec2> vec, int graph_handle , int trans_flag, int global_pos) {
+int drawModiGraph( std::vector<Vec2> vec, int graph_handle , int trans_flag, int global_pos) {
 	if(vec.size() < 4) {
 		return kErrorCode;
 	}
@@ -536,8 +536,8 @@ int drawModiGraphF( float x1, float y1, float x2, float y2, float x3, float y3, 
     return DrawModiGraphF(x1, y1, x2, y2, x3, y3, x4, y4, graph_handle, trans_flag);
 }
 
-// メモリに読みこんだグラフィックの自由変形描画(float,引数がb2Vec2)
-int drawModiGraphF( b2Vec2 pos1, b2Vec2 pos2, b2Vec2 pos3, b2Vec2 pos4, int graph_handle , int trans_flag, int global_pos) {
+// メモリに読みこんだグラフィックの自由変形描画(float,引数がVec2)
+int drawModiGraphF( Vec2 pos1, Vec2 pos2, Vec2 pos3, Vec2 pos4, int graph_handle , int trans_flag, int global_pos) {
 	return drawModiGraphF(pos1.x, pos1.y, pos2.x, pos2.y, pos3.x, pos3.y, pos4.x, pos4.y, graph_handle, trans_flag, global_pos);
 }
 
@@ -577,7 +577,7 @@ float nextBezieAdvance(float now_advance, float roughness, bool loop, bool init)
 }
 
 // 制御点が３つのベジェ曲線を画像で描画する
-int drawBezie(b2Vec2 left[3], b2Vec2 right[3], float roughness, std::vector<int> images, bool loop, bool edge_draw, int first_index, float advance, int global_pos) {
+int drawBezie(Vec2 left[3], Vec2 right[3], float roughness, std::vector<int> images, bool loop, bool edge_draw, int first_index, float advance, int global_pos) {
 	if(advance == Float::kMin) {
 		return first_index;
 	}
@@ -588,7 +588,7 @@ int drawBezie(b2Vec2 left[3], b2Vec2 right[3], float roughness, std::vector<int>
 	float next;
 	bool end = false;
 	// 左の始点、終点、右の始点、終点
-	b2Vec2 so, si, go, gi;
+	Vec2 so, si, go, gi;
 	roughness = Float::clamp(roughness, 0.0, 1.0);
 	next = loop ? Float::clamp(t + roughness, 0.0, 1.0) : 1.0;
 	if(advance < next) {

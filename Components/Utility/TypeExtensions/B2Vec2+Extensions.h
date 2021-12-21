@@ -60,7 +60,7 @@ namespace B2Vec2 {
 	 * @param vr 
 	 * @return float 
 	 */
-	static float innerProduct(b2Vec2& vl, b2Vec2& vr) {
+	inline float innerProduct(b2Vec2& vl, b2Vec2& vr) {
 		return vl.x * vr.x + vl.y * vr.y;
 	}
 
@@ -71,7 +71,7 @@ namespace B2Vec2 {
 	 * @param end 終点
 	 * @return b2Vec2 
 	 */
-	static b2Vec2 halfWay(b2Vec2 start, b2Vec2 end) {
+	inline b2Vec2 halfWay(b2Vec2 start, b2Vec2 end) {
 		return b2Vec2(Float::halfWay(start.x, end.x), Float::halfWay(start.y, end.y));
 	}
 
@@ -84,7 +84,7 @@ namespace B2Vec2 {
 	 * @param gy 
 	 * @return b2Vec2 
 	 */
-	static b2Vec2 halfWay(float sx, float sy, float gx, float gy) {
+	inline b2Vec2 halfWay(float sx, float sy, float gx, float gy) {
 		return b2Vec2(Float::halfWay(sx, gx), Float::halfWay(sy, gy));
 	}
 
@@ -98,7 +98,7 @@ namespace B2Vec2 {
 	 * @param rate 進行度
 	 * @return b2Vec2 
 	 */
-	static b2Vec2 between(float sx, float sy, float gx, float gy, float rate) {
+	inline b2Vec2 between(float sx, float sy, float gx, float gy, float rate) {
 		return b2Vec2(Float::between(sx, gx, rate), Float::between(sy, gy, rate));
 	}
 
@@ -110,7 +110,7 @@ namespace B2Vec2 {
 	 * @param rate 進行度
 	 * @return b2Vec2 
 	 */
-	static b2Vec2 between(b2Vec2 start, b2Vec2 end, float rate) {
+	inline b2Vec2 between(b2Vec2 start, b2Vec2 end, float rate) {
 		return between(start.x, start.y, end.x, end.y, rate);
 	}
 
@@ -123,7 +123,7 @@ namespace B2Vec2 {
 	 * @param gy 
 	 * @return float 
 	 */
-	static float distance(float sx, float sy, float gx, float gy) {
+	inline float distance(float sx, float sy, float gx, float gy) {
 		return sqrtf(powf(gx - sx, 2) + powf(gy - sy, 2));
 	}
 
@@ -134,7 +134,7 @@ namespace B2Vec2 {
 	 * @param end 終点
 	 * @return float 
 	 */
-	static float distance(b2Vec2 start, b2Vec2 end) {
+	inline float distance(b2Vec2 start, b2Vec2 end) {
 		return distance(start.x, start.y, end.x, end.y);
 	}
 
@@ -145,7 +145,7 @@ namespace B2Vec2 {
 	 * @param end 
 	 * @return float 
 	 */
-	static float xyShortDistance(b2Vec2 start, b2Vec2 end) {
+	inline float xyShortDistance(b2Vec2 start, b2Vec2 end) {
 		float x = start.x - end.x;
 		float y = start.y - end.y;
 		x = x < 0 ? -x : x; 
@@ -159,7 +159,7 @@ namespace B2Vec2 {
 	 * @param vec 座標
 	 * @param scale 拡大率
 	 */
-	static void applyScale(b2Vec2 *vec, float scale) {
+	inline void applyScale(b2Vec2 *vec, float scale) {
 		vec->x *= scale;
 		vec->y *= scale;
 	}
@@ -170,7 +170,7 @@ namespace B2Vec2 {
 	 * @param vec ポリゴン
 	 * @param scale 拡大率
 	 */
-	static void applyScale(std::vector<b2Vec2> vec, float scale) {
+	inline void applyScale(std::vector<b2Vec2> vec, float scale) {
 		if(scale == 0) {
 			return;
 		}
@@ -186,7 +186,7 @@ namespace B2Vec2 {
 	 * @param vec 座標
 	 * @param rate 縮小率
 	 */
-	static void applyRate(b2Vec2 *vec, float rate) {
+	inline void applyRate(b2Vec2 *vec, float rate) {
 		applyScale(vec, 1.0 / rate);
 	}
 
@@ -196,7 +196,7 @@ namespace B2Vec2 {
 	 * @param vec ポリゴン
 	 * @param rate 縮小率
 	 */
-	static void applyRate(std::vector<b2Vec2> vec, float rate) {
+	inline void applyRate(std::vector<b2Vec2> vec, float rate) {
 		applyScale(vec, 1.0 / rate);
 	}
 
@@ -207,7 +207,7 @@ namespace B2Vec2 {
 	 * @param target 変換する座標
 	 * @return b2Vec2 
 	 */
-	static b2Vec2 relativePosition(b2Vec2 base, b2Vec2 target) {
+	inline b2Vec2 relativePosition(b2Vec2 base, b2Vec2 target) {
 		return b2Vec2(target.x - base.x, target.y - base.y);
 	}
 
@@ -217,7 +217,7 @@ namespace B2Vec2 {
 	 * @param base 基準座標
 	 * @param target 適用するポリゴン
 	 */
-	static void setRelativePosition(b2Vec2 base, std::vector<b2Vec2> target) {
+	inline void setRelativePosition(b2Vec2 base, std::vector<b2Vec2> target) {
 		for(auto& itr: target) {
 			itr = relativePosition(base, itr);
 		}
@@ -230,7 +230,7 @@ namespace B2Vec2 {
 	 * @param pos2 
 	 * @return b2Vec2 
 	 */
-	static b2Vec2 add(b2Vec2 pos1, b2Vec2 pos2) {
+	inline b2Vec2 add(b2Vec2 pos1, b2Vec2 pos2) {
 		return b2Vec2(pos1.x + pos2.x, pos1.y + pos2.y);
 	}
 
@@ -241,7 +241,7 @@ namespace B2Vec2 {
 	 * @param pos2 
 	 * @return b2Vec2 
 	 */
-	static b2Vec2 sub(b2Vec2 pos1, b2Vec2 pos2) {
+	inline b2Vec2 sub(b2Vec2 pos1, b2Vec2 pos2) {
 		return b2Vec2(pos1.x - pos2.x, pos1.y - pos2.y);
 	}
 
@@ -252,7 +252,7 @@ namespace B2Vec2 {
 	 * @param pos2 
 	 * @return b2Vec2 
 	 */
-	static b2Vec2 multiplication(b2Vec2 pos1, b2Vec2 pos2) {
+	inline b2Vec2 multiplication(b2Vec2 pos1, b2Vec2 pos2) {
 		return b2Vec2(pos1.x * pos2.x, pos1.y * pos2.y);
 	}
 
@@ -263,7 +263,7 @@ namespace B2Vec2 {
 	 * @param scale 
 	 * @return b2Vec2 
 	 */
-	static b2Vec2 multiplication(b2Vec2 pos, float scale) {
+	inline b2Vec2 multiplication(b2Vec2 pos, float scale) {
 		return b2Vec2(pos.x * scale, pos.y * scale);
 	}
 
@@ -274,7 +274,7 @@ namespace B2Vec2 {
 	 * @param rate 
 	 * @return b2Vec2 
 	 */
-	static b2Vec2 division(b2Vec2 pos, float rate) {
+	inline b2Vec2 division(b2Vec2 pos, float rate) {
 		if(rate == 0) {
 			return pos;
 		}
@@ -287,7 +287,7 @@ namespace B2Vec2 {
 	 * @param vec std::vector<b2Vec2>
 	 * @return b2Vec2 
 	 */
-	static b2Vec2 center(std::vector<b2Vec2> vec) {
+	inline b2Vec2 center(std::vector<b2Vec2> vec) {
 		b2Vec2 pos = b2Vec2();
 		for(auto& itr: vec) {
 			pos = B2Vec2::add(pos, itr);
@@ -302,7 +302,7 @@ namespace B2Vec2 {
 	 * @param y 
 	 * @return b2Vec2 
 	 */
-	static b2Vec2 fromIntPos(int x, int y) {
+	inline b2Vec2 fromIntPos(int x, int y) {
 		return b2Vec2((float)x, (float)y);
 	}
 
@@ -313,7 +313,7 @@ namespace B2Vec2 {
 	 * @param scale 
 	 * @return b2Vec2 
 	 */
-	static b2Vec2 fromTouch(touch_t touch, float scale = 1.0) {
+	inline b2Vec2 fromTouch(touch_t touch, float scale = 1.0) {
 		return b2Vec2(((float)touch.x) * scale, ((float)touch.y) * scale);
 	}
 
@@ -325,7 +325,7 @@ namespace B2Vec2 {
 	 * @return true 
 	 * @return false 
 	 */
-	static bool checkCreatePos(b2Vec2 start, b2Vec2 end) {
+	inline bool checkCreatePos(b2Vec2 start, b2Vec2 end) {
 		return B2Vec2::distance(start, end) >= kCreateVertexDistance;
 	}
 
@@ -337,7 +337,7 @@ namespace B2Vec2 {
 	 * @param beginIndex タッチが開始されたインデックス
 	 * @return std::vector<b2Vec2> 
 	 */
-	static std::vector<b2Vec2> locus(std::vector<int> xVec, std::vector<int> yVec, int beginIndex) {
+	inline std::vector<b2Vec2> locus(std::vector<int> xVec, std::vector<int> yVec, int beginIndex) {
 		std::vector<b2Vec2> vertices;
 		int beforeIndex = beginIndex;
 		#define START fromIntPos(xVec[beforeIndex], yVec[beforeIndex])
@@ -365,7 +365,7 @@ namespace B2Vec2 {
 	 * @param last 1つ前の座標
 	 * @param lastLast 2つ前の座標
 	 */
-	static void recentLocus(std::vector<b2Vec2> locusList, b2Vec2* current, b2Vec2* last, b2Vec2* lastLast) {
+	inline void recentLocus(std::vector<b2Vec2> locusList, b2Vec2* current, b2Vec2* last, b2Vec2* lastLast) {
 		*current = locusList.back();
 		*last = locusList.size() < 2 ? *current : locusList.at(locusList.size() - 2);
 		// TODO: lastLastの座標が折り返した時におかしくなるので要修正
@@ -381,7 +381,7 @@ namespace B2Vec2 {
 	 * @param horizon -90度、90度に回転させる時のみ使用
 	 * @return b2Vec2 
 	 */
-	static b2Vec2 rotate(b2Vec2 pos, float radius, float radian, Horizon horizon = kCenter ) {
+	inline b2Vec2 rotate(b2Vec2 pos, float radius, float radian, Horizon horizon = kCenter ) {
 		float adjustedAngle;
 		switch(horizon) {
 			case kLeading:
@@ -405,7 +405,7 @@ namespace B2Vec2 {
 	 * @param radian 角度
 	 * @return b2Vec2 回転後の座標
 	 */
-	static b2Vec2 rotate(b2Vec2 pos, float radian) {
+	inline b2Vec2 rotate(b2Vec2 pos, float radian) {
 		return b2Vec2(pos.x * cos(radian) - pos.y * sin(radian), pos.x * sin(radian) + pos.y * cos(radian));
 	}
 
@@ -417,7 +417,7 @@ namespace B2Vec2 {
 	 * @return true 
 	 * @return false 
 	 */
-	static bool isTieLoop(std::vector<b2Vec2> vec, float range) {
+	inline bool isTieLoop(std::vector<b2Vec2> vec, float range) {
 		return distance(vec.front().x, vec.front().y, vec.back().x, vec.back().y) < range;
 	}
 
@@ -428,7 +428,7 @@ namespace B2Vec2 {
 	 * @param end 終点
 	 * @return float 
 	 */
-	static float angle(b2Vec2 start, b2Vec2 end) {
+	inline float angle(b2Vec2 start, b2Vec2 end) {
 		return atan2(start.y - end.y, start.x - end.x);
 	}
 
@@ -438,7 +438,7 @@ namespace B2Vec2 {
 	 * @param vec 
 	 * @return b2Vec2 
 	 */
-	static b2Vec2 unitVector(b2Vec2 vec) {
+	inline b2Vec2 unitVector(b2Vec2 vec) {
 		const float length = distance(kZero, vec);
 		if(length == 0) {
 			return vec;
@@ -453,7 +453,7 @@ namespace B2Vec2 {
 	 * @param posB 
 	 * @return float 
 	 */
-	static float crossValue(b2Vec2 posA, b2Vec2 posB) {
+	inline float crossValue(b2Vec2 posA, b2Vec2 posB) {
 		return posA.x * posB.y - posA.y * posB.x;
 	}
 
@@ -467,7 +467,7 @@ namespace B2Vec2 {
 	 * @param posD 線分２の終点
 	 * @return Intersect 
 	 */
-	static Intersect intersectLines(b2Vec2* result, b2Vec2 posA, b2Vec2 posB, b2Vec2 posC, b2Vec2 posD) {
+	inline Intersect intersectLines(b2Vec2* result, b2Vec2 posA, b2Vec2 posB, b2Vec2 posC, b2Vec2 posD) {
 		const b2Vec2 v = sub(posC, posA);
 		b2Vec2 v1 = sub(posB, posA);
 		const b2Vec2 v2 = sub(posD, posC);
@@ -497,7 +497,7 @@ namespace B2Vec2 {
 	 * @param t 進行率(0.0 〜 1.0)
 	 * @return b2Vec2 
 	 */
-	static b2Vec2 bezieValue(b2Vec2 pos[3], float t) {
+	inline b2Vec2 bezieValue(b2Vec2 pos[3], float t) {
 		const float x[3] = { pos[0].x, pos[1].x, pos[2].x };
 		const float y[3] = { pos[0].y, pos[1].y, pos[2].y };
 		return b2Vec2(
@@ -513,7 +513,7 @@ namespace B2Vec2 {
 	 * @param t 進行率(0.0 〜 1.0)
 	 * @return b2Vec2 
 	 */
-	static b2Vec2 bezieFourValue(b2Vec2 pos[4], float t) {
+	inline b2Vec2 bezieFourValue(b2Vec2 pos[4], float t) {
 		const float x[4] = { pos[0].x, pos[1].x, pos[2].x, pos[3].x };
 		const float y[4] = { pos[0].y, pos[1].y, pos[2].y, pos[3].y };
 		return b2Vec2(
@@ -530,7 +530,7 @@ namespace B2Vec2 {
 	 * @param t ベジェの進行率（ただし、0.25で区切る曲線が４つある）
 	 * @return b2Vec2 
 	 */
-	static b2Vec2 bezieCirclePos(b2Vec2 center, float radian, float t) {
+	inline b2Vec2 bezieCirclePos(b2Vec2 center, float radian, float t) {
 		// 進行度と回転角度を求める
 		const float plusAngle = Float::BezieCircle::plusAngle(t);
 		t = Float::BezieCircle::bezieRate(t);
@@ -550,7 +550,7 @@ namespace B2Vec2 {
 	 * @param vec 
 	 * @return DxLib::VECTOR 
 	 */
-	static DxLib::VECTOR toDxLibVector(b2Vec2 vec) {
+	inline DxLib::VECTOR toDxLibVector(b2Vec2 vec) {
 		DxLib::VECTOR vector;
 		vector.x = vec.x;
 		vector.y = vec.y;
@@ -565,7 +565,7 @@ namespace B2Vec2 {
 	 * @param color 
 	 * @return std::vector<VERTEX2D> 
 	 */
-	static std::vector<VERTEX2D> toDxLibRectVertices(std::vector<b2Vec2> vertices, int color) {
+	inline std::vector<VERTEX2D> toDxLibRectVertices(std::vector<b2Vec2> vertices, int color) {
 		const int max = 6;
 		VERTEX2D vecs[max];
 		int r, g, b;
@@ -614,7 +614,7 @@ namespace B2Vec2 {
 	 * @param pos1 
 	 * @param pos2 
 	 */
-	static void swap(b2Vec2* pos1, b2Vec2* pos2) {
+	inline void swap(b2Vec2* pos1, b2Vec2* pos2) {
 		const b2Vec2 tmp = *pos1;
 		*pos1 = *pos2;
 		*pos2 = tmp;
@@ -626,7 +626,7 @@ namespace B2Vec2 {
 	 * @param start 
 	 * @param end 
 	 */
-	static void setStartEnd(b2Vec2* start, b2Vec2* end) {
+	inline void setStartEnd(b2Vec2* start, b2Vec2* end) {
 		if(start->x > end->x) {
 			Float::swap(&start->x, &end->x);
 		}
@@ -643,7 +643,7 @@ namespace B2Vec2 {
 	 * @param distance 始点から終点にどれだけ進むか
 	 * @return b2Vec2 
 	 */
-	static b2Vec2 betweenFromDistance(b2Vec2 start, b2Vec2 end, float distance) {
+	inline b2Vec2 betweenFromDistance(b2Vec2 start, b2Vec2 end, float distance) {
 		return add(start, multiplication( unitVector(sub(end, start)), distance));
 	}
 }

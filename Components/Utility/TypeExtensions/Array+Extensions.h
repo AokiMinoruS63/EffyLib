@@ -27,7 +27,7 @@ namespace Array {
 	 * @return std::vector<T>* 
 	 */
 	template <typename T>
-	std::vector<T> toVector(T* array, int size) {
+	inline std::vector<T> toVector(T* array, int size) {
 		std::vector<T> vec;
 		for(int i = 0; i < size; i++) {
 			vec.push_back(array[i]);
@@ -42,7 +42,7 @@ namespace Array {
 	 * @param array 配列
 	 */
 	template <typename T>
-	void fromVector(std::vector<T> vec, T* array) {
+	inline void fromVector(std::vector<T> vec, T* array) {
 		for(int i = 0; i < vec.size(); i++) {
 			array[i] = vec.at(i);
 		}
