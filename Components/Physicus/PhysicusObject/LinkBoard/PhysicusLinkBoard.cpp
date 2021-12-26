@@ -14,6 +14,7 @@
 #include "../Common/PhysicusObjectCommon.h"
 #include "../../../Utility/DxLibWrap.h"
 #include "../../PhysicusWorld/Frame/PhysicusWorldFrame.h"
+#include "../../../Common/Constant/MathConstant.h"
 #include <vector>
 
 using namespace Physicus;
@@ -64,7 +65,7 @@ void createLinkBoardBody(Object* obj, int index) {
 	obj->appendLocusFrame({vertices[2], vertices[3]});
 
 	const float angleDifference = Float::angleDifference(angle, lastAngle);
-	if(angleDifference > DX_PI_F * 0.4) {
+	if(angleDifference > kPiFloat * 0.4) {
 		vertices[0] = B2Vec2::rotate(last, width, angle, B2Vec2::kLeading);
 		vertices[1] = B2Vec2::rotate(last, width, angle, B2Vec2::kTrailing);
 	}

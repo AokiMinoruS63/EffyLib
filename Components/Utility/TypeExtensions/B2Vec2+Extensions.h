@@ -17,6 +17,7 @@
 #include "../../OpenSource/Box2D/Common/b2Math.h"
 #include "../../Utility/DxLibWrap.h"
 #include "../../Touch/TouchData.h"
+#include "../../Common/Constant/MathConstant.h"
 #include <cmath>
 #include <vector>
 
@@ -385,10 +386,10 @@ namespace B2Vec2 {
 		float adjustedAngle;
 		switch(horizon) {
 			case kLeading:
-			adjustedAngle = - DX_PI_F / 2.0;
+			adjustedAngle = - kHalfPiFloat;
 			break;
 			case kTrailing:
-			adjustedAngle = DX_PI_F / 2.0;
+			adjustedAngle = kHalfPiFloat;
 			break;
 			adjustedAngle = 0;
 			default:break;

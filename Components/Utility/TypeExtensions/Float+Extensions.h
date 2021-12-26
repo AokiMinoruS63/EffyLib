@@ -13,6 +13,7 @@
 #define FLOAT_EXTENSION_H
 
 #include "../../Utility/DxLibWrap.h"
+#include "../../Common/Constant/MathConstant.h"
 #include <vector>
 
 namespace Float {
@@ -32,32 +33,32 @@ namespace Float {
 
 	namespace Angle {
 		// 左上角度
-		static const float kLeftTop = DX_PI_F / 3.0;
+		static const float kLeftTop = kPiFloat / 3.0;
 		// 上角度
-		static const float kTop = DX_PI_F / 2.0;
+		static const float kTop = kHalfPiFloat;
 		// 右上角度
-		static const float kRightTop = DX_PI_F * 2.0 / 3.0;
+		static const float kRightTop = kPiFloat / 3.0 * 2.0;
 		// 左角度
 		static const float kLeft = 0.0;
 		// 右角度
-		static const float kRight = DX_PI_F;
+		static const float kRight = kPiFloat;
 		// 左下角度
-		static const float kLeftBottom = -DX_PI_F / 3.0;
+		static const float kLeftBottom = -kPiFloat / 3.0;
 		// 下角度
-		static const float kBottom = -DX_PI_F / 2.0;
+		static const float kBottom = -kHalfPiFloat;
 		// 右下角度
-		static const float kRightBottom = -DX_PI_F * 2.0  / 3.0;
+		static const float kRightBottom = -kPiFloat / 3.0 * 2.0;
 
 		// 0度
 		static const float kZeroDegree = 0.0;
 		// 90度
-		static const float kNinetyDegree = DX_PI_F * 0.5;
+		static const float kNinetyDegree = kHalfPiFloat;
 		// 180度
-		static const float kOneEightyDegree = DX_PI_F;
+		static const float kOneEightyDegree = kPiFloat;
 		// 270度
-		static const float kTwoSeventyDegree = DX_PI_F * 1.5;
+		static const float kTwoSeventyDegree = kPiFloat * 1.5;
 		// 360度
-		static const float kThreeSixtyDegree = DX_PI_F * 2.0;
+		static const float kThreeSixtyDegree = kTwoPiFloat;
 
 		/**
 		 * @brief レートから角度への変換
@@ -66,7 +67,7 @@ namespace Float {
 		 * @return float 角度(radian)
 		 */
 		static float fromRate(float rate) {
-			return rate * DX_PI_F * 2.0;
+			return rate * kPiFloat * 2.0;
 		}
 	}
 
@@ -214,10 +215,10 @@ namespace Float {
 	 * @return float 
 	 */
 	inline float angleDifference(float angleA, float angleB) {
-		if(angleA < DX_PI_F * -kHalf && angleB > DX_PI_F * kHalf) {
-			angleA += DX_PI_F * 2.0;
-		} else if(angleB < DX_PI_F * -kHalf && angleA > DX_PI_F * kHalf) {
-			angleB += DX_PI_F * 2.0;
+		if(angleA < -kHalfPiFloat && angleB > kHalfPiFloat) {
+			angleA += kTwoPiFloat;
+		} else if(angleB < -kHalfPiFloat && angleA > kHalfPiFloat) {
+			angleB += kTwoPiFloat;
 		}
 		float dif = angleB - angleA;
 		if(dif < 0) {

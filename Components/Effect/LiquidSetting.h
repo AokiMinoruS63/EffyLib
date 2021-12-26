@@ -15,6 +15,7 @@
 #include "../Utility/TypeExtensions/Color+Extensions.h"
 #include "../Utility/TypeExtensions/Int+Extensions.h"
 #include "math.h"
+#include "../Common/Constant/MathConstant.h"
 
 namespace Effect {
 	struct LiquidSetting {
@@ -84,7 +85,7 @@ namespace Effect {
 		 * @return int 
 		 */
 		int blendPrm(LONG cnt) {
-			int prm = effect_prm_min + sin(DX_PI_F * 2.0f / ((float)effect_cycle) * ((float)(effect_prm_max - effect_prm_min)));
+			int prm = effect_prm_min + sin(kPiFloat * 2.0f / ((float)effect_cycle) * ((float)(effect_prm_max - effect_prm_min)));
 			prm = Int::clamp(prm, 0, 255);
 			return prm;
 		}

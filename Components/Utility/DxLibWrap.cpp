@@ -347,6 +347,11 @@ int clearDrawScreen() {
 	return ClearDrawScreen();
 }
 
+// RGBから色を取得する
+int getColor(int red, int green, int blue) {
+	return GetColor(red, green, blue);
+}
+
 // 色をintからRGBに変換する
 int getColor2(unsigned int color, Color::Color* color_buf) {
 	return GetColor2(color, &color_buf->red, &color_buf->green, &color_buf->blue);
@@ -379,8 +384,15 @@ int drawBox(int x1 , int y1 , int x2 , int y2 , unsigned int color , int fill_fl
     return DrawBox(x1, y1, x2, y2, color, fill_flag);
 }
 
+// 四角形を描画
+int drawBox(Rect rect, unsigned int color , int fill_flag, int global_pos) {
+	const Vec2 leftTop = rect.leftTop();
+	const Vec2 rightBottom = rect.rightBottom();
+	return drawBox((int)leftTop.x, (int)leftTop.y, (int)rightBottom.x, (int)rightBottom.y, color, fill_flag, global_pos);
+}
+
 // 四角形を描画(アンチエイリアス付き)
-int drawBoxAA(int x1 , int y1 , int x2 , int y2 , unsigned int color , int fill_flag, int global_pos) {
+int drawBoxAA(float x1 , float y1 , float x2 , float y2 , unsigned int color , int fill_flag, int global_pos) {
     if (global_pos == FALSE) {
         setScreenPosToGlobal(&x1, &y1);
         setScreenPosToGlobal(&x2, &y2);
@@ -388,11 +400,23 @@ int drawBoxAA(int x1 , int y1 , int x2 , int y2 , unsigned int color , int fill_
     return DrawBoxAA(x1, y1, x2, y2, color, fill_flag);
 }
 
+// 四角形を描画(アンチエイリアス付き)
+int drawBoxAA(Rect rect, unsigned int color, int fill_flag, int global_pos) {
+	const Vec2 leftTop = rect.leftTop();
+	const Vec2 rightBottom = rect.rightBottom();
+	return drawBoxAA(leftTop.x, leftTop.y, rightBottom.x, rightBottom.y, color, fill_flag, global_pos);
+}
+
 // 円の描画
 int drawCircle(int x, int y, int r, unsigned int color, int global_pos, int fill_flag, int line_chickness) {
     if (global_pos == FALSE)
         setScreenPosToGlobal(&x, &y);
     return DrawCircle(x, y, r, color, fill_flag, line_chickness);
+}
+
+// 円の描画
+int drawCircle(Circle circle, unsigned int color, int global_pos, int fill_flag, int line_chickness) {
+	return drawCircle(circle.x, circle.y, circle.radius, color, global_pos, fill_flag, line_chickness);
 }
 
 // 円の描画(アンチエイリアス付き)
@@ -407,6 +431,11 @@ int drawCircleAA(Vec2 center, float r, int posnum, unsigned int color, int globa
     if (global_pos == FALSE)
         setScreenPosToGlobal(&center.x, &center.y);
     return drawCircleAA(center.x, center.y, r, posnum, color, global_pos, fill_flag, line_chickness);
+}
+
+// 円の描画(アンチエイリアス付き)
+int drawCircleAA(Circle circle, int posnum, unsigned int color, int global_pos, int fill_flag, int line_chickness) {
+	return drawCircleAA(circle.x, circle.y, circle.radius, posnum, color, global_pos, fill_flag, line_chickness);
 }
 
 // 楕円を描く

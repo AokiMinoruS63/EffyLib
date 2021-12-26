@@ -31,6 +31,8 @@
 #include "TypeExtensions/ScreenState+Extensions.h"
 #include <stdarg.h>
 #include "../Common/Vec2.h"
+#include "../Common/Shape/Rect.h"
+#include "../Common/Shape/Circle.h"
 
 #ifdef EMSCRIPTEN
 #include "ScreenSizeGenerator.h"
@@ -207,6 +209,16 @@ int setDrawScreenBack();
 int clearDrawScreen();
 
 /**
+ * @brief RGBから色を取得する
+ * 
+ * @param red 
+ * @param green 
+ * @param blue 
+ * @return int 
+ */
+int getColor(int red, int green, int blue);
+
+/**
  * @brief 色をintからRGBに変換する
  * 
  * @param color 
@@ -260,6 +272,17 @@ int drawLineAA( int x1 , int y1 , int x2 , int y2 , unsigned int color, int glob
 int drawBox(int x1 , int y1 , int x2 , int y2 , unsigned int color , int fill_flag, int global_pos = FALSE);
 
 /**
+ * @brief 四角形の描画
+ * 
+ * @param rect 四角形の形状
+ * @param color 描画する四角形の色
+ * @param fill_flag 四角の中身を塗りつぶすか、のフラグ。TRUEで塗り
+ * @param global_pos パーティションを考慮したグローバル座標で描画するか、のフラグ。TRUEでグローバル座標描画
+ * @return int 0: 成功、-1: エラー発生
+ */
+int drawBox(Rect rect, unsigned int color , int fill_flag, int global_pos = FALSE);
+
+/**
  * @brief 四角形を描画(アンチエイリアス付き)
  * 
  * @param x1 描画する四角形の左上の頂点X座標
@@ -271,7 +294,18 @@ int drawBox(int x1 , int y1 , int x2 , int y2 , unsigned int color , int fill_fl
  * @param global_pos パーティションを考慮したグローバル座標で描画するか、のフラグ。TRUEでグローバル座標描画
  * @return int 0: 成功、-1: エラー発生
  */
-int drawBoxAA(int x1 , int y1 , int x2 , int y2 , unsigned int color , int fill_flag, int global_pos = FALSE);
+int drawBoxAA(float x1 , float y1 , float x2 , float y2 , unsigned int color , int fill_flag, int global_pos = FALSE);
+
+/**
+ * @brief 四角形を描画(アンチエイリアス付き)
+ * 
+ * @param rect 四角形の形状
+ * @param color 描画する四角形の色
+ * @param fill_flag 四角の中身を塗りつぶすか、のフラグ。TRUEで塗り
+ * @param global_pos パーティションを考慮したグローバル座標で描画するか、のフラグ。TRUEでグローバル座標描画
+ * @return int 0: 成功、-1: エラー発生
+ */
+int drawBoxAA(Rect rect, unsigned int color, int fill_flag, int global_pos = FALSE);
 
 /**
  * @brief 円の描画
@@ -287,6 +321,17 @@ int drawBoxAA(int x1 , int y1 , int x2 , int y2 , unsigned int color , int fill_
  */
 int drawCircle(int x, int y, int r, unsigned int color, int global_pos = FALSE, int fill_flag = TRUE, int line_chickness = 1);
 
+/**
+ * @brief 円の描画
+ * 
+ * @param circle 円の形状
+ * @param color 円の色
+ * @param global_pos パーティションを考慮したグローバル座標で描画するか、のフラグ。TRUEでグローバル座標描画
+ * @param fill_flag TRUE(1の意)で円の中身も塗りつぶし、FALSE(0の意)で輪郭のみ
+ * @param line_chickness 縁の太さ
+ * @return int 0: 成功、-1: エラー発生
+ */
+int drawCircle(Circle circle, unsigned int color, int global_pos = FALSE, int fill_flag = TRUE, int line_chickness = 1);
 
 /**
  * @brief 円の描画(アンチエイリアス付き)
@@ -317,6 +362,20 @@ int drawCircleAA(float x, float y, float r, int posnum, unsigned int color, int 
  * @return int 0: 成功、-1: エラー発生
  */
 int drawCircleAA(Vec2 center, float r, int posnum, unsigned int color, int global_pos = FALSE, int fill_flag = TRUE, 
+                    int line_chickness = 1);
+
+/**
+ * @brief 円の描画(アンチエイリアス付き)
+ * 
+ * @param circle 円の形状
+ * @param posnum 円を形成する頂点の数
+ * @param color 円の色
+ * @param global_pos パーティションを考慮したグローバル座標で描画するか、のフラグ。TRUEでグローバル座標描画
+ * @param fill_flag TRUE(1の意)で円の中身も塗りつぶし、FALSE(0の意)で輪郭のみ
+ * @param line_chickness 縁の太さ
+ * @return int 0: 成功、-1: エラー発生
+ */
+int drawCircleAA(Circle circle, int posnum, unsigned int color, int global_pos = FALSE, int fill_flag = TRUE, 
                     int line_chickness = 1);
 
 /**
