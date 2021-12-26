@@ -79,6 +79,7 @@
 				"build/b2WheelJoint.o",
 				// Component of EffyLib
 				"build/ComponentAssets.o",
+				"build/RandomEngine.o",
 				"build/LifeObject.o",
 				"build/HashObject.o",
 				"build/EffectScreen.o",
@@ -207,6 +208,7 @@
 				"build/b2WheelJoint.o",
 				// Component of EffyLib
 				"build/ComponentAssets.o",
+				"build/RandomEngine.o",
 				"build/LifeObject.o",
 				"build/HashObject.o",
 				"build/EffectScreen.o",
