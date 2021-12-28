@@ -157,7 +157,7 @@ inline Vec2 randomVec2(float length) {
  * @return Vec2 
  */
 inline Vec2 randomVec2(Vec2 min, Vec2 max) {
-	const Vec2 vec = Vec2();
+	Vec2 vec;
 	vec.x = randomFloat(min.x, max.x);
 	vec.y = randomFloat(min.y, max.y);
 	return vec;
@@ -171,7 +171,7 @@ inline Vec2 randomVec2(Vec2 min, Vec2 max) {
  * @return Vec2 
  */
 inline Vec2 randomVec2(float xMax, float yMax) {
-	const Vec2 vec = Vec2();
+	Vec2 vec = Vec2();
 	vec.x = randomFloat(0.0f, xMax);
 	vec.y = randomFloat(0.0f, yMax);
 	return vec;
@@ -183,10 +183,10 @@ inline Vec2 randomVec2(float xMax, float yMax) {
  * @param circle 移動させる円
  * @return Vec2 移動後の座標
  */
-inline Vec2 randomVec2(const Circle& circle) {
-	const float r = sqrt(randomFloat()) * circle.r;
+inline Vec2 randomVec2(Circle& circle) {
+	const float r = sqrt(randomFloat()) * circle.radius;
 	const double theta = randomFloat(kTwoPiFloat);
-	return circle.movedBy(std::cos(theta) * r, std::sin(theta) * r);
+	return circle.movedBy((float)std::cos(theta) * r, (float)std::sin(theta) * r);
 }
 
 /**
@@ -195,10 +195,10 @@ inline Vec2 randomVec2(const Circle& circle) {
  * @param rect 移動させる矩形
  * @return Vec2 移動後の座標
  */
-inline Vec2 randomVec2(const Rect& rect) {
-	Vec2 vec, leftTop, rightBottom;
-	leftTop = rect.leftTop();
-	rightTop = rect.rightBottom();
+inline Vec2 randomVec2(Rect& rect) {
+	Vec2 vec;
+	const Vec2 leftTop = rect.leftTop();
+	const Vec2 rightBottom = rect.rightBottom();
 	vec.x = randomFloat(leftTop.x, rightBottom.x);
 	vec.y = randomFloat(leftTop.y, rightBottom.y);
 	return rect.movedBy(vec);
@@ -265,7 +265,7 @@ inline Vec3 randomVec3(Vec3 min, Vec3 max) {
  * @return Vec3 
  */
 inline Vec3 randomVec3(float xMax, float yMax, float zMax) {
-	const Vec3 vec = Vec3();
+	Vec3 vec;
 	vec.x = randomFloat(0.0f, xMax);
 	vec.y = randomFloat(0.0f, yMax);
 	vec.z = randomFloat(0.0f, zMax);
@@ -278,7 +278,7 @@ inline Vec3 randomVec3(float xMax, float yMax, float zMax) {
  * @param sphere 移動させる球体
  * @return Vec3 移動後の座標
  */
-inline Vec3 randomVec3(const Sphere& sphere) {
+inline Vec3 randomVec3(Sphere& sphere) {
 	const Vec3 vec = randomVec3(sphere.radius);
 	return sphere.movedBy(vec);
 }

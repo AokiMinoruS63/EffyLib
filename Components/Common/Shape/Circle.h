@@ -33,7 +33,7 @@ struct Circle {
 	Vec2 movedBy(float x, float y) {
 		this->x += x;
 		this->y += y;
-		Vec2 vec = Vec2();
+		Vec2 vec;
 		vec.x = this->x;
 		vec.y = this->y;
 		return vec;

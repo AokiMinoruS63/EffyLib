@@ -161,7 +161,7 @@ struct Rect {
 	Vec2 movedBy(float x, float y) {
 		this->x += x;
 		this->y += y;
-		Vec2 vec = Vec2();
+		Vec2 vec;
 		vec.x = x;
 		vec.y = y;
 		return vec;

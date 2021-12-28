@@ -30,7 +30,10 @@ struct Sphere {
 	 * @param radius 半径
 	 */
 	Sphere(float radius) {
-		return { 0.0f, 0.0f, 0.0f, radius};
+		this->x = 0.0;
+		this->y = 0.0;
+		this->z = 0.0;
+		this->radius = radius;
 	}
 
 	/**
@@ -42,7 +45,10 @@ struct Sphere {
 	 * @param radius 
 	 */
 	Sphere(float x, float y, float z, float radius) {
-		return { x, y, z, radius};
+		this->x = x;
+		this->y = y;
+		this->z = z;
+		this->radius = radius;
 	}
 
 	/**
@@ -52,7 +58,10 @@ struct Sphere {
 	 * @param radius 半径
 	 */
 	Sphere(Vec3 position, float radius) {
-		return { position.x, position.y, position.z, radius};
+		this->x = position.x;
+		this->y = position.y;
+		this->z = position.z;
+		this->radius = radius;
 	}
 
 	/**
