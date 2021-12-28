@@ -278,7 +278,7 @@ inline Vec3 randomVec3(float xMax, float yMax, float zMax) {
  * @param sphere 移動させる球体
  * @return Vec3 移動後の座標
  */
-inline Vec3 randomVec3(Sphere& sphere) {
+inline Vec3 randomVec3(Sphere sphere) {
 	const Vec3 vec = randomVec3(sphere.radius);
 	return sphere.movedBy(vec);
 }
