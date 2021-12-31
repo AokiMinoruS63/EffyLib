@@ -76,6 +76,13 @@ int getMousePoint(int *x_buf, int *y_buf);
 int getTouchInput(int input_no, int *position_x, int *position_y, 
                     int global_pos = FALSE, int *id = (int *)0, int *device = (int *)0);
 
+/**
+ * @brief ミリ秒単位の精度を持つカウンタの現在値を得る
+ * 
+ * @return int 端末が起動してからの経過時間（ミリ秒）
+ */
+int getNowCount();
+
 /* 色・スクリーン関係 */
 
 /**

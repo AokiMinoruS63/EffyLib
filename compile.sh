@@ -62,6 +62,13 @@ done
 cd ../../../
 COMMENTOUT
 
+cd OpenSource/PerlinNoise
+for file in *.cpp
+do
+em++ "${file}" -c -o "../../../build/${file%.*}.o" -O0 -std=c++17 -g4 -IDxLibForHTML5/include -IComponents
+done
+
+cd ../../
 cd Assets
 for file in *.cpp
 do

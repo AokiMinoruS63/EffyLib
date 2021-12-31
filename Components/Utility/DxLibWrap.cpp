@@ -54,7 +54,11 @@ int getMousePoint(int *x_buf, int *y_buf) {
 int getTouchInput(int input_no, int *position_x, int *position_y, int global_pos, int *id, int *device) {
     if (global_pos == FALSE)
         setScreenPosToGlobal(position_x, position_y);
-    return GetTouchInput(input_no, position_x, position_y, id, device);
+    return G
+	
+// ミリ秒単位の精度を持つカウンタの現在値を得る
+int getNowCount() {
+	return GetNowCount();
 }
 
 // 明るさを取得する
