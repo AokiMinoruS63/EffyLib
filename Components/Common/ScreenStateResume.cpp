@@ -32,21 +32,21 @@ int ScreenStateResume::saveBlend() {
 }
 
 // 線形補完情報の読み込み
-int ScreenStateResume::loadLinerInterPolation() {
-	return setDrawMode(liner_inter_polation);
+int ScreenStateResume::loadLerp() {
+	return setDrawMode(lerp);
 }
 
 // 線形補完情報の保存
-int ScreenStateResume::saveLinerInterPolation() {
-	liner_inter_polation = getDrawMode();
-	return liner_inter_polation;
+int ScreenStateResume::saveLerp() {
+	lerp = getDrawMode();
+	return lerp;
 }
 
 // ブレンド情報の読み込み
 int ScreenStateResume::loadScreenState() {
 	if( loadBright() 			 == kErrorCode || 
 		loadBlend() 			 == kErrorCode || 
-		loadLinerInterPolation() == kErrorCode ) {
+		loadLerp() 				 == kErrorCode ) {
 		return kErrorCode;
 	}
 	return kSuccessCode;
@@ -56,7 +56,7 @@ int ScreenStateResume::loadScreenState() {
 int ScreenStateResume::saveScreenState() {
 	if( saveBright() 			 == kErrorCode || 
 		saveBlend() 			 == kErrorCode || 
-		saveLinerInterPolation() == kErrorCode ) {
+		saveLerp()				 == kErrorCode ) {
 		return kErrorCode;
 	}
 	return kSuccessCode;

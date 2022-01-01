@@ -62,6 +62,11 @@ int getNowCount() {
 	return GetNowCount();
 }
 
+// １秒を1.0fとした時のカウンタの現在地を得る
+float getNowCountFloat() {
+	return ((float)getNowCount()) * 0.001;
+}
+
 // 明るさを取得する
 int getDrawBright(Color::Color* color) {
 	return GetDrawBright(&color->red, &color->green, &color->blue);
@@ -328,12 +333,19 @@ int graphFilterBlt(int graph_handle, int dest_gr_handle, int filter_type, ...) {
 }
 
 // 線形補完を取得する
-int getDrawMode() {
-	return GetDrawMode();
+Lerp getDrawMode() {
+	const int mode = GetDrawMode();
+	switch(mode) {
+		case Lerp::kNearest: return Lerp::kNearest;
+		case Lerp::kBilinear: return Lerp::kBilinear;
+		case Lerp::kAnisotropic: return Lerp::kAnisotropic;
+		default: return Lerp::kOther;
+	}
+	return Lerp::kOther;
 }
 
 // 線形補完を設定する
-int setDrawMode(int draw_mode) {
+int setDrawMode(Lerp draw_mode) {
 	return SetDrawMode(draw_mode);
 }
 
@@ -394,6 +406,48 @@ int drawBox(Rect rect, unsigned int color , int fill_flag, int global_pos) {
 	const Vec2 leftTop = rect.leftTop();
 	const Vec2 rightBottom = rect.rightBottom();
 	return drawBox((int)leftTop.x, (int)leftTop.y, (int)rightBottom.x, (int)rightBottom.y, color, fill_flag, global_pos);
+}
+
+// 頂点座標を全て指定した矩形を描画
+int drawQuadrangle(Vec2* vertices, unsigned int color, int fill_flag, int global_pos) {
+	if(global_pos == FALSE) {
+		for(int i = 0; i < 4; i++) {
+			setScreenPosToGlobal(&vertices[i].x, &vertices[i].y);
+		}
+	}
+	return DrawQuadrangle(
+		vertices[0].x, 
+		vertices[0].y, 
+		vertices[1].x, 
+		vertices[1].y, 
+		vertices[2].x, 
+		vertices[2].y, 
+		vertices[3].x, 
+		vertices[3].y, 
+		color, 
+		fill_flag
+		);
+}
+
+// 頂点座標を全て指定した矩形を描画(アンチエイリアス付き)
+int drawQuadrangleAA(Vec2* vertices, unsigned int color, int fill_flag, int global_pos) {
+	if(global_pos == FALSE) {
+		for(int i = 0; i < 4; i++) {
+			setScreenPosToGlobal(&vertices[i].x, &vertices[i].y);
+		}
+	}
+	return DrawQuadrangleAA(
+		vertices[0].x, 
+		vertices[0].y, 
+		vertices[1].x, 
+		vertices[1].y, 
+		vertices[2].x, 
+		vertices[2].y, 
+		vertices[3].x, 
+		vertices[3].y, 
+		color, 
+		fill_flag
+		);
 }
 
 // 四角形を描画(アンチエイリアス付き)

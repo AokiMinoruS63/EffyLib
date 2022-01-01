@@ -22,7 +22,10 @@ struct ScreenStateResume {
 	BlendMode::Property buf_blend;
 
 	// バッファとして保存している線形補完情報
-	int liner_inter_polation;
+	Lerp lerp;
+
+	// 初期化
+	ScreenStateResume(): buf_bright(Color::Color { 255, 255, 255 }), buf_blend(BlendMode::Property { BlendMode::kNoBlend, 0 }), lerp(Lerp::kNearest) {}
 
 	// MARK: 画面の明るさ情報、ブレンド情報の読み込み・保存
 
@@ -59,14 +62,14 @@ struct ScreenStateResume {
 	 * 
 	 * @return int 
 	 */
-	int loadLinerInterPolation();
+	int loadLerp();
 
 	/**
 	 * @brief 線形補完情報の保存
 	 * 
 	 * @return int 
 	 */
-	int saveLinerInterPolation();
+	int saveLerp();
 
 	/**
 	 * @brief スクリーン情報のバッファからの読み込み

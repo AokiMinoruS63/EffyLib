@@ -10,30 +10,20 @@
  */
 
 #include "Rect.h"
+#include "../ScreenStateResume.h"
+#include "../../Utility/TypeExtensions/B2Vec2+Extensions.h"
 
-/**
- * @brief 半分の幅
- * 
- * @return const float 
- */
+// 半分の幅
 const float Rect::halfWidth() {
 	return width * 0.5f;
 }
 
-/**
- * @brief 半分の高さ　
- * 
- * @return const float 
- */
+// 半分の高さ　
 const float Rect::halfHeight() {
 	return height * 0.5f;
 }
 
-/**
- * @brief 左上座標
- * 
- * @return Vec2 
- */
+// 左上座標
 const Vec2 Rect::leftTop() {
 	Vec2 vec = Vec2();
 	vec.x = x - width * 0.5;
@@ -41,11 +31,7 @@ const Vec2 Rect::leftTop() {
 	return vec;
 }
 
-/**
- * @brief 上座標
- * 
- * @return Vec2 
- */
+// 上座標
 const Vec2 Rect::top() {
 	Vec2 vec = Vec2();
 	vec.x = x;
@@ -53,11 +39,7 @@ const Vec2 Rect::top() {
 	return vec;
 }
 
-/**
- * @brief 右上座標
- * 
- * @return Vec2 
- */
+// 右上座標
 const Vec2 Rect::rightTop() {
 	Vec2 vec = Vec2();
 	vec.x = x + width * 0.5;
@@ -65,11 +47,7 @@ const Vec2 Rect::rightTop() {
 	return vec;
 }
 
-/**
- * @brief 左座標
- * 
- * @return Vec2 
- */
+// 左座標
 const Vec2 Rect::left() {
 	Vec2 vec = Vec2();
 	vec.x = x - width * 0.5;
@@ -77,11 +55,7 @@ const Vec2 Rect::left() {
 	return vec;
 }
 
-/**
- * @brief 中心座標
- * 
- * @return Vec2 
- */
+// 中心座標
 const Vec2 Rect::center() {
 	Vec2 vec = Vec2();
 	vec.x = x;
@@ -89,11 +63,7 @@ const Vec2 Rect::center() {
 	return vec;
 }
 
-/**
- * @brief 右座標
- * 
- * @return Vec2 
- */
+// 右座標
 const Vec2 Rect::right() {
 	Vec2 vec = Vec2();
 	vec.x = x + width * 0.5;
@@ -101,11 +71,7 @@ const Vec2 Rect::right() {
 	return vec;
 }
 
-/**
- * @brief 左下座標
- * 
- * @return Vec2 
- */
+// 左下座標
 const Vec2 Rect::leftBottom() {
 	Vec2 vec = Vec2();
 	vec.x = x - width * 0.5;
@@ -113,11 +79,7 @@ const Vec2 Rect::leftBottom() {
 	return vec;
 }
 
-/**
- * @brief 下座標
- * 
- * @return Vec2 
- */
+// 下座標
 const Vec2 Rect::bottom() {
 	Vec2 vec = Vec2();
 	vec.x = x;
@@ -125,16 +87,57 @@ const Vec2 Rect::bottom() {
 	return vec;
 }
 
-/**
- * @brief 右下座標
- * 
- * @return Vec2 
- */
+// 右下座標
 const Vec2 Rect::rightBottom() {
 	Vec2 vec = Vec2();
 	vec.x = x + width * 0.5;
 	vec.y = y + height * 0.5;
 	return vec;
+}
+
+// 相対的な左上座標
+const Vec2 Rect::leftTopRelative() {
+	return Vec2(-halfWidth(), -halfHeight());
+}
+
+// 相対的な上座標
+const Vec2 Rect::topRelative() {
+	return Vec2(0.0f, -halfHeight());
+}
+
+// 相対的な右上座標
+const Vec2 Rect::rightTopRelative() {
+	return Vec2(halfWidth(), -halfHeight());
+}
+
+// 相対的な左座標
+const Vec2 Rect::leftRelative() {
+	return Vec2(-halfWidth(), 0.0f);
+}
+
+// 相対的な中心座標
+const Vec2 Rect::centerRelative() {
+	return Vec2(0.0f, 0.0f);
+}
+
+// 相対的な右座標
+const Vec2 Rect::rightRelative() {
+	return Vec2(halfWidth(), 0.0f);
+}
+
+// 相対的な左下座標
+const Vec2 Rect::leftBottomRelative() {
+	return Vec2(-halfWidth(), halfHeight());
+}
+
+// 相対的な下座標
+const Vec2 Rect::bottomRelative() {
+	return Vec2(0.0f, halfHeight());
+}
+
+// 相対的な右下座標
+const Vec2 Rect::rightBottomRelative() {
+	return Vec2(halfWidth(), halfHeight());
 }
 
 // 図形を移動させる
@@ -150,4 +153,23 @@ Vec2 Rect::movedBy(float x, float y) {
 // 図形を移動させる
 Vec2 Rect::movedBy(Vec2 vec) {
 	return movedBy(vec.x, vec.y);
+}
+
+// 描画
+int Rect::draw(int color, float radian, bool edgeOnly, BlendMode::Property blend, Lerp lerp) {
+	ScreenStateResume state = ScreenStateResume();
+	state.saveScreenState();
+	setDrawBlendMode(blend);
+	setDrawMode(lerp);
+	const int x = this->x;
+	const int y = this->y;
+	Vec2 vertices[4] = {
+		B2Vec2::rotate(leftTopRelative(), radian) + Vec2(x, y),
+		B2Vec2::rotate(rightTopRelative(), radian) + Vec2(x, y),
+		B2Vec2::rotate(rightBottomRelative(), radian) + Vec2(x, y),
+		B2Vec2::rotate(leftBottomRelative(), radian) + Vec2(x, y)
+	};
+	const int returnNum = drawQuadrangle(vertices, color, !edgeOnly);
+	state.loadScreenState();
+	return returnNum;
 }

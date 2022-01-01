@@ -24,14 +24,6 @@ namespace ScreenState {
 		kFront = DX_SCREEN_FRONT
 	};
 
-	// 線形補完
-	enum Lerp {
-		// 補完なし
-		kNearest = DX_DRAWMODE_NEAREST,
-		// バイリニア補完
-		kBilinear = DX_DRAWMODE_BILINEAR
-	};
-
 	// フレーム
 	struct Frame {
 		// 幅

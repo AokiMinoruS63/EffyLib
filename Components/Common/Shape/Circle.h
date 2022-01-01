@@ -13,6 +13,9 @@
 #define CIRCLE_H
 
 #include "../Vec2.h"
+#include "../Color.h"
+#include "../BlendMode.h"
+#include "../Lerp.h"
 
 // 円の図形
 struct Circle {
@@ -56,6 +59,17 @@ struct Circle {
 	 * @return Vec2 移動後の座標
 	 */
 	Vec2 movedBy(Vec2 vec);
+
+	/**
+	 * @brief 描画
+	 * 
+	 * @param color 色
+	 * @param edgeOnly 輪郭のみの描画なら**true**
+	 * @param blend ブレンドモード
+	 * @param lerp 線形補完
+	 * @return int 
+	 */
+	int draw(int color = Color::kWhite, bool edgeOnly = false, BlendMode::Property blend = BlendMode::Property { BlendMode::kNoBlend, 0 }, Lerp lerp = Lerp::kNearest);	
 };
 
 #endif

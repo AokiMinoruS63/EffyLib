@@ -13,6 +13,9 @@
 #define RECT_H
 
 #include "../Vec2.h"
+#include "../Color.h"
+#include "../BlendMode.h"
+#include "../Lerp.h"
 
 // 矩形
 struct Rect {
@@ -142,6 +145,69 @@ struct Rect {
 	 */
 	const Vec2 rightBottom();
 
+	/**
+	 * @brief 相対的な左上座標
+	 * 
+	 * @return Vec2 
+	 */
+	const Vec2 leftTopRelative();
+
+	/**
+	 * @brief 相対的な上座標
+	 * 
+	 * @return Vec2 
+	 */
+	const Vec2 topRelative();
+
+	/**
+	 * @brief 相対的な右上座標
+	 * 
+	 * @return Vec2 
+	 */
+	const Vec2 rightTopRelative();
+
+	/**
+	 * @brief 相対的な左座標
+	 * 
+	 * @return Vec2 
+	 */
+	const Vec2 leftRelative();
+
+	/**
+	 * @brief 相対的な中心座標
+	 * 
+	 * @return Vec2 
+	 */
+	const Vec2 centerRelative();
+
+	/**
+	 * @brief 相対的な右座標
+	 * 
+	 * @return Vec2 
+	 */
+	const Vec2 rightRelative();
+
+	/**
+	 * @brief 相対的な左下座標
+	 * 
+	 * @return Vec2 
+	 */
+	const Vec2 leftBottomRelative();
+
+	/**
+	 * @brief 相対的な下座標
+	 * 
+	 * @return Vec2 
+	 */
+	const Vec2 bottomRelative();
+
+	/**
+	 * @brief 相対的な右下座標
+	 * 
+	 * @return Vec2 
+	 */
+	const Vec2 rightBottomRelative();
+
 	/* 関数 */
 
 	/**
@@ -160,6 +226,18 @@ struct Rect {
 	 * @return Vec2 
 	 */
 	Vec2 movedBy(Vec2 vec);
+
+	/**
+	 * @brief 描画
+	 * 
+	 * @param color 色
+	 * @param radian 角度
+	 * @param edgeOnly 輪郭のみの描画なら**true**
+	 * @param blend ブレンドモード
+	 * @param lerp 線形補完
+	 * @return int 
+	 */
+	int draw(int color = Color::kWhite, float radian = 0.0, bool edgeOnly = false, BlendMode::Property blend = BlendMode::Property { BlendMode::kNoBlend, 0 }, Lerp lerp = Lerp::kNearest);	
 };
 
 #endif

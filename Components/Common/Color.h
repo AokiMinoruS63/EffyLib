@@ -42,6 +42,21 @@ namespace Color {
 		int green;
 		// 青
 		int blue;
+
+		/**
+		 * @brief 初期化
+		 * 
+		 * @param red 
+		 * @param green 
+		 * @param blue 
+		 */
+		Color(int red, int green, int blue): red(red), green(green), blue(blue) {}
+
+		/**
+		 * @brief 初期化
+		 * 
+		 */
+		Color(): Color(255, 255, 255) {}
 	};
 }
 

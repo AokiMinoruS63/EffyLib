@@ -28,6 +28,7 @@
 #include "../OpenSource/Box2D/Box2D.h"
 #include "../Common/Color.h"
 #include "../Common/BlendMode.h"
+#include "../Common/Lerp.h"
 #include "TypeExtensions/ScreenState+Extensions.h"
 #include <stdarg.h>
 #include "../Common/Vec2.h"
@@ -82,6 +83,13 @@ int getTouchInput(int input_no, int *position_x, int *position_y,
  * @return int 端末が起動してからの経過時間（ミリ秒）
  */
 int getNowCount();
+
+/**
+ * @brief １秒を1.0fとした時のカウンタの現在地を得る
+ * 
+ * @return float 
+ */
+float getNowCountFloat();
 
 /* 色・スクリーン関係 */
 
@@ -181,9 +189,9 @@ int graphFilterBlt(int graph_handle, int dest_gr_handle, int filter_type, ...);
 /**
  * @brief 線形補完を取得する
  * 
- * @return int 
+ * @return Lerp 
  */
-int getDrawMode();
+Lerp getDrawMode();
 
 /**
  * @brief 線形補完を設定する
@@ -191,7 +199,7 @@ int getDrawMode();
  * @param drawMode 
  * @return int 
  */
-int setDrawMode(int draw_mode);
+int setDrawMode(Lerp draw_mode);
 
 /**
  * @brief 描画を行うスクリーンをセットする
@@ -302,6 +310,28 @@ int drawBox(Rect rect, unsigned int color , int fill_flag, int global_pos = FALS
  * @return int 0: 成功、-1: エラー発生
  */
 int drawBoxAA(float x1 , float y1 , float x2 , float y2 , unsigned int color , int fill_flag, int global_pos = FALSE);
+
+/**
+ * @brief 頂点座標を全て指定した矩形を描画
+ * 
+ * @param vertices 頂点４つ（左上、右上、右下、左下）
+ * @param color 色
+ * @param fill_flag 塗りつぶすなら**true**
+ * @param global_pos パーティションを考慮したグローバル座標で描画するか、のフラグ。TRUEでグローバル座標描画
+ * @return int 0: 成功、-1: エラー発生
+ */
+int drawQuadrangle(Vec2* vertices, unsigned int color, int fill_flag, int global_pos = FALSE);
+
+/**
+ * @brief 頂点座標を全て指定した矩形を描画(アンチエイリアス付き)
+ * 
+ * @param vertices 頂点４つ（左上、右上、右下、左下）
+ * @param color 色
+ * @param fill_flag 塗りつぶすなら**true**
+ * @param global_pos パーティションを考慮したグローバル座標で描画するか、のフラグ。TRUEでグローバル座標描画
+ * @return int 0: 成功、-1: エラー発生
+ */
+int drawQuadrangleAA(Vec2* vertices, unsigned int color, int fill_flag, int global_pos = FALSE);
 
 /**
  * @brief 四角形を描画(アンチエイリアス付き)
