@@ -12,10 +12,10 @@
 #ifndef CIRCLE_H
 #define CIRCLE_H
 
-#include "../Vec2.h"
-#include "../Color.h"
-#include "../BlendMode.h"
-#include "../Lerp.h"
+#include "../Type/Vec2.h"
+#include "../Type/Color.h"
+#include "../ScreenState/BlendMode.h"
+#include "../ScreenState/Lerp.h"
 
 // 円の図形
 struct Circle {

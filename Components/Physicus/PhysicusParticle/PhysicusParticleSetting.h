@@ -15,7 +15,7 @@
 #include "../../OpenSource/Box2D/Box2D.h"
 #include "../../Effect/LiquidSetting.h"
 #include "PhysicusParticleType.h"
-#include "../../Common/Color.h"
+#include "../../Common/Type/Color.h"
 #include "../../Utility/TypeExtensions/Float+Extensions.h"
 #include <vector>
 #include <string>

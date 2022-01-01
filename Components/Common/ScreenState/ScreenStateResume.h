@@ -12,7 +12,7 @@
 #ifndef SCREEN_STATE_RESUME_H
 #define SCREEN_STATE_RESUME_H
 
-#include "../Utility/DxLibWrap.h"
+#include "../../Utility/DxLibWrap.h"
 
 struct ScreenStateResume {
 	// バッファとして保存している明るさ情報

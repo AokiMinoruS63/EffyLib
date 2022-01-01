@@ -12,7 +12,7 @@
 #ifndef EFFECT_SCREEN_H
 #define EFFECT_SCREEN_H
 
-#include "../Common/ScreenStateResume.h"
+#include "../Common/ScreenState/ScreenStateResume.h"
 
 // エフェクト用のスクリーン
 class EffectScreen {

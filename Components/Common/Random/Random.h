@@ -13,12 +13,12 @@
 #define RANDOM_H
 
 #include "RandomEngine.h"
-#include "Vec2.h"
-#include "Vec3.h"
-#include "Constant/MathConstant.h"
-#include "Shape/Circle.h"
-#include "Shape/Rect.h"
-#include "Shape/Sphere.h"
+#include "../Type/Vec2.h"
+#include "../Type/Vec3.h"
+#include "../Constant/MathConstant.h"
+#include "../Shape/Circle.h"
+#include "../Shape/Rect.h"
+#include "../Shape/Sphere.h"
 #include <cmath>
 
 /**

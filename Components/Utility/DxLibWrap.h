@@ -26,12 +26,12 @@
 #include <cstdlib>
 #include <utility>
 #include "../OpenSource/Box2D/Box2D.h"
-#include "../Common/Color.h"
-#include "../Common/BlendMode.h"
-#include "../Common/Lerp.h"
+#include "../Common/Type/Color.h"
+#include "../Common/ScreenState/BlendMode.h"
+#include "../Common/ScreenState/Lerp.h"
 #include "TypeExtensions/ScreenState+Extensions.h"
 #include <stdarg.h>
-#include "../Common/Vec2.h"
+#include "../Common/Type/Vec2.h"
 #include "../Common/Shape/Rect.h"
 #include "../Common/Shape/Circle.h"
 

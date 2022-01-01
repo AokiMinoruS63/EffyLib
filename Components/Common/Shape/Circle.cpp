@@ -10,7 +10,7 @@
  */
 
 #include "Circle.h"
-#include "../ScreenStateResume.h"
+#include "../ScreenState/ScreenStateResume.h"
 
 // 図形を移動させる
 Vec2 Circle::movedBy(float x, float y) {

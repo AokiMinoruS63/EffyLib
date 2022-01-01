@@ -15,7 +15,7 @@
 #include "../PhysicusWorld/Frame/PhysicusWorldFrame.h"
 #include "../../OpenSource/Box2D/Box2D.h"
 #include "../../Touch/TouchData.h"
-#include "../../Common/HashObject.h"
+#include "../../Common/Object/HashObject.h"
 #include "PhysicusEvent.h"
 
 class PhysicusManagerCommon: public HashObject {

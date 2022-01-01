@@ -12,10 +12,10 @@
 #ifndef RECT_H
 #define RECT_H
 
-#include "../Vec2.h"
-#include "../Color.h"
-#include "../BlendMode.h"
-#include "../Lerp.h"
+#include "../Type/Vec2.h"
+#include "../Type/Color.h"
+#include "../ScreenState/BlendMode.h"
+#include "../ScreenState/Lerp.h"
 
 // 矩形
 struct Rect {

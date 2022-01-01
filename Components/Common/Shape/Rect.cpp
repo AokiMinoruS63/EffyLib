@@ -10,7 +10,7 @@
  */
 
 #include "Rect.h"
-#include "../ScreenStateResume.h"
+#include "../ScreenState/ScreenStateResume.h"
 #include "../../Utility/TypeExtensions/B2Vec2+Extensions.h"
 
 // 半分の幅

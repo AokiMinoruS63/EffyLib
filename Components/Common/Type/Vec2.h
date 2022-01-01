@@ -12,7 +12,7 @@
 #ifndef VEC2_H
 #define VEC2_H
 
-#include "../OpenSource/Box2D/Box2D.h"
+#include "../../OpenSource/Box2D/Box2D.h"
 
 using Vec2 = b2Vec2;
 

@@ -77,12 +77,26 @@ done
 
 cd ..
 cd Common
+
+cd Random
 for file in *.cpp
 do
-em++ "${file}" -c -o "../../build/${file%.*}.o" -O0 -std=c++17 -g4 -IDxLibForHTML5/include -IComponents
+em++ "${file}" -c -o "../../../build/${file%.*}.o" -O0 -std=c++17 -g4 -IDxLibForHTML5/include -IComponents
 done
 
-cd Shape
+cd ../ScreenState
+for file in *.cpp
+do
+em++ "${file}" -c -o "../../../build/${file%.*}.o" -O0 -std=c++17 -g4 -IDxLibForHTML5/include -IComponents
+done
+
+cd ../Object
+for file in *.cpp
+do
+em++ "${file}" -c -o "../../../build/${file%.*}.o" -O0 -std=c++17 -g4 -IDxLibForHTML5/include -IComponents
+done
+
+cd ../Shape
 for file in *.cpp
 do
 em++ "${file}" -c -o "../../../build/${file%.*}.o" -O0 -std=c++17 -g4 -IDxLibForHTML5/include -IComponents

@@ -13,9 +13,9 @@
 #define BLENDMODE_H
 
 #ifdef EMSCRIPTEN
-#include "../../DxLibForHTML5/include/DxLib.h"
+#include "../../../DxLibForHTML5/include/DxLib.h"
 #else
-#include "DxLib.h"
+#include <DxLib.h>
 #endif
 
 namespace BlendMode {

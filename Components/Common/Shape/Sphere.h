@@ -12,7 +12,7 @@
 #ifndef SPHERE_H
 #define SPHERE_H
 
-#include "../Vec3.h"
+#include "../Type/Vec3.h"
 
 struct Sphere {
 	// X座標
