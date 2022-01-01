@@ -81,6 +81,7 @@
 				// Component of EffyLib
 				"build/ComponentAssets.o",
 				"build/RandomEngine.o",
+				"build/ScreenStateResume.o",
 				"build/LifeObject.o",
 				"build/HashObject.o",
 				"build/EffectScreen.o",
@@ -211,6 +212,7 @@
 				// Component of EffyLib
 				"build/ComponentAssets.o",
 				"build/RandomEngine.o",
+				"build/ScreenStateResume.o",
 				"build/LifeObject.o",
 				"build/HashObject.o",
 				"build/EffectScreen.o",

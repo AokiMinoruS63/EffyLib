@@ -17,6 +17,7 @@
  * 
  */
 EffectScreen::EffectScreen() {
+	screen_state_.saveScreenState();
 	ScreenState::Frame state = getScreenState();
 	edge_screen_ = -1;
 	fill_screen_ = -1;
@@ -52,53 +53,12 @@ int EffectScreen::getGaussScreen() {
 	return gauss_screen_;
 }
 
-// 明るさ情報の読み込み
-int EffectScreen::loadBright() {
-	return setDrawBright(buf_bright_);
-}
-
-// 明るさ情報の保存
-int EffectScreen::saveBright() {
-	return getDrawBright(&buf_bright_);
-}
-
-// ブレンド情報の読み込み
-int EffectScreen::loadBlend() {
-	return setDrawBlendMode(buf_blend_);
-}
-
-// ブレンド情報の保存
-int EffectScreen::saveBlend() {
-	return getDrawBlendMode(&buf_blend_);
-}
-
-// 線形補完情報の読み込み
-int EffectScreen::loadLinerInterPolation() {
-	return setDrawMode(liner_inter_polation_);
-}
-
-// 線形補完情報の保存
-int EffectScreen::saveLinerInterPolation() {
-	liner_inter_polation_ = getDrawMode();
-	return liner_inter_polation_;
-}
-
-// ブレンド情報の読み込み
+// スクリーン情報のバッファからの読み込み
 int EffectScreen::loadScreenState() {
-	if( loadBright() 			 == kErrorCode || 
-		loadBlend() 			 == kErrorCode || 
-		loadLinerInterPolation() == kErrorCode ) {
-		return kErrorCode;
-	}
-	return kSuccessCode;
+	return screen_state_.loadScreenState();
 }
 
-// ブレンド情報の保存
+// スクリーン情報のバッファへの保存
 int EffectScreen::saveScreenState() {
-	if( saveBright() 			 == kErrorCode || 
-		saveBlend() 			 == kErrorCode || 
-		saveLinerInterPolation() == kErrorCode ) {
-		return kErrorCode;
-	}
-	return kSuccessCode;
+	return screen_state_.saveScreenState();
 }
