@@ -25,18 +25,6 @@ struct Sphere {
 	float radius;
 
 	/**
-	 * @brief 半径のみの初期化
-	 * 
-	 * @param radius 半径
-	 */
-	Sphere(float radius) {
-		this->x = 0.0;
-		this->y = 0.0;
-		this->z = 0.0;
-		this->radius = radius;
-	}
-
-	/**
 	 * @brief 座標と半径を設定した初期化
 	 * 
 	 * @param x 
@@ -44,12 +32,14 @@ struct Sphere {
 	 * @param z 
 	 * @param radius 
 	 */
-	Sphere(float x, float y, float z, float radius) {
-		this->x = x;
-		this->y = y;
-		this->z = z;
-		this->radius = radius;
-	}
+	Sphere(float x, float y, float z, float radius): x(x), y(y), z(z), radius(radius) {}
+
+	/**
+	 * @brief 半径のみの初期化
+	 * 
+	 * @param radius 半径
+	 */
+	Sphere(float radius): Sphere(0.0f, 0.0f, 0.0f, radius) {}
 
 	/**
 	 * @brief 座標と半径を設定した初期化
@@ -57,12 +47,7 @@ struct Sphere {
 	 * @param position 座標
 	 * @param radius 半径
 	 */
-	Sphere(Vec3 position, float radius) {
-		this->x = position.x;
-		this->y = position.y;
-		this->z = position.z;
-		this->radius = radius;
-	}
+	Sphere(Vec3 position, float radius): Sphere(position.x, position.y, position.z, radius) {}
 
 	/**
 	 * @brief 球を移動させる
@@ -72,12 +57,7 @@ struct Sphere {
 	 * @param z Z軸の移動量
 	 * @return Vec3 移動後の座標
 	 */
-	Vec3 movedBy(float x, float y, float z) {
-		this->x += x;
-		this->y += y;
-		this->z += z;
-		return { this->x, this->y, this->z };
-	}
+	Vec3 movedBy(float x, float y, float z);
 
 	/**
 	 * @brief 球を移動させる
@@ -85,9 +65,7 @@ struct Sphere {
 	 * @param moveValue 移動量
 	 * @return Vec3 移動後の座標
 	 */
-	Vec3 movedBy(Vec3 moveValue) {
-		return movedBy( moveValue.x, moveValue.y, moveValue.z);
-	}
+	Vec3 movedBy(Vec3 moveValue);
 };
 
 #endif

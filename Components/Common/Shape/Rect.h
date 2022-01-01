@@ -25,131 +25,124 @@ struct Rect {
 	// 高さ
 	float height;
 
+	/* 初期化 */
+
+	/**
+	 * @brief 初期化
+	 * 
+	 * @param x X座標
+	 * @param y Y座標
+	 * @param width 幅
+	 * @param height 高さ
+	 */
+	Rect(float x, float y, float width, float height): x(x), y(y), width(width), height(height) {}
+
+	/**
+	 * @brief 正方形の場合の初期化
+	 * 
+	 * @param x X座標
+	 * @param y Y座標
+	 * @param size 幅と高さ
+	 */
+	Rect(float x, float y, float size): Rect(x, y, size, size) {}
+
+	/**
+	 * @brief 初期化
+	 * 
+	 * @param pos 座標
+	 * @param width 幅
+	 * @param height 高さ
+	 */
+	Rect(Vec2 pos, float width, float height): Rect(pos.x, pos.y, width, height) {}
+
+	/**
+	 * @brief 正方形の場合の初期化
+	 * 
+	 * @param pos 座標
+	 * @param size 幅と高さ
+	 */
+	Rect(Vec2 pos, float size): Rect(pos.x, pos.y, size, size) {}
+
+	/* Getter */
+
 	/**
 	 * @brief 半分の幅
 	 * 
 	 * @return const float 
 	 */
-	const float halfWidth() {
-		return width * 0.5f;
-	}
+	const float halfWidth();
 
 	/**
 	 * @brief 半分の高さ　
 	 * 
 	 * @return const float 
 	 */
-	const float halfHeight() {
-		return height * 0.5f;
-	}
+	const float halfHeight();
 
 	/**
 	 * @brief 左上座標
 	 * 
 	 * @return Vec2 
 	 */
-	const Vec2 leftTop() {
-		Vec2 vec = Vec2();
-		vec.x = x - width * 0.5;
-		vec.y = y - height * 0.5;
-		return vec;
-	}
+	const Vec2 leftTop();
 
 	/**
 	 * @brief 上座標
 	 * 
 	 * @return Vec2 
 	 */
-	const Vec2 top() {
-		Vec2 vec = Vec2();
-		vec.x = x;
-		vec.y = y - height * 0.5;
-		return vec;
-	}
+	const Vec2 top();
 
 	/**
 	 * @brief 右上座標
 	 * 
 	 * @return Vec2 
 	 */
-	const Vec2 rightTop() {
-		Vec2 vec = Vec2();
-		vec.x = x + width * 0.5;
-		vec.y = y - height * 0.5;
-		return vec;
-	}
+	const Vec2 rightTop();
 
 	/**
 	 * @brief 左座標
 	 * 
 	 * @return Vec2 
 	 */
-	const Vec2 left() {
-		Vec2 vec = Vec2();
-		vec.x = x - width * 0.5;
-		vec.y = y;
-		return vec;
-	}
+	const Vec2 left();
 
 	/**
 	 * @brief 中心座標
 	 * 
 	 * @return Vec2 
 	 */
-	const Vec2 center() {
-		Vec2 vec = Vec2();
-		vec.x = x;
-		vec.y = y;
-		return vec;
-	}
+	const Vec2 center();
 
 	/**
 	 * @brief 右座標
 	 * 
 	 * @return Vec2 
 	 */
-	const Vec2 right() {
-		Vec2 vec = Vec2();
-		vec.x = x + width * 0.5;
-		vec.y = y;
-		return vec;
-	}
+	const Vec2 right();
 
 	/**
 	 * @brief 左下座標
 	 * 
 	 * @return Vec2 
 	 */
-	const Vec2 leftBottom() {
-		Vec2 vec = Vec2();
-		vec.x = x - width * 0.5;
-		vec.y = y + height * 0.5;
-		return vec;
-	}
+	const Vec2 leftBottom();
 
 	/**
 	 * @brief 下座標
 	 * 
 	 * @return Vec2 
 	 */
-	const Vec2 bottom() {
-		Vec2 vec = Vec2();
-		vec.x = x;
-		vec.y = y + height * 0.5;
-		return vec;
-	}
+	const Vec2 bottom();
 
 	/**
 	 * @brief 右下座標
 	 * 
 	 * @return Vec2 
 	 */
-	const Vec2 rightBottom() {
-		Vec2 vec = Vec2();
-		vec.x = x + width * 0.5;
-		vec.y = y + height * 0.5;
-		return vec;
-	}
+	const Vec2 rightBottom();
+
+	/* 関数 */
 
 	/**
 	 * @brief 図形を移動させる
@@ -158,14 +151,7 @@ struct Rect {
 	 * @param y 移動させるY座標
 	 * @return Vec2 移動した座標
 	 */
-	Vec2 movedBy(float x, float y) {
-		this->x += x;
-		this->y += y;
-		Vec2 vec;
-		vec.x = x;
-		vec.y = y;
-		return vec;
-	}
+	Vec2 movedBy(float x, float y);
 
 	/**
 	 * @brief 図形を移動させる
@@ -173,9 +159,7 @@ struct Rect {
 	 * @param vec 
 	 * @return Vec2 
 	 */
-	Vec2 movedBy(Vec2 vec) {
-		return movedBy(vec.x, vec.y);
-	}
+	Vec2 movedBy(Vec2 vec);
 };
 
 #endif

@@ -12,11 +12,26 @@
 #ifndef VEC3_H
 #define VEC3_H
 
+#include <cmath>
+
 struct Vec3 {
 	float x;
 	float y;
 	float z;
+
+	/* 関数 */
+
+	/**
+	 * @brief ベクトルを正規化してスカラーを出力する
+	 * 
+	 * @return float 
+	 */
+	float norm() {
+		return std::sqrtf( x * x + y * y + z * z );
+	}
 };
+
+/* 演算 */
 
 /**
  * @brief Vec3それぞれにfloat型を足す
@@ -25,9 +40,18 @@ struct Vec3 {
  * @param f 
  * @return Vec3 
  */
-inline Vec3 operator + (const Vec3& v, float f)
-{
+inline Vec3 operator + (const Vec3& v, float f) {
 	return { v.x + f, v.y + f, v.z + f };
+}
+
+inline Vec3 operator + (float f, const Vec3& v) {
+	return { v.x + f, v.y + f, v.z + f };
+}
+
+inline void operator += (Vec3& v, float f) {
+	v.x += f;
+	v.y += f;
+	v.z += f;
 }
 
 /**
@@ -37,8 +61,11 @@ inline Vec3 operator + (const Vec3& v, float f)
  * @param f 
  * @return b2Vec2 
  */
-inline Vec3 operator - (const Vec3& v, float f)
-{
+inline Vec3 operator - (const Vec3& v, float f) {
+	return { v.x - f, v.y - f, v.z - f };
+}
+
+inline Vec3 operator - (float f, const Vec3& v) {
 	return { v.x - f, v.y - f, v.z - f };
 }
 
@@ -49,8 +76,11 @@ inline Vec3 operator - (const Vec3& v, float f)
  * @param f 
  * @return b2Vec2 
  */
-inline Vec3 operator * (const Vec3& v, float f)
-{
+inline Vec3 operator * (const Vec3& v, float f) {
+	return { v.x * f, v.y * f, v.z * f };
+}
+
+inline Vec3 operator * (float f, const Vec3& v) {
 	return { v.x * f, v.y * f, v.z * f };
 }
 
@@ -61,8 +91,11 @@ inline Vec3 operator * (const Vec3& v, float f)
  * @param f 
  * @return Vec3 
  */
-inline Vec3 operator / (const Vec3& v, float f)
-{
+inline Vec3 operator / (const Vec3& v, float f) {
+	return { v.x / f, v.y / f, v.z / f };
+}
+
+inline Vec3 operator / (float f, const Vec3& v) {
 	return { v.x / f, v.y / f, v.z / f };
 }
 
@@ -73,9 +106,18 @@ inline Vec3 operator / (const Vec3& v, float f)
  * @param v2 
  * @return Vec3 
  */
-inline Vec3 operator + (const Vec3& v1, const Vec3& v2)
-{
+inline Vec3 operator + (const Vec3& v1, const Vec3& v2) {
 	return { v1.x + v2.x, v1.y + v2.y, v1.z + v2.z };
+}
+
+/**
+ * @brief Vec3同士で足して代入する
+ * 
+ * @param v1 左辺
+ * @param v2 右辺
+ */
+inline void operator += (Vec3& v1, const Vec3& v2) {
+	v1 = v1 + v2;
 }
 
 /**
@@ -85,9 +127,18 @@ inline Vec3 operator + (const Vec3& v1, const Vec3& v2)
  * @param v2 
  * @return Vec3 
  */
-inline Vec3 operator - (const Vec3& v1, const Vec3& v2)
-{
+inline Vec3 operator - (const Vec3& v1, const Vec3& v2) {
 	return { v1.x - v2.x, v1.y - v2.y, v1.z - v2.z };
+}
+
+/**
+ * @brief Vec3からVec3を引いて代入する
+ * 
+ * @param v1 左辺
+ * @param v2 右辺
+ */
+inline void operator -= (Vec3& v1, const Vec3& v2) {
+	v1 = v1 - v2;
 }
 
 /**
@@ -97,9 +148,18 @@ inline Vec3 operator - (const Vec3& v1, const Vec3& v2)
  * @param v2 
  * @return Vec3 
  */
-inline Vec3 operator * (const Vec3& v1, const Vec3& v2)
-{
+inline Vec3 operator * (const Vec3& v1, const Vec3& v2) {
 	return { v1.x * v2.x, v1.y * v2.y, v1.z * v2.z };
+}
+
+/**
+ * @brief Vec3同士で掛け算して代入する
+ * 
+ * @param v1 左辺
+ * @param v2 右辺
+ */
+inline void operator *= (Vec3& v1, const Vec3& v2) {
+	v1 = v1 * v2;
 }
 
 /**
@@ -109,9 +169,18 @@ inline Vec3 operator * (const Vec3& v1, const Vec3& v2)
  * @param v2 
  * @return Vec3 
  */
-inline Vec3 operator / (const Vec3& v1, const Vec3& v2)
-{
+inline Vec3 operator / (const Vec3& v1, const Vec3& v2) {
 	return { v1.x / v2.x, v1.y / v2.y, v1.z / v2.z };
+}
+
+/**
+ * @brief Vec3からVec3を割って代入する
+ * 
+ * @param v1 左辺
+ * @param v2 右辺
+ */
+inline void operator /= (Vec3& v1, const Vec3& v2) {
+	v1 = v1 / v2;
 }
 
 #endif

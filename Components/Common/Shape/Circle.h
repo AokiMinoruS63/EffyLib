@@ -24,20 +24,30 @@ struct Circle {
 	float radius;
 
 	/**
+	 * @brief 初期化
+	 * 
+	 * @param x X座標
+	 * @param y Y座標
+	 * @param radius 半径
+	 */
+	Circle(float x, float y, float radius): x(x), y(y), radius(radius) {}
+
+	/**
+	 * @brief 初期化
+	 * 
+	 * @param pos 座標
+	 * @param radius 半径
+	 */
+	Circle(Vec2 pos, float radius): Circle(pos.x, pos.y, radius) {}
+
+	/**
 	 * @brief 図形を移動させる
 	 * 
 	 * @param x 移動させるX座標
 	 * @param y 移動させるY座標
 	 * @return Vec2 移動後の座標
 	 */
-	Vec2 movedBy(float x, float y) {
-		this->x += x;
-		this->y += y;
-		Vec2 vec;
-		vec.x = this->x;
-		vec.y = this->y;
-		return vec;
-	}
+	Vec2 movedBy(float x, float y);
 
 	/**
 	 * @brief 図形を移動させる
@@ -45,9 +55,7 @@ struct Circle {
 	 * @param vec 
 	 * @return Vec2 移動後の座標
 	 */
-	Vec2 movedBy(Vec2 vec) {
-		return movedBy(vec.x, vec.y);
-	}
+	Vec2 movedBy(Vec2 vec);
 };
 
 #endif
