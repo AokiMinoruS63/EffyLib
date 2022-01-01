@@ -12,7 +12,6 @@
 #ifndef TYPE_EXTENSION_H
 #define TYPE_EXTENSION_H
 
-#include "TypeExtensions/Color+Extensions.h"
 #include "TypeExtensions/Int+Extensions.h"
 #include "TypeExtensions/Float+Extensions.h"
 #include "TypeExtensions/B2Vec2+Extensions.h"
@@ -23,7 +22,6 @@
 #include "TypeExtensions/VectorOrArray+Extension.h"
 #include "TypeExtensions/Vector+Extension.h"
 #include "TypeExtensions/Array+Extensions.h"
-#include "TypeExtensions/BlendMode+Extension.h"
 #include "TypeExtensions/ScreenState+Extensions.h"
 #include "TypeExtensions/GraphEffect+Extensions.h"
 

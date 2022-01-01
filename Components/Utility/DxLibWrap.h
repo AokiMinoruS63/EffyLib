@@ -26,8 +26,8 @@
 #include <cstdlib>
 #include <utility>
 #include "../OpenSource/Box2D/Box2D.h"
-#include "TypeExtensions/Color+Extensions.h"
-#include "TypeExtensions/BlendMode+Extension.h"
+#include "../Common/Color.h"
+#include "../Common/BlendMode.h"
 #include "TypeExtensions/ScreenState+Extensions.h"
 #include <stdarg.h>
 #include "../Common/Vec2.h"

@@ -12,7 +12,7 @@
 #ifndef LIQUID_SETTING_H
 #define LIQUID_SETTING_H
 
-#include "../Utility/TypeExtensions/Color+Extensions.h"
+#include "../Common/Color.h"
 #include "../Utility/TypeExtensions/Int+Extensions.h"
 #include "math.h"
 #include "../Common/Constant/MathConstant.h"
