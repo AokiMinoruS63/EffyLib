@@ -22,6 +22,10 @@ namespace Float {
 	static const float kMinima = FLT_MIN;
 	// 最小値
 	static const float kMin = 0.0;
+	// 16分の1
+	static const float kOneSixteen = 0.0625;
+	// 8分の1
+	static const float kOneEight = 0.125;
 	// 4分の1
 	static const float kQuarter = 0.25;
 	// 中間値

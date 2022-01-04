@@ -18,11 +18,6 @@ using namespace Effect;
 using namespace ScreenState;
 using namespace GraphEffect;
 
-// デフォルトの初期化
-Liquid Liquid::init() {
-	return Liquid(LiquidSetting::init());
-}
-
 // コンストラクタ
 Liquid::Liquid(LiquidSetting setting) {
 	Frame frame =  getScreenState();

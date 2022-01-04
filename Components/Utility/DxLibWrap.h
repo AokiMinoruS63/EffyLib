@@ -166,6 +166,16 @@ float getImageWidth(int graph_handle);
 float getImageHeight(int graph_handle);
 
 /**
+ * @brief 描画対象にできるグラフィックを作成する
+ * 
+ * @param width 作成するグラフィックの幅
+ * @param height 作成するグラフィックの高さ
+ * @param use_alpha_channel 作成するグラフィックにアルファチャンネルを付けるかどうか(TRUE: 付ける FALSE: 付けない)
+ * @return int int 0: 成功、-1: エラー発生
+ */
+int makeScreen(int width, int height, int use_alpha_channel = FALSE);
+
+/**
  * @brief スクリーン・画像にフィルターを施す
  * 
  * @param graph_handle 
@@ -200,6 +210,13 @@ Lerp getDrawMode();
  * @return int 
  */
 int setDrawMode(Lerp draw_mode);
+
+/**
+ * @brief 描画を行なっているスクリーンを取得する
+ * 
+ * @return int 
+ */
+int getDrawScreen();
 
 /**
  * @brief 描画を行うスクリーンをセットする

@@ -15,6 +15,8 @@
 #include "../../Utility/DxLibWrap.h"
 
 struct ScreenStateResume {
+	// 保存時のスクリーン
+	int screen;
 	// バッファとして保存している明るさ情報
 	Color::Color buf_bright;
 
@@ -28,6 +30,20 @@ struct ScreenStateResume {
 	ScreenStateResume(): buf_bright(Color::Color { 255, 255, 255 }), buf_blend(BlendMode::Property { BlendMode::kNoBlend, 0 }), lerp(Lerp::kNearest) {}
 
 	// MARK: 画面の明るさ情報、ブレンド情報の読み込み・保存
+
+	/**
+	 * @brief アクティブなスクリーンの読み込み
+	 * 
+	 * @return int 
+	 */
+	int loadScreen();
+
+	/**
+	 * @brief 再起用のスクリーンの保存
+	 * 
+	 * @return int 
+	 */
+	int saveScreen();
 
 	/**
 	 * @brief 明るさ情報の読み込み
@@ -74,16 +90,18 @@ struct ScreenStateResume {
 	/**
 	 * @brief スクリーン情報のバッファからの読み込み
 	 * 
+	 * @param screen_load スクリーンもロードするなら**true**
 	 * @return int 
 	 */
-	int loadScreenState();
+	int loadScreenState(bool screen_load = false);
 
 	/**
 	 * @brief スクリーン情報のバッファへの保存
 	 * 
+	 * @param screen_save スクリーンもセーブするなら**true**
 	 * @return int 
 	 */
-	int saveScreenState();
+	int saveScreenState(bool screen_save = false);
 };
 
 #endif

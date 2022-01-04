@@ -70,4 +70,27 @@ namespace GraphEffect {
 		// フィルタの総数
 		kMax = DX_GRAPH_FILTER_NUM
 	};
+
+	enum Type {
+		// FALSE
+		kCmpNever = DX_CMP_NEVER,
+		// Src <  Dest		DrawAlpha <  TestParam
+		kCmpLess = DX_CMP_LESS,
+		// Src == Dest		DrawAlpha == TestParam
+		kCmpEqual = DX_CMP_EQUAL,
+		// Src <= Dest		DrawAlpha <= TestParam
+		kCmpLessQual = DX_CMP_LESSEQUAL,
+		// Src >  Dest		DrawAlpha >  TestParam
+		kCmpGreater = DX_CMP_GREATER,
+		// Src != Dest		DrawAlpha != TestParam
+		kCmpNoteQual = DX_CMP_NOTEQUAL,
+		// Src >= Dest		DrawAlpha >= TestParam
+		kCmpGreaterQual = DX_CMP_GREATEREQUAL,
+		// TRUE
+		kCmpAlways = DX_CMP_ALWAYS,
+		// ( DX_CMP_LESSEQUAL )
+		kZcmpDefault = DX_ZCMP_DEFAULT,
+		// ( DX_CMP_GREATEREQUAL )
+		kZcmpReverse = DX_ZCMP_REVERSE
+	};
 }

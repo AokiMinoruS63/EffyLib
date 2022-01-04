@@ -19,15 +19,44 @@ struct Vec3 {
 	float y;
 	float z;
 
+	/**
+	 * @brief 初期化
+	 * 
+	 * @param x 
+	 * @param y 
+	 * @param z 
+	 */
+	Vec3(float x, float y, float z): x(x), y(y), z(z){}
+
+	/**
+	 * @brief 初期化
+	 * 
+	 */
+	Vec3(): Vec3(0.0f, 0.0f, 0.0f) {}
+
+	/**
+	 * @brief 初期化
+	 * 
+	 * @param x 
+	 * @param y 
+	 * @param z 
+	 */
+	Vec3(int x, int y, int z): Vec3((float)x, (float)y, (float)z) {}
+
 	/* 関数 */
 
 	/**
-	 * @brief ベクトルを正規化してスカラーを出力する
-	 * 
-	 * @return float 
+	 * @brief ベクトルを正規化する
+	 *  
 	 */
-	float norm() {
-		return std::sqrtf( x * x + y * y + z * z );
+	void norm() {
+		float value = std::sqrtf( x * x + y * y + z * z );
+		if(value > 0) {
+			value = 1 / value;
+		}
+		x = x * value;
+		y = y * value;
+		z = z * value;
 	}
 };
 

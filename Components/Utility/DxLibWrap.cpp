@@ -120,6 +120,11 @@ float getImageHeight(int graph_handle) {
 	return (float)height;
 }
 
+// 描画対象にできるグラフィックを作成する
+int makeScreen(int width, int height, int use_alpha_channel) {
+	return MakeScreen(width, height, use_alpha_channel);
+}
+
 /**
  * @brief スクリーン・画像にフィルターを施す
  * 
@@ -347,6 +352,11 @@ Lerp getDrawMode() {
 // 線形補完を設定する
 int setDrawMode(Lerp draw_mode) {
 	return SetDrawMode(draw_mode);
+}
+
+// 描画を行なっているスクリーンを取得する
+int getDrawScreen() {
+	return GetDrawScreen();
 }
 
 // 描画を行うスクリーンをセットする
