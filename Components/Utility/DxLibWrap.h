@@ -32,17 +32,13 @@
 #include "TypeExtensions/ScreenState+Extensions.h"
 #include <stdarg.h>
 #include "../Common/Type/Vec2.h"
+#include "../Common/Type/ReturnType.h"
 #include "../Common/Shape/Rect.h"
 #include "../Common/Shape/Circle.h"
 
 #ifdef EMSCRIPTEN
 #include "ScreenSizeGenerator.h"
 #endif
-
-// 成功時に返す値
-const int kSuccessCode = 0;
-// エラーの時に返す値
-const int kErrorCode = -1;
 
 /* 読み込み、マウス、タッチ系 */
 

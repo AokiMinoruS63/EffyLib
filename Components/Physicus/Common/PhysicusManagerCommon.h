@@ -15,10 +15,10 @@
 #include "../PhysicusWorld/Frame/PhysicusWorldFrame.h"
 #include "../../OpenSource/Box2D/Box2D.h"
 #include "../../Touch/TouchData.h"
-#include "../../Common/Object/HashObject.h"
+#include "../../Common/Object/HandleObject.h"
 #include "PhysicusEvent.h"
 
-class PhysicusManagerCommon: public HashObject {
+class PhysicusManagerCommon {
 	// MARK: 定数
 	public:
 
@@ -35,7 +35,7 @@ class PhysicusManagerCommon: public HashObject {
 	// オブジェクト・パーティクルが生存できるエリア
 	Physicus::Frame alive_area_;
 	// 所持しているイベント
-	std::vector<Physicus::Event> events;
+	std::vector<Physicus::Event*> events;
 
 	// MARK: - 関数
 

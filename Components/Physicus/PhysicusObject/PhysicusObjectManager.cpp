@@ -17,7 +17,6 @@ using namespace Physicus;
 
 // コンストラクタ
 PhysicusObjectManager::PhysicusObjectManager(b2World* world, float scale, Frame alive_area, float tie_loop_range) {
-	hashInit();
 	world_ = world;
 	world_scale_ = scale;
 	alive_area_ = alive_area;

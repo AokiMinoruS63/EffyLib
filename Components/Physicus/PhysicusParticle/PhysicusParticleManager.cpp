@@ -16,7 +16,6 @@ using namespace Physicus;
 
 // コンストラクタ
 PhysicusParticleManager::PhysicusParticleManager(b2World* world, float scale, Physicus::Frame alive_area) {
-	hashInit();
 	world_ = world;
 	world_scale_ = scale;
 	alive_area_ = alive_area;

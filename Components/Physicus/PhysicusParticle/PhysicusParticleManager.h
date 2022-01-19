@@ -17,7 +17,7 @@
 #include "../../Effect/EffectScreen.h"
 #include "../../Effect/LiquidEffect.h"
 
-class PhysicusParticleManager: public PhysicusManagerCommon {
+class PhysicusParticleManager: public PhysicusManagerCommon, HandleObject<Physicus::Particle> {
 	// MARK: 変数
 	private:
 
