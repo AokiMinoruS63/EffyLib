@@ -12,7 +12,7 @@
 #ifndef LIFE_OBJECT_H
 #define LIFE_OBJECT_H
 
-#include "../Utility/DxLibWrap.h"
+#include "../../Utility/DxLibWrap.h"
 
 class LifeObject {
 	// MARK: - 変数

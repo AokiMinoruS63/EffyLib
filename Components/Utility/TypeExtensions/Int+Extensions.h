@@ -21,7 +21,7 @@ namespace Int {
 	 * @param max 最大値
 	 * @return int 
 	 */
-	static int clamp(int value, int min, int max) {
+	inline int clamp(int value, int min, int max) {
 		value = value < min ? min : value;
 		value = value > max ? max : value;
 		return value;

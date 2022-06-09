@@ -21,7 +21,7 @@ namespace B2Fixture {
 	 * 
 	 * @return b2FixtureDef 
 	 */
-	static b2FixtureDef defaultSetting() {
+	inline b2FixtureDef defaultSetting() {
 		b2FixtureDef fixtureDef = b2FixtureDef();
 		// 密度を設定
 		fixtureDef.density = 1.00f;
@@ -38,7 +38,7 @@ namespace B2Fixture {
 	 * @param fixture fixtureのポインタ
 	 * @return int 
 	 */
-	static int count(b2Fixture* fixture) {
+	inline int count(b2Fixture* fixture) {
 		int count = 0;
 		b2Fixture* itr;
 		itr = fixture;
@@ -55,7 +55,7 @@ namespace B2Fixture {
 	 * @param fixture 
 	 * @return std::vector<b2Fixture*> 
 	 */
-	static std::vector<b2Fixture*> toVector(b2Fixture* fixture) {
+	inline std::vector<b2Fixture*> toVector(b2Fixture* fixture) {
 		auto itr = fixture;
 		std::vector<b2Fixture*> vec;
 		while(itr != NULL) {
@@ -75,7 +75,7 @@ namespace B2Fixture {
 		 * @param scale 
 		 * @return std::vector<b2Vec2> 
 		 */
-		static std::vector<b2Vec2> vertices(b2Fixture* fixture, float scale = 1.0) {
+		inline std::vector<b2Vec2> vertices(b2Fixture* fixture, float scale = 1.0) {
 			std::vector<b2Vec2> vec;
 			b2Vec2 position = fixture->GetBody()->GetPosition();
 			b2EdgeShape* shape = (b2EdgeShape*)fixture->GetShape();

@@ -15,7 +15,7 @@
 #include "../Common/PhysicusManagerCommon.h"
 #include "PhysicusObject.h"
 
-class PhysicusObjectManager: public PhysicusManagerCommon {
+class PhysicusObjectManager: public PhysicusManagerCommon, HandleObject<Physicus::Object> {
 	// MARK: 変数
 	private:
 

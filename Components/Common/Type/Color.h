@@ -1,5 +1,5 @@
 /**
- * @file Color+Extensions.h
+ * @file Color.h
  * @author AokiMinoru (personal-git@aokiminoru.work)
  * @brief 
  * @version 0.1
@@ -9,10 +9,14 @@
  * 
  */
 
-#ifndef COLOR_EXTENSION_H
-#define COLOR_EXTENSION_H
+#ifndef COLOR_H
+#define COLOR_H
 
+#ifdef EMSCRIPTEN
 #include "../../../DxLibForHTML5/include/DxLib.h"
+#else
+#include <DxLib.h>
+#endif
 
 namespace Color {
 	static const int kWhite = GetColor(255, 255, 255);
@@ -38,6 +42,21 @@ namespace Color {
 		int green;
 		// 青
 		int blue;
+
+		/**
+		 * @brief 初期化
+		 * 
+		 * @param red 
+		 * @param green 
+		 * @param blue 
+		 */
+		Color(int red, int green, int blue): red(red), green(green), blue(blue) {}
+
+		/**
+		 * @brief 初期化
+		 * 
+		 */
+		Color(): Color(255, 255, 255) {}
 	};
 }
 

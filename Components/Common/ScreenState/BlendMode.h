@@ -1,5 +1,5 @@
 /**
- * @file BlendMode+Extension.h
+ * @file BlendMode.h
  * @author AokiMinoru (personal-git@aokiminoru.work)
  * @brief 
  * @version 0.1
@@ -9,10 +9,14 @@
  * 
  */
 
-#ifndef BLENDMODE_EXTENSION_H
-#define BLENDMODE_EXTENSION_H
+#ifndef BLENDMODE_H
+#define BLENDMODE_H
 
-#include "../DxLibWrap.h"
+#ifdef EMSCRIPTEN
+#include "../../../DxLibForHTML5/include/DxLib.h"
+#else
+#include <DxLib.h>
+#endif
 
 namespace BlendMode {
 	static const int kMin = 0;
@@ -53,7 +57,7 @@ namespace BlendMode {
 	 * @param prm パラメータ(0〜255)
 	 * @return Property 
 	 */
-	static Property init(Mode mode = kNoBlend, int prm = kMin) {
+	inline Property init(Mode mode = kNoBlend, int prm = kMin) {
 		return Property { mode, prm };
 	}
 
@@ -64,7 +68,7 @@ namespace BlendMode {
 	 * @param rate パラメータ(0.0〜1.0)
 	 * @return Property 
 	 */
-	static Property init(Mode mode = Mode::kNoBlend, float rate = 0.0) {
+	inline Property init(Mode mode = Mode::kNoBlend, float rate = 0.0) {
 		return Property { mode, (int)(rate * 255.0) };
 	}
 }

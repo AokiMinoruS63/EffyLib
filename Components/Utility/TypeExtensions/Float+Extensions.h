@@ -13,6 +13,7 @@
 #define FLOAT_EXTENSION_H
 
 #include "../../Utility/DxLibWrap.h"
+#include "../../Common/Constant/MathConstant.h"
 #include <vector>
 
 namespace Float {
@@ -21,6 +22,10 @@ namespace Float {
 	static const float kMinima = FLT_MIN;
 	// 最小値
 	static const float kMin = 0.0;
+	// 16分の1
+	static const float kOneSixteen = 0.0625;
+	// 8分の1
+	static const float kOneEight = 0.125;
 	// 4分の1
 	static const float kQuarter = 0.25;
 	// 中間値
@@ -32,32 +37,32 @@ namespace Float {
 
 	namespace Angle {
 		// 左上角度
-		static const float kLeftTop = DX_PI_F / 3.0;
+		static const float kLeftTop = kPiFloat / 3.0;
 		// 上角度
-		static const float kTop = DX_PI_F / 2.0;
+		static const float kTop = kHalfPiFloat;
 		// 右上角度
-		static const float kRightTop = DX_PI_F * 2.0 / 3.0;
+		static const float kRightTop = kPiFloat / 3.0 * 2.0;
 		// 左角度
 		static const float kLeft = 0.0;
 		// 右角度
-		static const float kRight = DX_PI_F;
+		static const float kRight = kPiFloat;
 		// 左下角度
-		static const float kLeftBottom = -DX_PI_F / 3.0;
+		static const float kLeftBottom = -kPiFloat / 3.0;
 		// 下角度
-		static const float kBottom = -DX_PI_F / 2.0;
+		static const float kBottom = -kHalfPiFloat;
 		// 右下角度
-		static const float kRightBottom = -DX_PI_F * 2.0  / 3.0;
+		static const float kRightBottom = -kPiFloat / 3.0 * 2.0;
 
 		// 0度
 		static const float kZeroDegree = 0.0;
 		// 90度
-		static const float kNinetyDegree = DX_PI_F * 0.5;
+		static const float kNinetyDegree = kHalfPiFloat;
 		// 180度
-		static const float kOneEightyDegree = DX_PI_F;
+		static const float kOneEightyDegree = kPiFloat;
 		// 270度
-		static const float kTwoSeventyDegree = DX_PI_F * 1.5;
+		static const float kTwoSeventyDegree = kPiFloat * 1.5;
 		// 360度
-		static const float kThreeSixtyDegree = DX_PI_F * 2.0;
+		static const float kThreeSixtyDegree = kTwoPiFloat;
 
 		/**
 		 * @brief レートから角度への変換
@@ -66,7 +71,7 @@ namespace Float {
 		 * @return float 角度(radian)
 		 */
 		static float fromRate(float rate) {
-			return rate * DX_PI_F * 2.0;
+			return rate * kPiFloat * 2.0;
 		}
 	}
 
@@ -85,7 +90,7 @@ namespace Float {
 		static const float kBezieCircleRate = 0.55228;
 
 		// 円のベジェ曲線における進行率を取得する
-		static float bezieRate(float t) {
+		inline float bezieRate(float t) {
 			if(t < Float::kQuarter) {
 				return t * 4.0;
 			} else if (t < Float::kHalf) {
@@ -98,7 +103,7 @@ namespace Float {
 		}
 
 		// 円のベジェ曲線における適用後の回転角度を取得する
-		static float plusAngle(float t) {
+		inline float plusAngle(float t) {
 			if(t < Float::kQuarter) {
 				return Angle::kZeroDegree;
 			} else if (t < Float::kHalf) {
@@ -117,7 +122,7 @@ namespace Float {
 	 * @param vec 
 	 * @return float 
 	 */
-	static float total(std::vector<float> vec) {
+	inline float total(std::vector<float> vec) {
 		float num = 0;
 		for(auto &itr: vec) {
 			num += itr;
@@ -133,7 +138,7 @@ namespace Float {
 	 * @param totalAdvance 全体の進行率。0.0〜1.0
 	 * @param size 節の個数
 	 */
-	static void setAdvance(int& separateNum, float& lastAdvance, float totalAdvance, int size) {
+	inline void setAdvance(int& separateNum, float& lastAdvance, float totalAdvance, int size) {
 		const float advance = totalAdvance * (float)size;
 		separateNum = (int)advance;
 		lastAdvance = totalAdvance == kMax ? kMax : fmodf(advance, 1.0 );
@@ -147,7 +152,7 @@ namespace Float {
 	 * @param sections 節の長さの配列
 	 * @param totalAdvance 全体の進行率。0.0〜1.0
 	 */
-	static void setAdvance(int& separateNum, float& lastAdvance, std::vector<float> sections, float totalAdvance) {
+	inline void setAdvance(int& separateNum, float& lastAdvance, std::vector<float> sections, float totalAdvance) {
 		const float totalLimit = total(sections);
 		totalAdvance *= totalLimit;
 		separateNum = 0;
@@ -170,7 +175,7 @@ namespace Float {
 	 * @param rate 
 	 * @return float 
 	 */
-	static float between(float s, float g, float rate) {
+	inline float between(float s, float g, float rate) {
 		return s + (g - s) * rate;
 	}
 
@@ -181,7 +186,7 @@ namespace Float {
 	 * @param g 終点
 	 * @return float 
 	 */
-	static float halfWay(float s, float g) {
+	inline float halfWay(float s, float g) {
 		return between(s, g, kHalf);
 	}
 
@@ -192,7 +197,7 @@ namespace Float {
 	 * @param g 
 	 * @return float 
 	 */
-	static float distance(float s, float g) {
+	inline float distance(float s, float g) {
 		return g - s < 0 ? s - g : g - s;
 	}
 
@@ -202,7 +207,7 @@ namespace Float {
 	 * @param value 
 	 * @return float 
 	 */
-	static float absolute(float value) {
+	inline float absolute(float value) {
 		return value < 0 ? -value : value;
 	}
 
@@ -213,11 +218,11 @@ namespace Float {
 	 * @param angleB 
 	 * @return float 
 	 */
-	static float angleDifference(float angleA, float angleB) {
-		if(angleA < DX_PI_F * -kHalf && angleB > DX_PI_F * kHalf) {
-			angleA += DX_PI_F * 2.0;
-		} else if(angleB < DX_PI_F * -kHalf && angleA > DX_PI_F * kHalf) {
-			angleB += DX_PI_F * 2.0;
+	inline float angleDifference(float angleA, float angleB) {
+		if(angleA < -kHalfPiFloat && angleB > kHalfPiFloat) {
+			angleA += kTwoPiFloat;
+		} else if(angleB < -kHalfPiFloat && angleA > kHalfPiFloat) {
+			angleB += kTwoPiFloat;
 		}
 		float dif = angleB - angleA;
 		if(dif < 0) {
@@ -234,7 +239,7 @@ namespace Float {
 	 * @param max 最大値
 	 * @return float 適用した値
 	 */
-	static float clamp(float num, float min, float max) {
+	inline float clamp(float num, float min, float max) {
 		num = num > max ? max : num;
 		num = num < min ? min : num;
 		return num;
@@ -247,7 +252,7 @@ namespace Float {
 	 * @param t 
 	 * @return float 
 	 */
-	static float bezieValue(const float value[3], float t) {
+	inline float bezieValue(const float value[3], float t) {
 		t = clamp(t, kMin, kMax);
 		const float tt = (kMax - t);
 		return value[0] * tt * tt + value[1] * 2.0 * t * tt +  value[2] * t * t;
@@ -260,7 +265,7 @@ namespace Float {
 	 * @param t 
 	 * @return float 
 	 */
-	static float bezieFourValue(const float value[4], float t) {
+	inline float bezieFourValue(const float value[4], float t) {
 		t = clamp(t, kMin, kMax);
 		const float tt = (kMax - t);
 		return value[0] * tt * tt * tt + value[1] * 3 * t * tt * tt + value[2] * 3 * t * t * tt + value[3] * t * t * t;
@@ -272,7 +277,7 @@ namespace Float {
 	 * @param val1 
 	 * @param val2 
 	 */
-	static void swap(float* val1, float* val2) {
+	inline void swap(float* val1, float* val2) {
 		const float tmp = *val1;
 		*val1 = *val2;
 		*val2 = tmp;
@@ -285,7 +290,7 @@ namespace Float {
 	 * @param num2 
 	 * @return float 
 	 */
-	static float smaller(float num1, float num2) {
+	inline float smaller(float num1, float num2) {
 		if(num1 < num2) {
 			return num1;
 		}

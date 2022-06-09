@@ -56,6 +56,16 @@ int getTouchInput(int input_no, int *position_x, int *position_y, int global_pos
         setScreenPosToGlobal(position_x, position_y);
     return GetTouchInput(input_no, position_x, position_y, id, device);
 }
+	
+// ミリ秒単位の精度を持つカウンタの現在値を得る
+int getNowCount() {
+	return GetNowCount();
+}
+
+// １秒を1.0fとした時のカウンタの現在地を得る
+float getNowCountFloat() {
+	return ((float)getNowCount()) * 0.001;
+}
 
 // 明るさを取得する
 int getDrawBright(Color::Color* color) {
@@ -108,6 +118,11 @@ float getImageHeight(int graph_handle) {
 	int width = -1, height = -1;
 	GetGraphSize(graph_handle, &width, &height);
 	return (float)height;
+}
+
+// 描画対象にできるグラフィックを作成する
+int makeScreen(int width, int height, int use_alpha_channel) {
+	return MakeScreen(width, height, use_alpha_channel);
 }
 
 /**
@@ -323,13 +338,25 @@ int graphFilterBlt(int graph_handle, int dest_gr_handle, int filter_type, ...) {
 }
 
 // 線形補完を取得する
-int getDrawMode() {
-	return GetDrawMode();
+Lerp getDrawMode() {
+	const int mode = GetDrawMode();
+	switch(mode) {
+		case Lerp::kNearest: return Lerp::kNearest;
+		case Lerp::kBilinear: return Lerp::kBilinear;
+		case Lerp::kAnisotropic: return Lerp::kAnisotropic;
+		default: return Lerp::kOther;
+	}
+	return Lerp::kOther;
 }
 
 // 線形補完を設定する
-int setDrawMode(int draw_mode) {
+int setDrawMode(Lerp draw_mode) {
 	return SetDrawMode(draw_mode);
+}
+
+// 描画を行なっているスクリーンを取得する
+int getDrawScreen() {
+	return GetDrawScreen();
 }
 
 // 描画を行うスクリーンをセットする
@@ -345,6 +372,11 @@ int setDrawScreenBack() {
 // 現在描画を行なっているスクリーンをクリアする
 int clearDrawScreen() {
 	return ClearDrawScreen();
+}
+
+// RGBから色を取得する
+int getColor(int red, int green, int blue) {
+	return GetColor(red, green, blue);
 }
 
 // 色をintからRGBに変換する
@@ -379,8 +411,57 @@ int drawBox(int x1 , int y1 , int x2 , int y2 , unsigned int color , int fill_fl
     return DrawBox(x1, y1, x2, y2, color, fill_flag);
 }
 
+// 四角形を描画
+int drawBox(Rect rect, unsigned int color , int fill_flag, int global_pos) {
+	const Vec2 leftTop = rect.leftTop();
+	const Vec2 rightBottom = rect.rightBottom();
+	return drawBox((int)leftTop.x, (int)leftTop.y, (int)rightBottom.x, (int)rightBottom.y, color, fill_flag, global_pos);
+}
+
+// 頂点座標を全て指定した矩形を描画
+int drawQuadrangle(Vec2* vertices, unsigned int color, int fill_flag, int global_pos) {
+	if(global_pos == FALSE) {
+		for(int i = 0; i < 4; i++) {
+			setScreenPosToGlobal(&vertices[i].x, &vertices[i].y);
+		}
+	}
+	return DrawQuadrangle(
+		vertices[0].x, 
+		vertices[0].y, 
+		vertices[1].x, 
+		vertices[1].y, 
+		vertices[2].x, 
+		vertices[2].y, 
+		vertices[3].x, 
+		vertices[3].y, 
+		color, 
+		fill_flag
+		);
+}
+
+// 頂点座標を全て指定した矩形を描画(アンチエイリアス付き)
+int drawQuadrangleAA(Vec2* vertices, unsigned int color, int fill_flag, int global_pos) {
+	if(global_pos == FALSE) {
+		for(int i = 0; i < 4; i++) {
+			setScreenPosToGlobal(&vertices[i].x, &vertices[i].y);
+		}
+	}
+	return DrawQuadrangleAA(
+		vertices[0].x, 
+		vertices[0].y, 
+		vertices[1].x, 
+		vertices[1].y, 
+		vertices[2].x, 
+		vertices[2].y, 
+		vertices[3].x, 
+		vertices[3].y, 
+		color, 
+		fill_flag
+		);
+}
+
 // 四角形を描画(アンチエイリアス付き)
-int drawBoxAA(int x1 , int y1 , int x2 , int y2 , unsigned int color , int fill_flag, int global_pos) {
+int drawBoxAA(float x1 , float y1 , float x2 , float y2 , unsigned int color , int fill_flag, int global_pos) {
     if (global_pos == FALSE) {
         setScreenPosToGlobal(&x1, &y1);
         setScreenPosToGlobal(&x2, &y2);
@@ -388,11 +469,23 @@ int drawBoxAA(int x1 , int y1 , int x2 , int y2 , unsigned int color , int fill_
     return DrawBoxAA(x1, y1, x2, y2, color, fill_flag);
 }
 
+// 四角形を描画(アンチエイリアス付き)
+int drawBoxAA(Rect rect, unsigned int color, int fill_flag, int global_pos) {
+	const Vec2 leftTop = rect.leftTop();
+	const Vec2 rightBottom = rect.rightBottom();
+	return drawBoxAA(leftTop.x, leftTop.y, rightBottom.x, rightBottom.y, color, fill_flag, global_pos);
+}
+
 // 円の描画
 int drawCircle(int x, int y, int r, unsigned int color, int global_pos, int fill_flag, int line_chickness) {
     if (global_pos == FALSE)
         setScreenPosToGlobal(&x, &y);
     return DrawCircle(x, y, r, color, fill_flag, line_chickness);
+}
+
+// 円の描画
+int drawCircle(Circle circle, unsigned int color, int global_pos, int fill_flag, int line_chickness) {
+	return drawCircle(circle.x, circle.y, circle.radius, color, global_pos, fill_flag, line_chickness);
 }
 
 // 円の描画(アンチエイリアス付き)
@@ -403,10 +496,15 @@ int drawCircleAA(float x, float y, float r, int posnum, unsigned int color, int 
 }
 
 // 円の描画(アンチエイリアス付き)
-int drawCircleAA(b2Vec2 center, float r, int posnum, unsigned int color, int global_pos, int fill_flag, int line_chickness) {
+int drawCircleAA(Vec2 center, float r, int posnum, unsigned int color, int global_pos, int fill_flag, int line_chickness) {
     if (global_pos == FALSE)
         setScreenPosToGlobal(&center.x, &center.y);
     return drawCircleAA(center.x, center.y, r, posnum, color, global_pos, fill_flag, line_chickness);
+}
+
+// 円の描画(アンチエイリアス付き)
+int drawCircleAA(Circle circle, int posnum, unsigned int color, int global_pos, int fill_flag, int line_chickness) {
+	return drawCircleAA(circle.x, circle.y, circle.radius, posnum, color, global_pos, fill_flag, line_chickness);
 }
 
 // 楕円を描く
@@ -513,12 +611,12 @@ int drawModiGraph( int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y
 }
 
 // メモリに読みこんだグラフィックの自由変形描画
-int drawModiGraph( b2Vec2 leftUp, b2Vec2 rightUp, b2Vec2 rightBottom, b2Vec2 leftBottom, int graph_handle , int trans_flag, int global_pos) {
+int drawModiGraph( Vec2 leftUp, Vec2 rightUp, Vec2 rightBottom, Vec2 leftBottom, int graph_handle , int trans_flag, int global_pos) {
     return drawModiGraph((int)leftUp.x, (int)leftUp.y, (int)rightUp.x, (int)rightUp.y, (int)rightBottom.x, (int)rightBottom.y, (int)leftBottom.x, (int)leftBottom.y, graph_handle, trans_flag, global_pos);
 }
 
 // メモリに読みこんだグラフィックの自由変形描画
-int drawModiGraph( std::vector<b2Vec2> vec, int graph_handle , int trans_flag, int global_pos) {
+int drawModiGraph( std::vector<Vec2> vec, int graph_handle , int trans_flag, int global_pos) {
 	if(vec.size() < 4) {
 		return kErrorCode;
 	}
@@ -536,8 +634,8 @@ int drawModiGraphF( float x1, float y1, float x2, float y2, float x3, float y3, 
     return DrawModiGraphF(x1, y1, x2, y2, x3, y3, x4, y4, graph_handle, trans_flag);
 }
 
-// メモリに読みこんだグラフィックの自由変形描画(float,引数がb2Vec2)
-int drawModiGraphF( b2Vec2 pos1, b2Vec2 pos2, b2Vec2 pos3, b2Vec2 pos4, int graph_handle , int trans_flag, int global_pos) {
+// メモリに読みこんだグラフィックの自由変形描画(float,引数がVec2)
+int drawModiGraphF( Vec2 pos1, Vec2 pos2, Vec2 pos3, Vec2 pos4, int graph_handle , int trans_flag, int global_pos) {
 	return drawModiGraphF(pos1.x, pos1.y, pos2.x, pos2.y, pos3.x, pos3.y, pos4.x, pos4.y, graph_handle, trans_flag, global_pos);
 }
 
@@ -577,7 +675,7 @@ float nextBezieAdvance(float now_advance, float roughness, bool loop, bool init)
 }
 
 // 制御点が３つのベジェ曲線を画像で描画する
-int drawBezie(b2Vec2 left[3], b2Vec2 right[3], float roughness, std::vector<int> images, bool loop, bool edge_draw, int first_index, float advance, int global_pos) {
+int drawBezie(Vec2 left[3], Vec2 right[3], float roughness, std::vector<int> images, bool loop, bool edge_draw, int first_index, float advance, int global_pos) {
 	if(advance == Float::kMin) {
 		return first_index;
 	}
@@ -588,7 +686,7 @@ int drawBezie(b2Vec2 left[3], b2Vec2 right[3], float roughness, std::vector<int>
 	float next;
 	bool end = false;
 	// 左の始点、終点、右の始点、終点
-	b2Vec2 so, si, go, gi;
+	Vec2 so, si, go, gi;
 	roughness = Float::clamp(roughness, 0.0, 1.0);
 	next = loop ? Float::clamp(t + roughness, 0.0, 1.0) : 1.0;
 	if(advance < next) {

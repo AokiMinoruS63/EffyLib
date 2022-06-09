@@ -17,6 +17,8 @@
 #include "Physicus/Physicus.h"
 #include "Sprite/Sprite.h"
 #include "Touch/TouchMgr.h"
+#include "Effect/Particle/EffectParticle3D.h"
+#include "Effect/BloomEffect.h"
 #include "Utility/DxLibWrap.h"
 #include "Utility/ScreenSizeGenerator.h"
 #include "Utility/TypeConversion.h"

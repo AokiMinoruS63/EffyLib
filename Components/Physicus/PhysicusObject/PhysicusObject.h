@@ -20,7 +20,7 @@
 #include "../PhysicusWorld/Frame/PhysicusWorldFrame.h"
 #include "Constant/PhysicusConstant.h"
 #include "PhysicusObjectSetting.h"
-#include "../../Common/LifeObject.h"
+#include "../../Common/Object/LifeObject.h"
 
 // 相互参照
 class Sprite;

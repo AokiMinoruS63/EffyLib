@@ -36,22 +36,6 @@ namespace Effect {
 		public:
 
 		/**
-		 * @brief Liquid
-		 * 
-		 * @param fill_screen 塗りつぶし用のスクリーン
-		 * @param edge_screen 縁を描画用のスクリーン
-		 * @param gauss_screen ガウス用のスクリーン
-		 * @return Liquid 
-		 */
-
-		/**
-		 * @brief 
-		 * 
-		 * @return Liquid 
-		 */
-		Liquid init();
-
-		/**
 		 * @brief コンストラクタ
 		 * 
 		 * @param setting セッティング

@@ -25,6 +25,7 @@
 
 				// Component
 				// OpenSource
+				"build/PerlinNoise.o",
 				"build/b2Particle.o",
 				"build/b2ParticleAssembly.o",
 				"build/b2ParticleGroup.o",
@@ -79,12 +80,20 @@
 				"build/b2WheelJoint.o",
 				// Component of EffyLib
 				"build/ComponentAssets.o",
+				"build/RandomEngine.o",
+				"build/ScreenStateResume.o",
+				"build/Circle.o",
+				"build/Rect.o",
+				"build/Sphere.o",
 				"build/LifeObject.o",
-				"build/HashObject.o",
+				"build/EffectParticleBase.o",
+				"build/EffectParticle3D.o",
 				"build/EffectScreen.o",
+				"build/BloomEffect.o",
 				"build/LiquidEffect.o",
 				"build/PhysicusParticleManager.o",
 				"build/PhysicusParticle.o",
+				"build/PhysicusEventManager.o",
 				"build/PhysicusManagerCommon.o",
                 "build/PhysicusObjectManager.o",
                 "build/PhysicusObject.o",
@@ -153,6 +162,7 @@
 
 				// Component
 				// OpenSource
+				"build/PerlinNoise.o",
 				"build/b2Particle.o",
 				"build/b2ParticleAssembly.o",
 				"build/b2ParticleGroup.o",
@@ -207,12 +217,20 @@
 				"build/b2WheelJoint.o",
 				// Component of EffyLib
 				"build/ComponentAssets.o",
+				"build/RandomEngine.o",
+				"build/ScreenStateResume.o",
+				"build/Circle.o",
+				"build/Rect.o",
+				"build/Sphere.o",
 				"build/LifeObject.o",
-				"build/HashObject.o",
 				"build/EffectScreen.o",
+				"build/EffectParticleBase.o",
+				"build/EffectParticle3D.o",
+				"build/BloomEffect.o",
 				"build/LiquidEffect.o",
 				"build/PhysicusParticleManager.o",
 				"build/PhysicusParticle.o",
+				"build/PhysicusEventManager.o",
 				"build/PhysicusManagerCommon.o",
 				"build/PhysicusObjectManager.o",
                 "build/PhysicusObject.o",

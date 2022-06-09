@@ -25,7 +25,7 @@ namespace B2BodyDef {
 	 * @param fixRotation 
 	 * @return b2BodyDef 
 	 */
-	static b2BodyDef generate(b2BodyType type, float x, float y, float rate = 1.0, bool fixedRotation = false) {
+	inline b2BodyDef generate(b2BodyType type, float x, float y, float rate = 1.0, bool fixedRotation = false) {
 		b2BodyDef bodyDef;
 
 		// 動体オブジェクトを定義する
@@ -44,7 +44,7 @@ namespace B2BodyDef {
 	 * @param fixRotation 
 	 * @return b2BodyDef 
 	 */
-	static b2BodyDef generate(b2BodyType type, b2Vec2 vec, float rate = 1.0, bool fixedRotation = false) {
+	inline b2BodyDef generate(b2BodyType type, b2Vec2 vec, float rate = 1.0, bool fixedRotation = false) {
 		return generate(type, vec.x, vec.y, rate, fixedRotation);
 	}
 
@@ -57,7 +57,7 @@ namespace B2BodyDef {
 	 * @param fixRotation 
 	 * @return b2BodyDef 
 	 */
-	static b2BodyDef fix(float x, float y, float rate = 1.0, bool fixedRotation = false) {
+	inline b2BodyDef fix(float x, float y, float rate = 1.0, bool fixedRotation = false) {
 		return generate(b2_staticBody, x, y, rate, fixedRotation);
 	}
 
@@ -69,7 +69,7 @@ namespace B2BodyDef {
 	 * @param fixRotation 
 	 * @return b2BodyDef 
 	 */
-	static b2BodyDef fix(b2Vec2 vec, float rate = 1.0, bool fixedRotation = false) {
+	inline b2BodyDef fix(b2Vec2 vec, float rate = 1.0, bool fixedRotation = false) {
 		return fix(vec.x, vec.y, rate, fixedRotation);
 	}
 	/**
@@ -81,7 +81,7 @@ namespace B2BodyDef {
 	 * @param fixedRotation
 	 * @return b2BodyDef 
 	 */
-	static b2BodyDef dynamic(float x, float y, float rate = 1.0, bool fixedRotation = false) {
+	inline b2BodyDef dynamic(float x, float y, float rate = 1.0, bool fixedRotation = false) {
 		return generate(b2_dynamicBody, x, y, rate, fixedRotation);
 	}
 
@@ -93,7 +93,7 @@ namespace B2BodyDef {
 	 * @param fixedRotation
 	 * @return b2BodyDef 
 	 */
-	static b2BodyDef dynamic(b2Vec2 vec, float rate = 1.0, bool fixedRotation = false) {
+	inline b2BodyDef dynamic(b2Vec2 vec, float rate = 1.0, bool fixedRotation = false) {
 		return dynamic(vec.x, vec.y, rate, fixedRotation);
 	}
 
@@ -104,7 +104,7 @@ namespace B2BodyDef {
 	 * @param y 
 	 * @return b2BodyDef 
 	 */
-	static b2BodyDef kinematic(float x, float y, float rate = 1.0, bool fixedRotation = false) {
+	inline b2BodyDef kinematic(float x, float y, float rate = 1.0, bool fixedRotation = false) {
 		return generate(b2_kinematicBody, x, y, rate, fixedRotation);
 	}
 
@@ -114,7 +114,7 @@ namespace B2BodyDef {
 	 * @param vec 
 	 * @return b2BodyDef 
 	 */
-	static b2BodyDef kinematic(b2Vec2 vec, float rate = 1.0, bool fixedRotation = false) {
+	inline b2BodyDef kinematic(b2Vec2 vec, float rate = 1.0, bool fixedRotation = false) {
 		return kinematic(vec.x, vec.y, rate, fixedRotation);
 	}
 }

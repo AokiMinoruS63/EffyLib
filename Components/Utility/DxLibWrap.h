@@ -26,19 +26,19 @@
 #include <cstdlib>
 #include <utility>
 #include "../OpenSource/Box2D/Box2D.h"
-#include "TypeExtensions/Color+Extensions.h"
-#include "TypeExtensions/BlendMode+Extension.h"
+#include "../Common/Type/Color.h"
+#include "../Common/ScreenState/BlendMode.h"
+#include "../Common/ScreenState/Lerp.h"
 #include "TypeExtensions/ScreenState+Extensions.h"
 #include <stdarg.h>
+#include "../Common/Type/Vec2.h"
+#include "../Common/Type/ReturnType.h"
+#include "../Common/Shape/Rect.h"
+#include "../Common/Shape/Circle.h"
 
 #ifdef EMSCRIPTEN
 #include "ScreenSizeGenerator.h"
 #endif
-
-// 成功時に返す値
-const int kSuccessCode = 0;
-// エラーの時に返す値
-const int kErrorCode = -1;
 
 /* 読み込み、マウス、タッチ系 */
 
@@ -72,6 +72,20 @@ int getMousePoint(int *x_buf, int *y_buf);
  */
 int getTouchInput(int input_no, int *position_x, int *position_y, 
                     int global_pos = FALSE, int *id = (int *)0, int *device = (int *)0);
+
+/**
+ * @brief ミリ秒単位の精度を持つカウンタの現在値を得る
+ * 
+ * @return int 端末が起動してからの経過時間（ミリ秒）
+ */
+int getNowCount();
+
+/**
+ * @brief １秒を1.0fとした時のカウンタの現在地を得る
+ * 
+ * @return float 
+ */
+float getNowCountFloat();
 
 /* 色・スクリーン関係 */
 
@@ -148,6 +162,16 @@ float getImageWidth(int graph_handle);
 float getImageHeight(int graph_handle);
 
 /**
+ * @brief 描画対象にできるグラフィックを作成する
+ * 
+ * @param width 作成するグラフィックの幅
+ * @param height 作成するグラフィックの高さ
+ * @param use_alpha_channel 作成するグラフィックにアルファチャンネルを付けるかどうか(TRUE: 付ける FALSE: 付けない)
+ * @return int int 0: 成功、-1: エラー発生
+ */
+int makeScreen(int width, int height, int use_alpha_channel = FALSE);
+
+/**
  * @brief スクリーン・画像にフィルターを施す
  * 
  * @param graph_handle 
@@ -171,9 +195,9 @@ int graphFilterBlt(int graph_handle, int dest_gr_handle, int filter_type, ...);
 /**
  * @brief 線形補完を取得する
  * 
- * @return int 
+ * @return Lerp 
  */
-int getDrawMode();
+Lerp getDrawMode();
 
 /**
  * @brief 線形補完を設定する
@@ -181,7 +205,14 @@ int getDrawMode();
  * @param drawMode 
  * @return int 
  */
-int setDrawMode(int draw_mode);
+int setDrawMode(Lerp draw_mode);
+
+/**
+ * @brief 描画を行なっているスクリーンを取得する
+ * 
+ * @return int 
+ */
+int getDrawScreen();
 
 /**
  * @brief 描画を行うスクリーンをセットする
@@ -204,6 +235,16 @@ int setDrawScreenBack();
  * @return int 
  */
 int clearDrawScreen();
+
+/**
+ * @brief RGBから色を取得する
+ * 
+ * @param red 
+ * @param green 
+ * @param blue 
+ * @return int 
+ */
+int getColor(int red, int green, int blue);
 
 /**
  * @brief 色をintからRGBに変換する
@@ -259,6 +300,17 @@ int drawLineAA( int x1 , int y1 , int x2 , int y2 , unsigned int color, int glob
 int drawBox(int x1 , int y1 , int x2 , int y2 , unsigned int color , int fill_flag, int global_pos = FALSE);
 
 /**
+ * @brief 四角形の描画
+ * 
+ * @param rect 四角形の形状
+ * @param color 描画する四角形の色
+ * @param fill_flag 四角の中身を塗りつぶすか、のフラグ。TRUEで塗り
+ * @param global_pos パーティションを考慮したグローバル座標で描画するか、のフラグ。TRUEでグローバル座標描画
+ * @return int 0: 成功、-1: エラー発生
+ */
+int drawBox(Rect rect, unsigned int color , int fill_flag, int global_pos = FALSE);
+
+/**
  * @brief 四角形を描画(アンチエイリアス付き)
  * 
  * @param x1 描画する四角形の左上の頂点X座標
@@ -270,7 +322,40 @@ int drawBox(int x1 , int y1 , int x2 , int y2 , unsigned int color , int fill_fl
  * @param global_pos パーティションを考慮したグローバル座標で描画するか、のフラグ。TRUEでグローバル座標描画
  * @return int 0: 成功、-1: エラー発生
  */
-int drawBoxAA(int x1 , int y1 , int x2 , int y2 , unsigned int color , int fill_flag, int global_pos = FALSE);
+int drawBoxAA(float x1 , float y1 , float x2 , float y2 , unsigned int color , int fill_flag, int global_pos = FALSE);
+
+/**
+ * @brief 頂点座標を全て指定した矩形を描画
+ * 
+ * @param vertices 頂点４つ（左上、右上、右下、左下）
+ * @param color 色
+ * @param fill_flag 塗りつぶすなら**true**
+ * @param global_pos パーティションを考慮したグローバル座標で描画するか、のフラグ。TRUEでグローバル座標描画
+ * @return int 0: 成功、-1: エラー発生
+ */
+int drawQuadrangle(Vec2* vertices, unsigned int color, int fill_flag, int global_pos = FALSE);
+
+/**
+ * @brief 頂点座標を全て指定した矩形を描画(アンチエイリアス付き)
+ * 
+ * @param vertices 頂点４つ（左上、右上、右下、左下）
+ * @param color 色
+ * @param fill_flag 塗りつぶすなら**true**
+ * @param global_pos パーティションを考慮したグローバル座標で描画するか、のフラグ。TRUEでグローバル座標描画
+ * @return int 0: 成功、-1: エラー発生
+ */
+int drawQuadrangleAA(Vec2* vertices, unsigned int color, int fill_flag, int global_pos = FALSE);
+
+/**
+ * @brief 四角形を描画(アンチエイリアス付き)
+ * 
+ * @param rect 四角形の形状
+ * @param color 描画する四角形の色
+ * @param fill_flag 四角の中身を塗りつぶすか、のフラグ。TRUEで塗り
+ * @param global_pos パーティションを考慮したグローバル座標で描画するか、のフラグ。TRUEでグローバル座標描画
+ * @return int 0: 成功、-1: エラー発生
+ */
+int drawBoxAA(Rect rect, unsigned int color, int fill_flag, int global_pos = FALSE);
 
 /**
  * @brief 円の描画
@@ -286,6 +371,17 @@ int drawBoxAA(int x1 , int y1 , int x2 , int y2 , unsigned int color , int fill_
  */
 int drawCircle(int x, int y, int r, unsigned int color, int global_pos = FALSE, int fill_flag = TRUE, int line_chickness = 1);
 
+/**
+ * @brief 円の描画
+ * 
+ * @param circle 円の形状
+ * @param color 円の色
+ * @param global_pos パーティションを考慮したグローバル座標で描画するか、のフラグ。TRUEでグローバル座標描画
+ * @param fill_flag TRUE(1の意)で円の中身も塗りつぶし、FALSE(0の意)で輪郭のみ
+ * @param line_chickness 縁の太さ
+ * @return int 0: 成功、-1: エラー発生
+ */
+int drawCircle(Circle circle, unsigned int color, int global_pos = FALSE, int fill_flag = TRUE, int line_chickness = 1);
 
 /**
  * @brief 円の描画(アンチエイリアス付き)
@@ -315,7 +411,21 @@ int drawCircleAA(float x, float y, float r, int posnum, unsigned int color, int 
  * @param line_chickness 縁の太さ
  * @return int 0: 成功、-1: エラー発生
  */
-int drawCircleAA(b2Vec2 center, float r, int posnum, unsigned int color, int global_pos = FALSE, int fill_flag = TRUE, 
+int drawCircleAA(Vec2 center, float r, int posnum, unsigned int color, int global_pos = FALSE, int fill_flag = TRUE, 
+                    int line_chickness = 1);
+
+/**
+ * @brief 円の描画(アンチエイリアス付き)
+ * 
+ * @param circle 円の形状
+ * @param posnum 円を形成する頂点の数
+ * @param color 円の色
+ * @param global_pos パーティションを考慮したグローバル座標で描画するか、のフラグ。TRUEでグローバル座標描画
+ * @param fill_flag TRUE(1の意)で円の中身も塗りつぶし、FALSE(0の意)で輪郭のみ
+ * @param line_chickness 縁の太さ
+ * @return int 0: 成功、-1: エラー発生
+ */
+int drawCircleAA(Circle circle, int posnum, unsigned int color, int global_pos = FALSE, int fill_flag = TRUE, 
                     int line_chickness = 1);
 
 /**
@@ -516,7 +626,7 @@ int drawModiGraph( int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y
  * @param global_pos パーティションを考慮したグローバル座標で描画するか、のフラグ。TRUEでグローバル座標描画
  * @return int 0: 成功、-1: エラー発生
  */
-int drawModiGraph( b2Vec2 leftUp, b2Vec2 rightUp, b2Vec2 rightBottom, b2Vec2 leftBottom,
+int drawModiGraph( Vec2 leftUp, Vec2 rightUp, Vec2 rightBottom, Vec2 leftBottom,
                     int graph_handle , int trans_flag, int global_pos = FALSE);
 
 /**
@@ -528,7 +638,7 @@ int drawModiGraph( b2Vec2 leftUp, b2Vec2 rightUp, b2Vec2 rightBottom, b2Vec2 lef
  * @param global_pos パーティションを考慮したグローバル座標で描画するか、のフラグ。TRUEでグローバル座標描画
  * @return int 0: 成功、-1: エラー発生
  */
-int drawModiGraph( std::vector<b2Vec2> vec,
+int drawModiGraph( std::vector<Vec2> vec,
                     int graph_handle , int trans_flag, int global_pos = FALSE);
 
 /**
@@ -562,7 +672,7 @@ int drawModiGraphF( float x1, float y1, float x2, float y2, float x3, float y3, 
  * @param global_pos パーティションを考慮したグローバル座標で描画するか、のフラグ。TRUEでグローバル座標描画
  * @return int 0: 成功、-1: エラー発生
  */
-int drawModiGraphF( b2Vec2 pos1, b2Vec2 pos2, b2Vec2 pos3, b2Vec2 pos4, 
+int drawModiGraphF( Vec2 pos1, Vec2 pos2, Vec2 pos3, Vec2 pos4, 
 					int graph_handle , int trans_flag, int global_pos = FALSE);
 
 /**
@@ -601,7 +711,7 @@ float nextBezieAdvance(float now_advance, float roughness, bool loop, bool init 
  * @param global_pos パーティションを考慮したグローバル座標で描画するか、のフラグ。TRUEでグローバル座標描画
  * @return int 終了後のインデックス
  */
-int drawBezie(b2Vec2 left[3], b2Vec2 right[3], float roughness, std::vector<int> images, bool loop, bool edge_draw, int first_index, float advance = 1.0, int global_pos = FALSE);
+int drawBezie(Vec2 left[3], Vec2 right[3], float roughness, std::vector<int> images, bool loop, bool edge_draw, int first_index, float advance = 1.0, int global_pos = FALSE);
 
 /**
  * @brief グラフィックの指定矩形部分のみを描画

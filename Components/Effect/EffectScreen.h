@@ -12,6 +12,8 @@
 #ifndef EFFECT_SCREEN_H
 #define EFFECT_SCREEN_H
 
+#include "../Common/ScreenState/ScreenStateResume.h"
+
 // エフェクト用のスクリーン
 class EffectScreen {
 
@@ -19,7 +21,7 @@ class EffectScreen {
 
 	public:
 	// 1/kGaussRatioの大きさのスクリーンにする
-	static const int kGaussRatio = 2;
+	static const int kGaussRatio = 4;
 
 	// MARK: 変数
 
@@ -31,14 +33,8 @@ class EffectScreen {
 	// ガウス用のスクリーン
 	int gauss_screen_;
 
-	// バッファとして保存している明るさ情報
-	Color::Color buf_bright_;
-
-	// バッファとして保存しているブレンド情報
-	BlendMode::Property buf_blend_;
-
-	// バッファとして保存している線形補完情報
-	int liner_inter_polation_;
+	// 明るさ、ブレンド、線形補完情報を一時的に記憶している構造体
+	ScreenStateResume screen_state_;
 
 	// MARK: コンストラクタ・デストラクタ
 
@@ -70,49 +66,6 @@ class EffectScreen {
 	int getGaussScreen();
 
 	// MARK: 画面の明るさ情報、ブレンド情報の読み込み・保存
-
-	private:
-	/**
-	 * @brief 明るさ情報の読み込み
-	 * 
-	 * @return int 
-	 */
-	int loadBright();
-
-	/**
-	 * @brief 明るさ情報の保存
-	 * 
-	 * @return int 
-	 */
-	int saveBright();
-
-	/**
-	 * @brief ブレンド情報の読み込み
-	 * 
-	 * @return int 
-	 */
-	int loadBlend();
-
-	/**
-	 * @brief ブレンド情報の保存
-	 * 
-	 * @return int 
-	 */
-	int saveBlend();
-
-	/**
-	 * @brief 線形補完情報の読み込み
-	 * 
-	 * @return int 
-	 */
-	int loadLinerInterPolation();
-
-	/**
-	 * @brief 線形補完情報の保存
-	 * 
-	 * @return int 
-	 */
-	int saveLinerInterPolation();
 
 	public:
 
