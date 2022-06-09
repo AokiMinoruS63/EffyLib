@@ -12,7 +12,7 @@
 // パーティションを入れない幅（ローカル幅）
 static const int kScreenWidth = 1136;
 // パーティションを入れない高さ(ローカル高さ)
-static const int kScreenHeight = 852;
+static const int kScreenHeight = 640;
 
 #ifdef EMSCRIPTEN
 // ブラウザのパーティションの幅
