@@ -1,11 +1,10 @@
 /**
  * @file PhysicusObjectType.h
- * @author AokiMinoru (personal-git@aokiminoru.work)
  * @brief B2Object::Objectの種類
- * @version 0.1
- * @date 2021-10-06
  * 
- * @copyright Copyright (c) 2021
+ * Copyright (c) 2021-2022 AokiMinoru
+ * Released under the MIT license.
+ * see https://opensource.org/licenses/MIT
  * 
  */
 

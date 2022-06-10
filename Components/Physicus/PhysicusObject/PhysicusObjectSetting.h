@@ -1,11 +1,10 @@
 /**
  * @file PhysicusObjectSetting.h
- * @author AokiMinoru (personal-git@aokiminoru.work)
  * @brief オブジェクトの設定
- * @version 0.1
- * @date 2021-10-17
  * 
- * @copyright Copyright (c) 2021
+ * Copyright (c) 2021-2022 AokiMinoru
+ * Released under the MIT license.
+ * see https://opensource.org/licenses/MIT
  * 
  */
 

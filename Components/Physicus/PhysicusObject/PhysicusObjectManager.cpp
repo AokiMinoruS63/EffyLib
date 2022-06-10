@@ -1,11 +1,10 @@
 /**
  * @file PhysicusObjectManager.cpp
- * @author AokiMinoru (personal-git@aokiminoru.work)
- * @brief オブジェクト管理クラス
- * @version 0.1
- * @date 2021-12-12
+ * @brief 物理演算オブジェクト管理クラス
  * 
- * @copyright Copyright (c) 2021
+ * Copyright (c) 2021-2022 AokiMinoru
+ * Released under the MIT license.
+ * see https://opensource.org/licenses/MIT
  * 
  */
 

@@ -1,11 +1,10 @@
 /**
- * @file B2Vec2Extensions.h
- * @author AokiMinoru (personal-git@aokiminoru.work)
- * @brief b2Vec2型のextension
- * @version 0.1
- * @date 2021-09-26
+ * @file B2Vec2+Extensions.h
+ * @brief 2Vec2型のextension
  * 
- * @copyright Copyright (c) 2021
+ * Copyright (c) 2021-2022 AokiMinoru
+ * Released under the MIT license.
+ * see https://opensource.org/licenses/MIT
  * 
  */
 

@@ -1,11 +1,10 @@
 /**
  * @file Sprite.h
- * @author AokiMinoru (personal-git@aokiminoru.work)
  * @brief スプライトクラス。描画とトランジションや動き、寿命などの計算管理を行う
- * @version 0.1
- * @date 2021-07-05
  * 
- * @copyright Copyright (c) 2021
+ * Copyright (c) 2021-2022 AokiMinoru
+ * Released under the MIT license.
+ * see https://opensource.org/licenses/MIT
  * 
  */
 

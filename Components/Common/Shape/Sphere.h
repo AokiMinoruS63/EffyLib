@@ -1,11 +1,10 @@
 /**
  * @file Sphere.h
- * @author AokiMinoru (personal-git@aokiminoru.work)
  * @brief 球体の形状
- * @version 0.1
- * @date 2021-12-26
  * 
- * @copyright Copyright (c) 2021
+ * Copyright (c) 2021-2022 AokiMinoru
+ * Released under the MIT license.
+ * see https://opensource.org/licenses/MIT
  * 
  */
 
