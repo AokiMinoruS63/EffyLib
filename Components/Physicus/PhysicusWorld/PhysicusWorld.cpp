@@ -95,6 +95,7 @@ void PhysicusWorld::makePreviewData() {
 	makeRectangleStroke(b2Vec2(0, 200), b2Vec2(300, 230));
 
 	int image = ComponentAssets::shared()->getImages().icons.at(2);
+	auto log = objects_->getImages();
 	objects_->setImages(&image, 1);
 	const int kDistance = 150;
 	for(int i = 0; i  < 5; i++) {
@@ -110,6 +111,7 @@ void PhysicusWorld::makePreviewData() {
 	setting.effect_setting.fill_color = Color::kDeepOrange;
 	setting.effect_setting.effect = true;
 	makeParticleSingle(b2Vec2(200, 200), setting);
+	objects_->setImages(log);
 }
 
 // 縁取りした矩形の即時生成
