@@ -1,11 +1,10 @@
 /**
  * @file TypeExtensions.h
- * @author AokiMinoru (personal-git@aokiminoru.work)
- * @brief Float関係のエクステンション
- * @version 0.1
- * @date 2021-09-26
+ * @brief 型関係のエクステンション
  * 
- * @copyright Copyright (c) 2021
+ * Copyright (c) 2021-2022 AokiMinoru
+ * Released under the MIT license.
+ * see https://opensource.org/licenses/MIT
  * 
  */
 

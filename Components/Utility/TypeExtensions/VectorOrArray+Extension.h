@@ -1,11 +1,6 @@
 /**
  * @file VectorOrArray+Extension.h
- * @author AokiMinoru (personal-git@aokiminoru.work)
  * @brief Vectorに適用出来るForEach, Filter, Map, Reduce処理関数
- * @version 0.1
- * @date 2021-09-20
- * 
- * @copyright Copyright (c) 2021
  * 
  */
 

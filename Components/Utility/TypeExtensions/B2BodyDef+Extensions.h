@@ -1,11 +1,10 @@
 /**
- * @file B2BodyDefExtensions.h
- * @author AokiMinoru (personal-git@aokiminoru.work)
+ * @file B2BodyDef+Extensions.h
  * @brief b2BodyDef型のextension
- * @version 0.1
- * @date 2021-09-26
  * 
- * @copyright Copyright (c) 2021
+ * Copyright (c) 2021-2022 AokiMinoru
+ * Released under the MIT license.
+ * see https://opensource.org/licenses/MIT
  * 
  */
 

@@ -1,11 +1,10 @@
 /**
  * @file SpriteCommon.h
- * @author AokiMinoru (personal-git@aokiminoru.work)
  * @brief スプライトのローカル、グローバル問わない共通情報
- * @version 0.1
- * @date 2021-09-01
  * 
- * @copyright Copyright (c) 2021
+ * Copyright (c) 2021-2022 AokiMinoru
+ * Released under the MIT license.
+ * see https://opensource.org/licenses/MIT
  * 
  */
 

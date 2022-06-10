@@ -1,11 +1,10 @@
 /**
  * @file ScreenStateResume.h
- * @author AokiMinoru (personal-git@aokiminoru.work)
  * @brief スクリーン情報を一時的に保存するための構造体
- * @version 0.1
- * @date 2022-01-01
  * 
- * @copyright Copyright (c) 2022
+ * Copyright (c) 2021-2022 AokiMinoru
+ * Released under the MIT license.
+ * see https://opensource.org/licenses/MIT
  * 
  */
 

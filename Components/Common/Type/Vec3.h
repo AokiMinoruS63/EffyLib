@@ -1,11 +1,10 @@
 /**
  * @file Vec3.h
- * @author AokiMinoru (personal-git@aokiminoru.work)
  * @brief ３軸のベクトル構造体
- * @version 0.1
- * @date 2021-12-21
  * 
- * @copyright Copyright (c) 2021
+ * Copyright (c) 2021-2022 AokiMinoru
+ * Released under the MIT license.
+ * see https://opensource.org/licenses/MIT
  * 
  */
 

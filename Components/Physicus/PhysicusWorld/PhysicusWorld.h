@@ -1,11 +1,10 @@
 /**
  * @file PhysicusWorld.h
- * @author AokiMinoru (personal-git@aokiminoru.work)
  * @brief 物理演算の制御を行うワールドのクラス
- * @version 0.1
- * @date 2021-09-19
  * 
- * @copyright Copyright (c) 2021
+ * Copyright (c) 2021-2022 AokiMinoru
+ * Released under the MIT license.
+ * see https://opensource.org/licenses/MIT
  * 
  */
 

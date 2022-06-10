@@ -1,11 +1,10 @@
 /**
  * @file PhysicusManagerCommon.cpp
- * @author AokiMinoru (personal-git@aokiminoru.work)
  * @brief 物理演算のオブジェクト・パーティクルのためのオーバーライド用のクラス
- * @version 0.1
- * @date 2021-12-12
  * 
- * @copyright Copyright (c) 2021
+ * Copyright (c) 2021-2022 AokiMinoru
+ * Released under the MIT license.
+ * see https://opensource.org/licenses/MIT
  * 
  */
 

@@ -1,11 +1,10 @@
 /**
  * @file PhysicusLinkBoard.h
- * @author AokiMinoru (personal-git@aokiminoru.work)
  * @brief リンクボード関係のメソッドを記述
- * @version 0.1
- * @date 2021-10-12
  * 
- * @copyright Copyright (c) 2021
+ * Copyright (c) 2021-2022 AokiMinoru
+ * Released under the MIT license.
+ * see https://opensource.org/licenses/MIT
  * 
  */
 

@@ -1,11 +1,10 @@
 /**
  * @file BloomEffect.h
- * @author AokiMinoru (personal-git@aokiminoru.work)
  * @brief ブルームエフェクト用のスクリーン
- * @version 0.1
- * @date 2022-01-04
  * 
- * @copyright Copyright (c) 2022
+ * Copyright (c) 2021-2022 AokiMinoru
+ * Released under the MIT license.
+ * see https://opensource.org/licenses/MIT
  * 
  */
 

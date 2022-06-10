@@ -1,11 +1,10 @@
 /**
  * @file ComponentAssets.h
- * @author AokiMinoru (personal-git@aokiminoru.work)
- * @brief コンポーネントのアセット
- * @version 0.1
- * @date 2021-10-17
+ * @brief ライブラリ固有のコンポーネント
  * 
- * @copyright Copyright (c) 2021
+ * Copyright (c) 2021-2022 AokiMinoru
+ * Released under the MIT license.
+ * see https://opensource.org/licenses/MIT
  * 
  */
 

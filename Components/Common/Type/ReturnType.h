@@ -1,11 +1,10 @@
 /**
  * @file ReturnType.h
- * @author AokiMinoru (personal-git@aokiminoru.work)
  * @brief 正常終了とエラーの時に返す値
- * @version 0.1
- * @date 2022-01-11
  * 
- * @copyright Copyright (c) 2022
+ * Copyright (c) 2021-2022 AokiMinoru
+ * Released under the MIT license.
+ * see https://opensource.org/licenses/MIT
  * 
  */
 
