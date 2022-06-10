@@ -73,5 +73,3 @@ emscripten の導入は <https://qiita.com/nokotan/items/5fa6f2d39ff7bb6641e8> �
 これらのプロジェクトのおかげで EffyLib は成り立っています. ありがとうございます.
 
 - - -
-
-DxLib for HTML5  Copyright (C) 2021 かめのこにょこにょこ
