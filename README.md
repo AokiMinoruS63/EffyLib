@@ -51,12 +51,13 @@ emscripten の導入は <https://qiita.com/nokotan/items/5fa6f2d39ff7bb6641e8> �
 
 ## ビルド
 
+- 初めて実行する時は、compile.shのコメントアウトを外しましょう。
 - Ctrl(Cmd)+Shift+B (デバッグビルド)
 - リリースビルドをしたいときは Ctrl(Cmd)+Shift+P でタスクの実行を選んで, Build Release
 
 ## 実行
 
-- 初めて実行する時は、compile.shのコメントアウトを外しましょう。Ctrl(Cmd)+Shift+B でビルド。Ctrl(Cmd)+F5で実行
+- Ctrl(Cmd)+F5で実行
 
 
 ## ライセンス表記
