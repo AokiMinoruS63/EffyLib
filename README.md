@@ -27,7 +27,7 @@ Android、iOS、Windowsでも使用できるように作ります。
 - 新しいクラスを追加したらtask.jsonに追加を忘れないようにしましょう。
 - 新しいコンポーネントフォルダを作成したらcompile.shに追加するのを忘れないようにしましょう。
 
-以下は　DxLib for HTML5  Copyright (C) 2021 かめのこにょこにょこ　さんより
+以下は　DxLib for HTML5  Copyright (C) 2021 かめのこにょこにょこ　さんより一部引用
 
 ## 前提要件
 
