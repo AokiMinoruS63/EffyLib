@@ -86,31 +86,34 @@ int PhysicusWorld::touchParticleCreate(touch_t touch) {
 }
 
 // プレビューの作成
-void PhysicusWorld::makePreviewData() {
+void PhysicusWorld::makePreviewData(bool is_block_set, bool is_liquid_particle_set) {
 	makeRectangleStroke(b2Vec2(0, 580), b2Vec2(880, 600));
 	makeRectangleStroke(b2Vec2(0, 200), b2Vec2(20, 600));
 	makeRectangleStroke(b2Vec2(860, 200), b2Vec2(880, 600));	
 
 	makeRectangleStroke(b2Vec2(0, 200), b2Vec2(300, 230));
 
-	int image = ComponentAssets::shared()->getImages().icons.at(2);
-	auto log = objects_->getImages();
-	objects_->setImages(&image, 1);
-	const int kDistance = 150;
-	for(int i = 0; i  < 5; i++) {
-		for(int j = 0; j  < 5; j++) {
-			makeRectangleFill(b2Vec2(100 + i * kDistance, 300 + j * kDistance), b2Vec2(130 + i * kDistance, 330 + j * kDistance));
-			makeRectangleFill(b2Vec2(150 + i * kDistance, 350 + j * kDistance), b2Vec2(180 + i * kDistance, 380 + j * kDistance));
+	if(is_block_set) {
+		int image = ComponentAssets::shared()->getImages().icons.at(2);
+		auto log = objects_->getImages();
+		objects_->setImages(&image, 1);
+		const int kDistance = 150;
+		for(int i = 0; i  < 5; i++) {
+			for(int j = 0; j  < 5; j++) {
+				makeRectangleFill(b2Vec2(100 + i * kDistance, 300 + j * kDistance), b2Vec2(130 + i * kDistance, 330 + j * kDistance));
+				makeRectangleFill(b2Vec2(150 + i * kDistance, 350 + j * kDistance), b2Vec2(180 + i * kDistance, 380 + j * kDistance));
+			}
 		}
+		objects_->setImages(log);
 	}
 	
-
-	auto setting = Physicus::ParticleSetting::init();
-	setting.effect_setting.group = 2;
-	setting.effect_setting.fill_color = Color::kDeepOrange;
-	setting.effect_setting.effect = true;
-	makeParticleSingle(b2Vec2(200, 200), setting);
-	objects_->setImages(log);
+	if(is_liquid_particle_set) {
+		auto setting = Physicus::ParticleSetting::init();
+		setting.effect_setting.group = 2;
+		setting.effect_setting.fill_color = Color::kDeepOrange;
+		setting.effect_setting.effect = true;
+		makeParticleSingle(b2Vec2(200, 200), setting);
+	}
 }
 
 // 縁取りした矩形の即時生成

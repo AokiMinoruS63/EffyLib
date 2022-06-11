@@ -124,7 +124,13 @@ class PhysicusWorld {
 
 	// MARK: - プレビュー
 
-	void makePreviewData();
+	/**
+	 * @brief プレビューデータを設置する
+	 * 
+	 * @param is_block_set ブロックを設置するなら**true**
+	 * @param is_liquid_particle_set パーティクルもセットするなら**true**
+	 */
+	void makePreviewData(bool is_block_set = false, bool is_liquid_particle_set = false);
 
 	// MARK: - 関数
 
