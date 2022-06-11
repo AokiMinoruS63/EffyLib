@@ -84,34 +84,6 @@ MainContent::MainContent() {
 	setDrawScreen(ScreenState::kBack);
 	// プレビューデータの作成
 	world_->makePreviewData();
-	/*
-	// DXライブラリのエラーコードは-1
-const int kErrorValue = -1;
-
-bool isDrawText(int font_handle, const char * input_text) {
-	int i = 0 ;
-
-	// 入力文字列の終端に到達するまで繰り返し
-	while( input_text[ i ] != '\0' )
-	{
-		// 入力文字の1文字のバイト数を取得する
-		// TODO: 環境によってDX_CHARCODEFORMAT_SHIFTJISの部分を変更する
-		int input_char_bytes = GetCharBytes( DX_CHARCODEFORMAT_SHIFTJIS, &input_text[ i ] ) ;
-		// フォントの中に入っている文字の中に入力文字列の文字が無かったら false を返す
-		int tmp[4], width;
-		if(GetFontCharInfo(font_handle, input_text[i], )  )
-
-		if( font_image_text[ j ] == '\0' )
-		{
-			return false ;
-		}
-
-		// 入力文字のチェック対象の位置を１文字分移動する
-		i += input_char_bytes ;
-	}
-	return true;
-}
-	*/
 }
 
 MainContent::~MainContent() {
