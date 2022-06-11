@@ -19,13 +19,76 @@ LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
 OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-# DX Library for HTML5 
+## DX Library for HTML5 
 
 (C) 2020-2022 かめのこにょこにょこ
 
 ## DX Library
 
 DX Library Copyright (C) 2001-2021 Takumi Yamada.
+
+## Box2D
+
+Copyright (c) 2006-2013 Erin Catto http://www.gphysics.com
+
+This software is provided 'as-is', without any express or implied
+warranty.  In no event will the authors be held liable for any damages
+arising from the use of this software.
+
+Permission is granted to anyone to use this software for any purpose,
+including commercial applications, and to alter it and redistribute it
+freely, subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not
+claim that you wrote the original software. If you use this software
+in a product, an acknowledgment in the product documentation would be
+appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be
+misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+
+## LiquidFun
+
+Copyright © 2013-2014 Fun Propulsion Labs at Google
+
+Portions of this documentation are modifications based on work created and shared by Erin Catto and used according to terms described in the Creative Commons 4.0 Attribution License
+
+## FlatBuffers
+
+https://google.github.io/flatbuffers/
+https://github.com/google/flatbuffers
+
+Copyright 2014 Google Inc. All rights reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+https://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+## Perlin_Noise
+
+Here you could find the code for "Perlin noise in C++11", for more informations visit the project webpage:
+
+http://solarianprogrammer.com/2012/07/18/perlin-noise-cpp-11/
+
+You could use this program under the terms of GPL v3, for more details see:
+
+http://www.gnu.org/copyleft/gpl.html
+
+Copyright 2012 Sol from www.solarianprogrammer.com
+
+## nameof
+
+Licensed under the MIT License <http://opensource.org/licenses/MIT>.
+SPDX-License-Identifier: MIT
+Copyright (c) 2016, 2018 - 2021 Daniil Goncharov <neargye@gmail.com>.
 
 ## libjpeg
 
