@@ -65,6 +65,7 @@ emscripten の導入は <https://qiita.com/nokotan/items/5fa6f2d39ff7bb6641e8> �
 ## ライセンス表記
 
 - Copyright (c) 2021-2022 AokiMinoruと記載しているファイルは私が書いたため、MITライセンス適用ですが、その他のファイルは外部ライブラリや元のDxlib, DxlibHTML5などに準じます。
+- https://github.com/AokiMinoruS63/EffyLib/blob/master/LICENSE.md
 
 ## 謝辞
 
