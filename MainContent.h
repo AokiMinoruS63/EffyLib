@@ -1,11 +1,6 @@
 /**
  * @file MainContent.h
  * @brief プラットフォーム共通のメインループ、メインの初期化をここに記述する。
- * 
- * Copyright (c) 2021-2022 AokiMinoru
- * Released under the MIT license.
- * see https://opensource.org/licenses/MIT
- * 
  */
 
 #include <EffyLib.h>
