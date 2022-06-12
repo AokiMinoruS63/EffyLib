@@ -10,7 +10,7 @@
 #endif
 
 MainContent::MainContent() {
-	SetGraphMode(getScreenWidthWithPartition(), getScreenHeightWithPartition(), 32);
+	setGraphMode(getScreenWidthWithPartition(), getScreenHeightWithPartition(), 32);
 	if (init() == kErrorCode) {
 		return;
 	}

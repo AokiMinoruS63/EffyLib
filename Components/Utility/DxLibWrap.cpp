@@ -336,6 +336,11 @@ int graphFilterBlt(int graph_handle, int dest_gr_handle, int filter_type, ...) {
 	return return_num;
 }
 
+// 画面モードの変更
+int setGraphMode(int screen_size_x, int screen_size_y, int color_bit_depth, int refresh_rate) {
+	return SetGraphMode(screen_size_x, screen_size_y, color_bit_depth, refresh_rate);
+}
+
 // 線形補完を取得する
 Lerp getDrawMode() {
 	const int mode = GetDrawMode();

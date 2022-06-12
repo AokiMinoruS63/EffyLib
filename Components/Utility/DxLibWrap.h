@@ -192,6 +192,17 @@ int graphFilter(int graph_handle, int filter_type, ...);
 int graphFilterBlt(int graph_handle, int dest_gr_handle, int filter_type, ...);
 
 /**
+ * @brief 画面モードの変更
+ * 
+ * @param screen_size_x 画面Xサイズ
+ * @param screen_size_y 画面Yサイズ
+ * @param color_bit_depth カラービット
+ * @param refresh_rate 
+ * @return int 
+ */
+int setGraphMode(int screen_size_x, int screen_size_y, int color_bit_depth, int refresh_rate = 60);
+
+/**
  * @brief 線形補完を取得する
  * 
  * @return Lerp 
