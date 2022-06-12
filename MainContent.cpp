@@ -16,15 +16,14 @@
 
 MainContent::MainContent() {
 	SetGraphMode(getScreenWidthWithPartition(), getScreenHeightWithPartition(), 32);
-    if (DxLib_Init() == -1) {
-		return ;
-    }
+	if (init() == kErrorCode) {
+		return;
+	}
 	touchMgr_ = new TouchMgr();
 	world_ = new PhysicusWorld(b2Vec2(0, 10.0), 0.1, {b2Vec2(0, 0), b2Vec2(getScreenWidth(), getScreenHeight())});
 
 	auto setting = world_->getParticleSetting();
 
-    ChangeFont("07LogoTypeGothic7.ttf");
 	setDrawScreen(ScreenState::kBack);
 	// プレビューデータの作成
 	world_->makePreviewData();
@@ -50,12 +49,12 @@ void MainContent::run() {
 	// タッチ画像描画
 	{	
 		touch_t touch = touchMgr_->get();
-		int CircleColor = ( touch.status != TouchStatus::kNoTouch && touch.status != TouchStatus::kJustRelease) ? Color::kYellow : Color::kRed;
-		drawCircle(touch.x, touch.y, 5, CircleColor);
+		int circle_color = ( touch.status != TouchStatus::kNoTouch && touch.status != TouchStatus::kJustRelease) ? Color::kYellow : Color::kRed;
+		drawCircle(touch.x, touch.y, 5, circle_color);
 	}
 	
 	// オブジェクトの描画
 	world_->draw();
 
-	ScreenFlip();
+	screenFrip();
 }

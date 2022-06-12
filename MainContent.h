@@ -24,6 +24,25 @@ class MainContent {
 
 	/* 関数 */
 
+	private:
+
+	/**
+	 * @brief 初期化
+	 * 
+	 * @return int エラーなら**kErrorCode**を返す
+	 */
+	int init() {
+		if (DxLib_Init() == kErrorCode) {
+			return kErrorCode;
+		}
+		#ifdef EMSCRIPTEN
+		ChangeFont("07LogoTypeGothic7.ttf");
+		#endif
+		return kSuccessCode;
+	}
+
+	public:
+
 	/**
 	 * @brief 　メインループ
 	 * 

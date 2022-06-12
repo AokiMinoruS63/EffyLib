@@ -373,6 +373,11 @@ int clearDrawScreen() {
 	return ClearDrawScreen();
 }
 
+// 裏画面を表画面に反映する
+int screenFrip() {
+	return ScreenFlip();
+}
+
 // RGBから色を取得する
 int getColor(int red, int green, int blue) {
 	return GetColor(red, green, blue);

@@ -39,7 +39,7 @@
 #include "ScreenSizeGenerator.h"
 #endif
 
-/* 読み込み、マウス、タッチ系 */
+// MARK - 読み込み、マウス、タッチ系
 
 /**
  * @brief バイナリをバッファに丸ごと読み込む
@@ -86,7 +86,7 @@ int getNowCount();
  */
 float getNowCountFloat();
 
-/* 色・スクリーン関係 */
+// MARK -  色・スクリーン関係
 
 /**
  * @brief 明るさを取得する
@@ -236,6 +236,13 @@ int setDrawScreenBack();
 int clearDrawScreen();
 
 /**
+ * @brief 裏画面を表画面に反映する
+ * 
+ * @return int 
+ */
+int screenFrip();
+
+/**
  * @brief RGBから色を取得する
  * 
  * @param red 
@@ -254,7 +261,7 @@ int getColor(int red, int green, int blue);
  */
 int getColor2(unsigned int color, Color::Color* color_buf);
 
-/* 図形描画 */
+// MARK -  図形描画
 
 /**
  * @brief 線の描画
@@ -496,7 +503,7 @@ int drawPixel( int x , int y , unsigned int color, int global_pos = FALSE) ;
 unsigned int getPixel( int x , int y, int global_pos = FALSE);
 
 
-/* 画像描画 */
+// MARK -  画像描画
 
 /**
  * @brief メモリに読みこんだグラフィックの描画
