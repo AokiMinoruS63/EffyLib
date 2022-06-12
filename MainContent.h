@@ -1,6 +1,6 @@
 /**
  * @file MainContent.h
- * @brief プラットフォーム共通のメインループ、メインの初期化をここに記述する。
+ * @brief 全プラットフォーム共通で行う処理.
  */
 
 #include <EffyLib.h>

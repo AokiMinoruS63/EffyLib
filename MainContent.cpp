@@ -1,6 +1,6 @@
 /**
  * @file MainContent.cpp
- * @brief 
+ * @brief 全プラットフォーム共通で行う処理
  */
 
 #include "MainContent.h"
