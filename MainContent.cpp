@@ -1,6 +1,6 @@
 /**
  * @file MainContent.cpp
- * @brief 全プラットフォーム共通で行う処理
+ * @brief 全プラットフォーム共通で行う処理のルート部分.
  */
 
 #include "MainContent.h"
