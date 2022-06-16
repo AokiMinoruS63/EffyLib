@@ -25,6 +25,14 @@
 
 				// Component
 				// OpenSource
+				"build/SS5PlayerPlatform.o",
+				"build/SS5Player.o",
+				"build/ssplayer_effect.o",
+				"build/ssplayer_effect2.o",
+				"build/ssplayer_effectfunction.o",
+				"build/ssplayer_matrix.o",
+				"build/ssplayer_PartState.o",
+				"build/DebugPrint.o",
 				"build/PerlinNoise.o",
 				"build/b2Particle.o",
 				"build/b2ParticleAssembly.o",
@@ -162,6 +170,14 @@
 
 				// Component
 				// OpenSource
+				"build/SS5PlayerPlatform.o",
+				"build/SS5Player.o",
+				"build/ssplayer_effect.o",
+				"build/ssplayer_effect2.o",
+				"build/ssplayer_effectfunction.o",
+				"build/ssplayer_matrix.o",
+				"build/ssplayer_PartState.o",
+				"build/DebugPrint.o",
 				"build/PerlinNoise.o",
 				"build/b2Particle.o",
 				"build/b2ParticleAssembly.o",

@@ -2,7 +2,32 @@ cd Components
 
 << COMMENTOUT
 
-cd OpenSource/Box2D/Collision
+cd OpenSource
+
+cd ssbpLib
+
+for file in *.cpp
+do
+em++ "${file}" -c -o "../../../build/${file%.*}.o" -O0 -std=c++17 -g4 -IDxLibForHTML5/include -IComponents -IComponents/OpenSource/
+done
+
+cd common/Animator
+
+for file in *.cpp
+do
+em++ "${file}" -c -o "../../../../../build/${file%.*}.o" -O0 -std=c++17 -g4 -IDxLibForHTML5/include -IComponents -IComponents/OpenSource/
+done
+
+cd ../Helper
+
+for file in *.cpp
+do
+em++ "${file}" -c -o "../../../../../build/${file%.*}.o" -O0 -std=c++17 -g4 -IDxLibForHTML5/include -IComponents -IComponents/OpenSource/
+done
+
+cd ../../../
+
+cd Box2D/Collision
 
 for file in *.cpp
 do
@@ -60,7 +85,7 @@ done
 
 
 cd ../../../
-COMMENTOUT
+
 
 cd OpenSource/PerlinNoise
 for file in *.cpp
@@ -69,6 +94,9 @@ em++ "${file}" -c -o "../../../build/${file%.*}.o" -O0 -std=c++17 -g4 -IDxLibFor
 done
 
 cd ../../
+
+COMMENTOUT
+
 cd Assets
 for file in *.cpp
 do
