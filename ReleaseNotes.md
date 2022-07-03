@@ -11,6 +11,11 @@ Each release comprises the following sections:
     existing users' code.
 *   "Other Changes", which lists all other changes present in the release.
 
+### 0.0.3
+*	Additional SpriteStudio5 features.
+*	Added wrapper functions for DxLib string functions.
+*	Fixed an invalid value for the access handle obtained when registering a HandleObject.
+
 ### 0.0.2
 *	Fixed default font changes outside of browser platform.
 *	Fixed a source file that did not match the Google C++ Style Guide.
