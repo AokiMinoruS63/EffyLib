@@ -394,7 +394,7 @@ int getColor2(unsigned int color, Color::Color* color_buf) {
 }
 
 // 文字列を描画する
-int drawString(int x, int y, char* string, unsigned int color, unsigned int edge_color) {
+int drawString(int x, int y, const char* string, unsigned int color, unsigned int edge_color) {
 	return DrawString(x, y, string, color, edge_color);
 }
 
