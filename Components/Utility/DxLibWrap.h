@@ -272,7 +272,161 @@ int getColor(int red, int green, int blue);
  */
 int getColor2(unsigned int color, Color::Color* color_buf);
 
-// MARK -  図形描画
+// MARK: - 文字描画
+
+/**
+ * @brief 文字列を描画する
+ * 
+ * @param x 文字列を描画する領域の左上のX座標
+ * @param y 文字列を描画する領域の左上のY座標
+ * @param string 描画する文字列のポインタ
+ * @param color 描画する文字列の色
+ * @param edge_color 縁の色
+ * @return int 0: 成功、-1: エラー発生
+ */
+int drawString(int x, int y, char* string, unsigned int color, unsigned int edge_color = 0);
+
+/**
+ * @brief 書式付き文字列を描画する
+ * 
+ * @param x 文字列を描画する領域の左上のX座標
+ * @param y 文字列を描画する領域の左上のY座標
+ * @param color 文字列の色
+ * @param format_string 描画する文字列
+ * @param ... 書式付き文字列に付随する引数
+ * @return int 0: 成功、-1: エラー発生
+ */
+int drawFormatString(int x, int y, unsigned int color, const char *format_string, ...);
+
+/**
+ * @brief 指定のフォントデータで文字列を描画する
+ * 
+ * @param x 文字列を描画する領域の左上のX座標
+ * @param y 文字列を描画する領域の左上のY座標
+ * @param string 文字列
+ * @param color 文字列の色
+ * @param font_handle 描画に使用するフォントのデータ識別番号(フォントハンドル)
+ * @return int 0: 成功、-1: エラー発生
+ */
+int drawStringToHandle(int x, int y, char* string, unsigned int color, int font_handle);
+
+/**
+ * @brief 指定のフォントデータで書式付き文字列を描画する
+ * 
+ * @param x 文字列を描画する領域の左上のX座標
+ * @param y 文字列を描画する領域の左上のY座標
+ * @param color 文字列の色
+ * @param font_handle 描画に使用するフォントのデータ識別番号(フォントハンドル)
+ * @param format_string 文字列
+ * @param ... 書式付き文字列に付随する引数
+ * @return int 0: 成功、-1: エラー発生
+ */
+int drawFormatStringToHandle(int x, int y, unsigned int color, int font_handle, char* format_string, ...);
+
+/**
+ * @brief 描画した時の文字列の幅(ドット単位)を得る
+ * 
+ * @param string 描画時の幅を調べたい文字列のアドレス
+ * @return int 0以上: 幅、-1: エラー発生
+ */
+int getDrawStringWidth(const char* string);
+
+/**
+ * @brief 関数書式付き文字列の描画幅(ドット単位)を得る
+ * 
+ * @param format_string 描画幅を得たい書式付き文字列のアドレス
+ * @param ... 書式付き文字列に付随する引数
+ * @return int 0以上: 幅、-1: エラー発生
+ */
+int getDrawFormatStringWidth(const char* format_string, ...);
+
+/**
+ * @brief 指定のフォントデータで描画する文字列の幅(ドット単位)を得る
+ * 
+ * @param string 描画時の幅を調べたい文字列のアドレス
+ * @param font_handle フォントハンドル
+ * @return int 0以上: 幅、-1: エラー発生
+ */
+int getDrawStringWidthToHandle(char* string, int font_handle);
+
+/**
+ * @brief 指定のフォントデータで書式付き文字列の描画幅を得る
+ * 
+ * @param font_handle フォントハンドル
+ * @param format_string 描画幅を得たい書式付き文字列のアドレス
+ * @param ... 書式付き文字列に付随する引数
+ * @return int 0以上: 幅、-1: エラー発生
+ */
+int getDrawFormatStringWidthToHandle(int font_handle, char* format_string, ...);
+
+/**
+ * @brief 描画する文字列のフォントのサイズをセットする
+ * 
+ * @param font_size 描画する文字列のフォントのサイズをセットする
+ * @return int 0: 成功、-1: エラー発生
+ */
+int setFontSize(int font_size);
+
+/**
+ * @brief drawString系の関数で描画する文字列の文字の太さをセットする
+ * 
+ * @param thick_width 文字の太さ
+ * @return int 0: 成功、-1: エラー発生
+ */
+int setFontThickness(int thick_width);
+
+/**
+ * @brief drawString系の関数で文字列描画に使用するフォントを変更する
+ * 
+ * @param font_name フォントの名前
+ * @return int 0: 成功、-1: エラー発生
+ */
+int changeFont(char* font_name);
+
+/**
+ * @brief DXライブラリ用のフォントデータファイルを読み込む
+ * 
+ * @param file_name DXライブラリ用のフォントデータファイルのパス
+ * @param edge_size 作成するフォントの縁の太さ（ 0 を指定すると縁無し )
+ * @return int 0以上: フォントハンドル、-1: エラー発生
+ */
+int loadDxLibFontDataToHandle(char* file_name, int edge_size);
+
+/**
+ * @brief フォントデータを削除する
+ * 
+ * @param font_handle 削除したいフォントデータに付けられた識別番号(フォントハンドル)
+ * @return int 0: 成功、-1: エラー発生
+ */
+int deleteFontToHandle(int font_handle);
+
+/**
+ * @brief 作成するフォントデータを『乗算済みα』用にするかどうかを設定する
+ * 
+ * @param is_alpha 乗算済みα用なら**true**
+ * @return int 0: 成功、-1: エラー発生
+ */
+int setFontCacheUsePremulAlphaFlag(bool is_alpha);
+
+/**
+ * @brief createFontToHandle 関数で作成したフォントデータの情報を得る
+ * 
+ * @param font_name フォント名を保存する char 型配列へのポインタ
+ * @param size サイズを保存する int 型変数へのポインタ
+ * @param thick 太さを保存する int 型変数へのポインタ
+ * @param font_handle 情報を得たいフォントデータの識別番号(フォントハンドル)
+ * @return int 0: 成功、-1: エラー発生
+ */
+int getFontStateToHandle(char* font_name, int* size, int* thick, int font_handle);
+
+/**
+ * @brief フォントデータを全て初期化する
+ * 
+ * @return int 0: 成功、-1: エラー発生
+ */
+int initFontToHandle();
+
+// MARK: - 図形描画
 
 /**
  * @brief 線の描画
