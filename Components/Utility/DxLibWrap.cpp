@@ -393,6 +393,116 @@ int getColor2(unsigned int color, Color::Color* color_buf) {
 	return GetColor2(color, &color_buf->red, &color_buf->green, &color_buf->blue);
 }
 
+// 文字列を描画する
+int drawString(int x, int y, char* string, unsigned int color, unsigned int edge_color) {
+	return DrawString(x, y, string, color, edge_color);
+}
+
+#define OUTPUT_TEXT_COUNT_MAX 1024
+
+// 書式付き文字列を描画する
+int drawFormatString(int x, int y, unsigned int color, const char *format_string, ...) {
+	va_list va;
+	va_start(va, format_string);
+	char str[OUTPUT_TEXT_COUNT_MAX];
+	vsprintfDx(str, format_string, va);
+	int return_num = DrawString(x, y, str, color);
+	va_end(va);
+	return return_num;
+}
+
+// 指定のフォントデータで文字列を描画する
+int drawStringToHandle(int x, int y, char* string, unsigned int color, int font_handle) {
+	return DrawStringToHandle(x, y, string, color, font_handle);
+}
+
+// 指定のフォントデータで書式付き文字列を描画する
+int drawFormatStringToHandle(int x, int y, unsigned int color, int font_handle, char* format_string, ...) {
+	va_list va;
+	va_start(va, format_string);
+	char str[OUTPUT_TEXT_COUNT_MAX];
+	vsprintfDx(str, format_string, va);
+	int return_num = DrawFormatStringToHandle(x, y, color, font_handle, format_string, va);
+	va_end(va);
+	return return_num;
+}
+
+// 描画した時の文字列の幅(ドット単位)を得る
+int getDrawStringWidth(const char* string) {
+	int str_len = strlen(string);
+	return GetDrawStringWidth(string, str_len);
+}
+
+// 関数書式付き文字列の描画幅(ドット単位)を得る
+int getDrawFormatStringWidth(const char* format_string, ...) {
+	va_list va;
+	va_start(va, format_string);
+	char str[OUTPUT_TEXT_COUNT_MAX];
+	vsprintfDx(str, format_string, va);
+	int return_num = GetDrawFormatStringWidth(str);
+	va_end(va);
+	return return_num;
+}
+
+// 指定のフォントデータで描画する文字列の幅(ドット単位)を得る
+int getDrawStringWidthToHandle(char* string, int font_handle) {
+	int str_len = strlen(string);
+	return GetDrawStringWidthToHandle(string, str_len, font_handle);
+}
+
+// 指定のフォントデータで書式付き文字列の描画幅を得る
+int getDrawFormatStringWidthToHandle(int font_handle, char* format_string, ...) {
+	va_list va;
+	va_start(va, format_string);
+	char str[OUTPUT_TEXT_COUNT_MAX];
+	vsprintfDx(str, format_string, va);
+	int return_num = GetDrawFormatStringWidthToHandle(font_handle, str);
+	va_end(va);
+	return return_num;
+}
+
+#undef OUTPUT_TEXT_COUNT_MAX
+
+// 描画する文字列のフォントのサイズをセットする
+int setFontSize(int font_size) {
+	return SetFontSize(font_size);
+}
+
+// drawString系の関数で描画する文字列の文字の太さをセットする
+int setFontThickness(int thick_width) {
+	return SetFontThickness(thick_width);
+}
+
+// drawString系の関数で文字列描画に使用するフォントを変更する
+int changeFont(char* font_name) {
+	return ChangeFont(font_name);
+}
+
+// DXライブラリ用のフォントデータファイルを読み込む
+int loadDxLibFontDataToHandle(char* file_name, int edge_size) {
+	return LoadFontDataToHandle(file_name, edge_size);
+}
+
+// フォントデータを削除する
+int deleteFontToHandle(int font_handle) {
+	return DeleteFontToHandle(font_handle);
+}
+
+// 作成するフォントデータを『乗算済みα』用にするかどうかを設定する
+int setFontCacheUsePremulAlphaFlag(bool is_alpha) {
+	return SetFontCacheUsePremulAlphaFlag(is_alpha);
+}
+
+// createFontToHandle 関数で作成したフォントデータの情報を得る
+int getFontStateToHandle(char* font_name, int* size, int* thick, int font_handle) {
+	return GetFontStateToHandle(font_name, size, thick, font_handle);
+}
+
+// フォントデータを全て初期化する
+int initFontToHandle() {
+	return InitFontToHandle();
+}
+
 // 線を描画
 int drawLine( int x1 , int y1 , int x2 , int y2 , unsigned int color, int global_pos, int thickness) {
     if (global_pos == FALSE) {
