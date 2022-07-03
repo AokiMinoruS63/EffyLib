@@ -1,6 +1,6 @@
 /**
  * @file Vec3.h
- * @brief ３軸のベクトル構造体
+ * @brief 
  * 
  * Copyright (c) 2021-2022 AokiMinoru
  * Released under the MIT license.

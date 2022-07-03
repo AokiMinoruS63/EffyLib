@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<SpriteStudioCellMap version="1.00.02" editorVersion="6.6.0">
+	<name>sprite_studio_test</name>
+	<exportPath></exportPath>
+	<generator>SpriteStudio</generator>
+	<packed>0</packed>
+	<imagePath>sprite_studio_test.png</imagePath>
+	<pixelSize>1024 512</pixelSize>
+	<overrideTexSettings>0</overrideTexSettings>
+	<wrapMode>clamp</wrapMode>
+	<filterMode>linear</filterMode>
+	<imagePathAtImport></imagePathAtImport>
+	<packInfoFilePath></packInfoFilePath>
+	<texPackSettings>
+		<maxSize>4096 4096</maxSize>
+		<forcePo2>1</forcePo2>
+		<forceSquare>0</forceSquare>
+		<margin>0</margin>
+		<padding>1</padding>
+	</texPackSettings>
+	<cells>
+		<cell>
+			<name>button</name>
+			<tags>
+				<value>Button</value>
+			</tags>
+			<pos>548 4</pos>
+			<size>241 61</size>
+			<pivot>0 0</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>bar_thumb</name>
+			<tags>
+				<value>RectangleBar</value>
+			</tags>
+			<pos>560 122</pos>
+			<size>33 61</size>
+			<pivot>0 0</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>bar_frame</name>
+			<tags>
+				<value>RectangleBar</value>
+			</tags>
+			<pos>302 122</pos>
+			<size>256 28</size>
+			<pivot>0 0</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>bar_value</name>
+			<tags>
+				<value>RectangleBar</value>
+			</tags>
+			<pos>150 152</pos>
+			<size>250 20</size>
+			<pivot>0 0</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>gauge_frame</name>
+			<tags>
+				<value>FreeShapeBar</value>
+			</tags>
+			<pos>548 68</pos>
+			<size>240 51</size>
+			<pivot>0 0</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>gauge_mask</name>
+			<tags>
+				<value>FreeShapeBar</value>
+			</tags>
+			<pos>302 4</pos>
+			<size>243 63</size>
+			<pivot>0 0</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>gauge_value</name>
+			<tags>
+				<value>FreeShapeBar</value>
+			</tags>
+			<pos>9 180</pos>
+			<size>238 46</size>
+			<pivot>0.432773113250732 0.0652173906564713</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>weapon_2</name>
+			<tags>
+				<value>Unit</value>
+			</tags>
+			<pos>860 4</pos>
+			<size>58 179</size>
+			<pivot>0 0</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>weapon_1</name>
+			<tags>
+				<value>Unit</value>
+			</tags>
+			<pos>792 4</pos>
+			<size>65 222</size>
+			<pivot>0 0</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>mouth</name>
+			<tags>
+				<value>Unit</value>
+			</tags>
+			<pos>596 122</pos>
+			<size>39 27</size>
+			<pivot>0 0</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>eye_left</name>
+			<tags>
+				<value>Unit</value>
+			</tags>
+			<pos>638 122</pos>
+			<size>32 33</size>
+			<pivot>0 0</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>eye_right</name>
+			<tags>
+				<value>Unit</value>
+			</tags>
+			<pos>672 122</pos>
+			<size>32 33</size>
+			<pivot>0 0</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>face</name>
+			<tags>
+				<value>Unit</value>
+			</tags>
+			<pos>150 4</pos>
+			<size>149 131</size>
+			<pivot>0 0</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>leg_left</name>
+			<tags>
+				<value>Unit</value>
+			</tags>
+			<pos>920 96</pos>
+			<size>42 95</size>
+			<pivot>-0.0476190485060215 0.321052640676498</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>lef_right</name>
+			<tags>
+				<value>Unit</value>
+			</tags>
+			<pos>964 96</pos>
+			<size>42 95</size>
+			<pivot>-0.0476190485060215 0.363157898187637</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>arm_right</name>
+			<tags>
+				<value>Unit</value>
+			</tags>
+			<pos>920 4</pos>
+			<size>91 43</size>
+			<pivot>0.324175834655762 0.0348837226629257</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>arm_left</name>
+			<tags>
+				<value>Unit</value>
+			</tags>
+			<pos>920 50</pos>
+			<size>91 43</size>
+			<pivot>-0.346153855323792 0.104651160538197</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
+			<name>body</name>
+			<tags>
+				<value>Unit</value>
+			</tags>
+			<pos>4 4</pos>
+			<size>144 161</size>
+			<pivot>-0.020833333954215 -0.326086968183517</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+	</cells>
+</SpriteStudioCellMap>

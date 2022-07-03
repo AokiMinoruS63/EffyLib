@@ -284,7 +284,7 @@ int getColor2(unsigned int color, Color::Color* color_buf);
  * @param edge_color 縁の色
  * @return int 0: 成功、-1: エラー発生
  */
-int drawString(int x, int y, char* string, unsigned int color, unsigned int edge_color = 0);
+int drawString(int x, int y, const char* string, unsigned int color, unsigned int edge_color = 0);
 
 /**
  * @brief 書式付き文字列を描画する
