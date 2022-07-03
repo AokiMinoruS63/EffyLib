@@ -87,6 +87,8 @@
 				"build/b2WeldJoint.o",
 				"build/b2WheelJoint.o",
 				// Component of EffyLib
+				"build/SpriteStudio.o",
+				"build/SpriteStudioManager.o",
 				"build/ComponentAssets.o",
 				"build/RandomEngine.o",
 				"build/ScreenStateResume.o",
@@ -232,6 +234,8 @@
 				"build/b2WeldJoint.o",
 				"build/b2WheelJoint.o",
 				// Component of EffyLib
+				"build/SpriteStudio.o",
+				"build/SpriteStudioManager.o",
 				"build/ComponentAssets.o",
 				"build/RandomEngine.o",
 				"build/ScreenStateResume.o",

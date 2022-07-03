@@ -26,19 +26,18 @@ namespace ss
 		do
 		{
 		    // read the file from hardware
-			FILE *fp = fopen(pszFileName, pszMode);
-		    SS_BREAK_IF(!fp);
-		    
-		    fseek(fp,0,SEEK_END);
-		    *pSize = ftell(fp);
-		    fseek(fp,0,SEEK_SET);
-		    pBuffer = new unsigned char[*pSize];
-		    *pSize = fread(pBuffer,sizeof(unsigned char), *pSize,fp);
-		    fclose(fp);
+			int fp = FileRead_open(pszFileName);
+			//	SS_BREAK_IF(!fp);
+					
+			FileRead_seek(fp,0,SEEK_END);
+			*pSize = FileRead_tell(fp);
+			FileRead_seek(fp,0,SEEK_SET);
+			pBuffer = new unsigned char[*pSize];
+			*pSize = FileRead_read(pBuffer,*pSize,fp);
+			FileRead_close(fp);
 		} while (0);
 		if (! pBuffer)
 		{
-
 			std::string msg = "Get data from file(";
 		    msg.append(pszFileName).append(") failed!");
 		    

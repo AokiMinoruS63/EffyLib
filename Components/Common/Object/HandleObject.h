@@ -79,6 +79,17 @@ class HandleObject: public DeleterBase {
 	}
 
 	/**
+	 * @brief データを取得する
+	 * 
+	 * @param handle アクセス用のハンドル
+	 * @return T* データ
+	 */
+	T* getHashData(int handle) {
+		return entity_table_.at(handle);
+	}
+
+
+	/**
 	 * @brief データをセットする
 	 * 
 	 * @param data 
@@ -86,7 +97,7 @@ class HandleObject: public DeleterBase {
 	 */
 	int setHashData(T* data) {
 		entity_table_.push_back(data);
-		return entity_table_.size();
+		return entity_table_.size() - 1;
 	}
 
 	/**

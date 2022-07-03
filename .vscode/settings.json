@@ -71,7 +71,8 @@
 		"random": "cpp",
 		"fstream": "cpp",
 		"iostream": "cpp",
-		"numeric": "cpp"
+		"numeric": "cpp",
+		"list": "cpp"
 	},
 	"C_Cpp.errorSquiggles": "Disabled"
 }
