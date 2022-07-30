@@ -2167,6 +2167,12 @@ void Player::getInstanceParam(bool *overWrite, Instance *keyParam)
 	*keyParam = _instanseParam;			//インスタンスパラメータ
 }
 
+void Player::getColor(int *r, int *g, int *b) {
+	*r = _col_r;
+	*g = _col_g;
+	*b = _col_b;
+}
+
 //アニメーションの色成分を変更します
 void Player::setColor(int r, int g, int b)
 {
@@ -3124,6 +3130,19 @@ void Player::draw()
 	}
 }
 
+// フレームサイズを取得する
+int Player::getFrameSize(int* width, int* height) {
+	if(_currentAnimeRef == NULL) {
+		return -1;
+	}
+	if(_currentAnimeRef->animationData == NULL) {
+		return -1;
+	}
+	*width = _currentAnimeRef->animationData->canvasSizeW;
+	*height = _currentAnimeRef->animationData->canvasSizeH;
+	return 0;
+}
+
 void Player::checkUserData(int frameNo)
 {
 	ToPointer ptr(_currentRs->data);
@@ -3209,16 +3228,33 @@ void Player::checkUserData(int frameNo)
 
 }
 
+void  Player::getPosition(float *x, float *y) {
+	*x = _state.x;
+	*y = _state.y;
+}
+
 void  Player::setPosition(float x, float y)
 {
 	_state.x = x;
 	_state.y = y;
 }
+
+void  Player::getRotation(float *x, float *y, float *z) {
+	*x = _state.rotationX;
+	*y = _state.rotationY;
+	*z = _state.rotationZ;
+}
+
 void  Player::setRotation(float x, float y, float z)
 {
 	_state.rotationX = x;
 	_state.rotationY = y;
 	_state.rotationZ = z;
+}
+
+void  Player::getScale(float *x, float *y) {
+	*x = _state.scaleX;
+	*y = _state.scaleY;
 }
 
 void  Player::setScale(float x, float y)
@@ -3227,9 +3263,18 @@ void  Player::setScale(float x, float y)
 	_state.scaleY = y;
 }
 
+void  Player::getAlpha(int *a) {
+	*a = _state.opacity;
+}
+
 void  Player::setAlpha(int a)
 {
 	_state.opacity = a;
+}
+
+void  Player::getFlip(bool *flipX, bool *flipY) {
+	*flipX = _state.flipX;
+	*flipY = _state.flipY;
 }
 
 void  Player::setFlip(bool flipX, bool flipY)

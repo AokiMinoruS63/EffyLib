@@ -75,6 +75,11 @@ const std::string& Player::getPlayPackName(int handle) {
 	return SpriteStudioManager::shared()->getPlayerPlayPackName(handle);
 }
 
+// Playerが持つアニメーション名のリストを取得する
+std::vector<std::string> Player::getAnimeNameList(int handle) {
+	return SpriteStudioManager::shared()->getPlayerAnimeName(handle);
+}
+
 // 再生しているアニメーション名を返します.
 const std::string& Player::getPlayAnimeName(int handle) {
 	return SpriteStudioManager::shared()->getPlayerPlayAnimeName(handle);
@@ -88,6 +93,11 @@ int Player::getMaxFrame(int handle) {
 // 再生フレームNoを取得します.
 int Player::getFrameNo(int handle) {
 	return SpriteStudioManager::shared()->getPlayerFrameNo(handle);
+}
+
+// フレームサイズを取得する
+int getFrameSize(int handle, int* width, int* height) {
+	return SpriteStudioManager::shared()->getPlayerFrameSize(handle, width, height);
 }
 
 // 再生フレームNoを設定します.
@@ -170,9 +180,24 @@ int Player::setPartCell(int handle, std::string parts_name, std::string ssce_nam
 	return SpriteStudioManager::shared()->setPlayerPartCell(handle, parts_name, ssce_name, cell_name);
 }
 
+// 座標を取得する
+int Player::getPosition(int handle, float *x, float *y) {
+	return SpriteStudioManager::shared()->getPlayerPosition(handle, x, y);
+}
+
 // 座標をセットする
 int Player::setPosition(int handle, float x, float y) {
 	return SpriteStudioManager::shared()->setPlayerPosition(handle, x, y);
+}
+
+// 回転率を取得する
+int Player::getRotation(int handle, float *z) {
+	return SpriteStudioManager::shared()->getPlayerRotation(handle, z);
+}
+
+// 回転率を取得する
+int Player::getRotation(int handle, float *x, float *y, float *z) {
+	return SpriteStudioManager::shared()->getPlayerRotation(handle, x, y, z);
 }
 
 // 回転率をセットする
@@ -185,6 +210,11 @@ int Player::setRotation(int handle, float x, float y, float z) {
 	return SpriteStudioManager::shared()->setPlayerRotation(handle, x, y, z);
 }
 
+// 拡大率を取得する
+int Player::getScale(int handle, float *scale_x, float *scale_y) {
+	return SpriteStudioManager::shared()->getPlayerScale(handle, scale_x, scale_y);
+}
+
 // 拡大率をセットする
 int Player::setScale(int handle, float scale) {
 	return SpriteStudioManager::shared()->setPlayerScale(handle, scale);
@@ -195,9 +225,19 @@ int Player::setScale(int handle, float scale_x, float scale_y) {
 	return SpriteStudioManager::shared()->setPlayerScale(handle, scale_x, scale_y);
 }
 
+// 透過値を取得する
+int Player::getAlpha(int handle, float *alpha) {
+	return SpriteStudioManager::shared()->getPlayerAlpha(handle, alpha);
+}
+
 // 透過値をセットする
 int Player::setAlpha(int handle, float alpha) {
 	return SpriteStudioManager::shared()->setPlayerAlpha(handle, alpha);
+}
+
+// アニメの輝度を取得します.
+int Player::getColor(int handle, int *r, int *g, int *b) {
+	return SpriteStudioManager::shared()->getPlayerColor(handle, r, g, b);
 }
 
 // アニメの輝度を設定します.
@@ -243,6 +283,11 @@ int Player::setEndFrameToLabelName(int handle, char *label_name) {
 // 表示を行うパーツ数を取得します
 int Player::getDrawSpriteCount(int handle) {
 	return SpriteStudioManager::shared()->getPlayerDrawSpriteCount(handle);
+}
+
+// 反転状態を取得する
+int Player::getFlip(int handle, bool *flip_x, bool *flip_y) {
+	return SpriteStudioManager::shared()->getPlayerFlip(handle, flip_x, flip_y);
 }
 
 // 反転する

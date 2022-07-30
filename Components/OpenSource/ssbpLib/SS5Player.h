@@ -1089,24 +1089,54 @@ public:
 	void setPartCell(std::string partsname, std::string sscename, std::string cellname);
 
 	/*
+	* プレイヤー本体の位置を取得します。
+	*/
+	void  getPosition(float *x, float *y);
+
+	/*
 	* プレイヤー本体の位置を設定します。
 	*/
 	void  setPosition(float x, float y);
 
 	/*
+	* プレイヤー本体の回転角度を取得します。2Dの回転はZに値をが挿入されます。
+	*/
+	void  getRotation(float *x, float *y, float *z);
+
+	/*
 	* プレイヤー本体の回転角度を設定します。2Dの回転はZに値を設定してください。
 	*/
-
 	void  setRotation(float x, float y, float z);
+
+	/*
+	* プレイヤー本体のスケールを取得します。
+	*/
+	void  getScale(float *x, float *y);
+
 	/*
 	* プレイヤー本体のスケールを設定します。
 	*/
 	void  setScale(float x, float y);
 
 	/*
+	* プレイヤー本体の透明度を取得します。
+	*/
+	void  getAlpha(int *a);
+
+	/*
 	* プレイヤー本体の透明度を設定します。
 	*/
 	void  setAlpha(int a);
+
+	/*
+	* アニメの輝度を取得します.
+	* 制限としてカラーブレンドが適用されたパーツの色は取得できませんので注意してください。
+	*
+	* @param  r          赤成分(0～255)
+	* @param  g          緑成分(0～255)
+	* @param  b          青成分(0～255)
+	*/
+	void getColor(int *r, int *g, int *b);
 
 	/*
 	* アニメの輝度を設定します.
@@ -1191,6 +1221,11 @@ public:
 	void setEndFrameToLabelName(char *findLabelName);
 
 	/*
+	* プレイヤー本体の反転を取得します。
+	*/
+	void  getFlip(bool *flipX, bool *flipY);
+
+	/*
 	* プレイヤー本体の反転を設定します。
 	*/
 	void  setFlip(bool flipX, bool flipY);
@@ -1216,6 +1251,15 @@ public:
 	* プレイヤーの表示を行います。ゲームの表示タイミングで呼び出してください。
 	*/
 	void draw();
+
+	/**
+	 * @brief フレームサイズを取得する
+	 * 
+	 * @param width 
+	 * @param height 
+	 * @return int 
+	 */
+	int getFrameSize(int* width, int* height);
 
 public:
 	Player(void);

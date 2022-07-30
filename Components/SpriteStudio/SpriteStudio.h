@@ -126,6 +126,14 @@ namespace SpriteStudio {
 		const std::string& getPlayPackName(int handle);
 
 		/**
+		 * @brief Playerが持つアニメーション名のリストを取得する
+		 * 
+		 * @param handle アクセスハンドル
+		 * @return const std::vector<std::string> 
+		 */
+		std::vector<std::string> getAnimeNameList(int handle);
+
+		/**
 		 * @brief 再生しているアニメーション名を返します.
 		 * 
 		 * @param handle アクセスハンドル
@@ -148,6 +156,16 @@ namespace SpriteStudio {
 		 * @return int 再生フレームNo. frame no.
 		 */
 		int getFrameNo(int handle);
+
+		/**
+		 * @brief フレームサイズを取得する
+		 * 
+		 * @param handle アクセスハンドル
+		 * @param width 幅
+		 * @param height 高さ
+		 * @return int 成功…kSuccessCode, 失敗…kErrorCode
+		 */
+		int getFrameSize(int handle, int* width, int* height);
 
 		/**
 		 * @brief 再生フレームNoを設定します.
@@ -298,6 +316,16 @@ namespace SpriteStudio {
 		int setPartCell(int handle, std::string parts_name, std::string ssce_name, std::string cell_name);
 
 		/**
+		 * @brief 座標を取得する
+		 * 
+		 * @param handle アクセスハンドル
+		 * @param x X座標
+		 * @param y Y座標
+		 * @return int 成功…kSuccessCode, 失敗…kErrorCode
+		 */
+		int getPosition(int handle, float *x, float *y);
+
+		/**
 		 * @brief 座標をセットする
 		 * 
 		 * @param handle アクセスハンドル
@@ -306,6 +334,26 @@ namespace SpriteStudio {
 		 * @return int 成功…kSuccessCode, 失敗…kErrorCode
 		 */
 		int setPosition(int handle, float x, float y);
+
+		/**
+		 * @brief 回転率を取得する
+		 * 
+		 * @param handle アクセスハンドル
+		 * @param z Z軸回転角度
+		 * @return int 成功…kSuccessCode, 失敗…kErrorCode
+		 */
+		int getRotation(int handle, float *z);
+
+		/**
+		 * @brief 回転率を取得する
+		 * 
+		 * @param handle アクセスハンドル
+		 * @param x X軸回転角度
+		 * @param y Y軸回転角度
+		 * @param z Z軸回転角度
+		 * @return int 成功…kSuccessCode, 失敗…kErrorCode
+		 */
+		int getRotation(int handle, float *x, float *y, float *z);
 
 		/**
 		 * @brief 回転率をセットする
@@ -328,6 +376,16 @@ namespace SpriteStudio {
 		int setRotation(int handle, float x, float y, float z);
 
 		/**
+		 * @brief 拡大率を取得する
+		 * 
+		 * @param handle アクセスハンドル
+		 * @param scale_x X拡大率
+		 * @param scale_y Y拡大率
+		 * @return int 成功…kSuccessCode, 失敗…kErrorCode
+		 */
+		int getScale(int handle, float *scale_x, float *scale_y);
+
+		/**
 		 * @brief 拡大率をセットする
 		 * 
 		 * @param handle アクセスハンドル
@@ -347,6 +405,15 @@ namespace SpriteStudio {
 		int setScale(int handle, float scale_x, float scale_y);
 
 		/**
+		 * @brief 透過値を取得する
+		 * 
+		 * @param handle アクセスハンドル
+		 * @param alpha 0.0〜1.0まで透明度を指定する(０が透明)
+		 * @return int 成功…kSuccessCode, 失敗…kErrorCode
+		 */
+		int getAlpha(int handle, float *alpha);
+
+		/**
 		 * @brief 透過値をセットする
 		 * 
 		 * @param handle アクセスハンドル
@@ -354,6 +421,18 @@ namespace SpriteStudio {
 		 * @return int 成功…kSuccessCode, 失敗…kErrorCode
 		 */
 		int setAlpha(int handle, float alpha);
+
+		/**
+		 * @brief アニメの輝度を取得します.
+		 * 制限としてカラーブレンドが適用されたパーツの色は取得できませんので注意してください。
+		 * 
+		 * @param handle アクセスハンドル
+		 * @param r 赤成分(0～255)
+		 * @param g 緑成分(0～255)
+		 * @param b 青成分(0～255)
+		 * @return int 成功…kSuccessCode, 失敗…kErrorCode
+		 */
+		int getColor(int handle, int *r, int *g, int *b);
 
 		/**
 		 * @brief アニメの輝度を設定します.
@@ -449,6 +528,16 @@ namespace SpriteStudio {
 		 * @return int パーツ数
 		 */
 		int getDrawSpriteCount(int handle);
+
+		/**
+		 * @brief 反転状態を取得する
+		 * 
+		 * @param handle アクセスハンドル
+		 * @param flip_x X軸で反転するなら**true**
+		 * @param flip_y Y軸で反転するなら**true**
+		 * @return int 成功…kSuccessCode, 失敗…kErrorCode
+		 */
+		int getFlip(int handle, bool *flip_x, bool *flip_y);
 
 		/**
 		 * @brief 反転する

@@ -138,6 +138,13 @@ const std::string& SpriteStudioManager::getPlayerPlayPackName(int handle) {
 	return player->getPlayPackName();
 }
 
+// ssbpファイルに含まれるアニメーション名のリストを返す
+std::vector<std::string> SpriteStudioManager::getPlayerAnimeName(int handle) {
+	ss::Player *player = getHashData(handle);
+	std::string dataName = player == NULL ? "" : player->getPlayDataName();
+	return ss::ResourceManager::getInstance()->getAnimeName(dataName);
+}
+
 // 再生しているアニメーション名を返します.
 const std::string& SpriteStudioManager::getPlayerPlayAnimeName(int handle) {
 	ss::Player *player = getHashData(handle);
@@ -163,6 +170,15 @@ int SpriteStudioManager::getPlayerFrameNo(int handle) {
 		return 0;
 	}
 	return player->getFrameNo();
+}
+
+// フレームサイズを取得する
+int SpriteStudioManager::getPlayerFrameSize(int handle, int* width, int* height) {
+	ss::Player *player = getHashData(handle);
+	if(player == NULL) {
+		return kErrorCode;
+	}
+	return player->getFrameSize(width, height);
 }
 
 // 再生フレームNoを設定します.
@@ -356,6 +372,16 @@ int SpriteStudioManager::setPlayerPartCell(int handle, std::string parts_name, s
 	return kSuccessCode;
 }
 
+// 座標を取得する
+int SpriteStudioManager::getPlayerPosition(int handle, float *x, float *y) {
+	ss::Player *player = getHashData(handle);
+	if(player == NULL) {
+		return kErrorCode;
+	}
+	player->getPosition(x, y);
+	return kSuccessCode;
+}
+
 // SpriteStudioのモーションPlayerの座標をセットする
 int SpriteStudioManager::setPlayerPosition(int handle, float x, float y) {
 	ss::Player *player = getHashData(handle);
@@ -363,6 +389,22 @@ int SpriteStudioManager::setPlayerPosition(int handle, float x, float y) {
 		return kErrorCode;
 	}
 	player->setPosition(x, y);
+	return kSuccessCode;
+}
+
+// SpriteStudioのモーションPlayerの回転率を取得する
+int SpriteStudioManager::getPlayerRotation(int handle, float *z) {
+	float x, y;
+	return getPlayerRotation(handle, &x, &y, z);
+}
+
+// SpriteStudioのモーションPlayerの回転率を取得する
+int SpriteStudioManager::getPlayerRotation(int handle, float *x, float *y, float *z) {
+	ss::Player *player = getHashData(handle);
+	if(player == NULL) {
+		return kErrorCode;
+	}
+	player->getRotation(x, y, z);
 	return kSuccessCode;
 }
 
@@ -381,6 +423,16 @@ int SpriteStudioManager::setPlayerRotation(int handle, float x, float y, float z
 	return kSuccessCode;
 }
 
+// 拡大率を取得する
+int SpriteStudioManager::getPlayerScale(int handle, float *scale_x, float *scale_y) {
+	ss::Player *player = getHashData(handle);
+	if(player == NULL) {
+		return kErrorCode;
+	}
+	player->getScale(scale_x, scale_y);
+	return kSuccessCode;
+}
+
 // SpriteStudioのモーションPlayerの拡大率をセットする
 int SpriteStudioManager::setPlayerScale(int handle, float scale) {
 	return setPlayerScale(handle, scale, scale);
@@ -396,6 +448,18 @@ int SpriteStudioManager::setPlayerScale(int handle, float scale_x, float scale_y
 	return kSuccessCode;
 }
 
+// 透過値を取得する
+int SpriteStudioManager::getPlayerAlpha(int handle, float *alpha) {
+	ss::Player *player = getHashData(handle);
+	if(player == NULL) {
+		return kErrorCode;
+	}
+	int alpha_float;
+	player->getAlpha(&alpha_float);
+	*alpha = alpha_float == 0 ? 0.0 : ((float)alpha_float) / 255.0;
+	return kSuccessCode;
+}
+
 // SpriteStudioのモーションPlayerの透過値をセットする
 int SpriteStudioManager::setPlayerAlpha(int handle, float alpha) {
 	ss::Player *player = getHashData(handle);
@@ -403,6 +467,16 @@ int SpriteStudioManager::setPlayerAlpha(int handle, float alpha) {
 		return kErrorCode;
 	}
 	player->setAlpha((int)((float)alpha * 255.0));
+	return kSuccessCode;
+}
+
+// アニメの輝度を取得します.
+int SpriteStudioManager::getPlayerColor(int handle, int *r, int *g, int *b) {
+	ss::Player *player = getHashData(handle);
+	if(player == NULL) {
+		return kErrorCode;
+	}
+	player->getColor(r, g, b);
 	return kSuccessCode;
 }
 
@@ -523,6 +597,16 @@ int SpriteStudioManager::getPlayerDrawSpriteCount(int handle) {
 		return kErrorCode;
 	}
 	return player->getDrawSpriteCount();
+}
+
+// 反転状態を取得する
+int SpriteStudioManager::getPlayerFlip(int handle, bool *flip_x, bool *flip_y) {
+	ss::Player *player = getHashData(handle);
+	if(player == NULL) {
+		return kErrorCode;
+	}
+	player->getFlip(flip_x, flip_y);
+	return kSuccessCode;
 }
 
 // 反転する
