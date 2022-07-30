@@ -78,3 +78,11 @@ int ScreenStateResume::saveScreenState(bool screen_save) {
 	}
 	return kSuccessCode;
 }
+
+// スクリーン情報の初期化
+int ScreenStateResume::initScreenState() {
+	setDrawBright(Color::kWhite);
+	setDrawBlendMode(BlendMode::kNoBlend, 0);
+	setDrawMode(Lerp::kNearest);
+	return kSuccessCode;
+}

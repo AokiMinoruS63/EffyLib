@@ -28,7 +28,7 @@ struct ScreenStateResume {
 	// 初期化
 	ScreenStateResume(): buf_bright(Color::Color { 255, 255, 255 }), buf_blend(BlendMode::Property { BlendMode::kNoBlend, 0 }), lerp(Lerp::kNearest) {}
 
-	// MARK: 画面の明るさ情報、ブレンド情報の読み込み・保存
+	// MARK: - 画面の明るさ情報、ブレンド情報の読み込み・保存
 
 	/**
 	 * @brief アクティブなスクリーンの読み込み
@@ -101,6 +101,15 @@ struct ScreenStateResume {
 	 * @return int 
 	 */
 	int saveScreenState(bool screen_save = false);
+
+	// MARK: - スクリーン画面の初期化
+
+	/**
+	 * @brief スクリーン情報の初期化
+	 * 
+	 * @return int 
+	 */
+	int initScreenState();
 };
 
 #endif
