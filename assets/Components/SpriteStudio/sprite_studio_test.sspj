@@ -91,6 +91,10 @@
 				<name>Unit</name>
 				<color>FFD71F05</color>
 			</value>
+			<value>
+				<name>Window</name>
+				<color>FF5FD255</color>
+			</value>
 		</cellTags>
 	</settings>
 	<animeSettings>
@@ -122,12 +126,13 @@
 		<value>ui_gauge_rectangle_back.ssae</value>
 		<value>ui_gauge_rectangle_front.ssae</value>
 		<value>ui_gauge_rectangle_thumb.ssae</value>
+		<value>ui_window.ssae</value>
 		<value>unit.ssae</value>
 	</animepackNames>
-	<lastAnimeFile>ui_gauge_free_shape_back.ssae</lastAnimeFile>
-	<lastAnimeName>anime</lastAnimeName>
-	<lastPart>root</lastPart>
+	<lastAnimeFile>ui_window.ssae</lastAnimeFile>
+	<lastAnimeName>0_normal</lastAnimeName>
+	<lastPart>button</lastPart>
 	<lastCellMapFile>sprite_studio_test.ssce</lastCellMapFile>
-	<lastCell>arm_left</lastCell>
+	<lastCell>window</lastCell>
 	<lastEffectFile></lastEffectFile>
 </SpriteStudioProject>

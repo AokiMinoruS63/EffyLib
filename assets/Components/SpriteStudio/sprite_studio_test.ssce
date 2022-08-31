@@ -224,6 +224,18 @@
 			<posStable>0</posStable>
 		</cell>
 		<cell>
+			<name>window</name>
+			<tags>
+				<value>Window</value>
+			</tags>
+			<pos>25 250</pos>
+			<size>396 260</size>
+			<pivot>0 0</pivot>
+			<rotated>0</rotated>
+			<orgImageName></orgImageName>
+			<posStable>0</posStable>
+		</cell>
+		<cell>
 			<name>body</name>
 			<tags>
 				<value>Unit</value>
