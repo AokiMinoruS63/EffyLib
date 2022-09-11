@@ -634,6 +634,7 @@ struct ResluteState
 	int	part_boundsType;			/// 当たり判定種類
 	int	part_alphaBlendType;		/// BlendType
 	int	part_labelcolor;			/// ラベルカラー
+	int parent_index;				/// 親のパーツインデックス
 };
 
 //プロジェクトフラグ
@@ -1048,12 +1049,11 @@ public:
 	int getPartsCount(void);
 
 	/**
-	* indexからパーツ名を取得します.
-	*
-	* @param  result        パーツ情報を受け取るバッファ
-	* @param  name          取得するパーツ名
-	* @param  frameNo       取得するフレーム番号 -1の場合は現在再生しているフレームが適用される
-	*/
+	 * @brief インデックスからパーツ名を取得します.
+	 * 
+	 * @param partId パーツインデックス
+	 * @return const char* 
+	 */
 	const char* getPartName(int partId) const;
 
 	/**

@@ -21,7 +21,7 @@ namespace SpriteStudio {
 	 * @brief SpriteStudio用のボタン
 	 * 
 	 */
-	class Button: UICommon {
+	class Button: public UICommon {
 
 		// MARK: - 変数
 

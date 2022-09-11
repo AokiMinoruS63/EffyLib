@@ -47,6 +47,7 @@ struct SpriteStudioResult {
 	int	part_boundsType;			/// 当たり判定種類
 	int	part_alphaBlendType;		/// BlendType
 	int	part_labelcolor;			/// ラベルカラー
+	int parent_index;				/// 親のパーツインデックス
 };
 
 #endif

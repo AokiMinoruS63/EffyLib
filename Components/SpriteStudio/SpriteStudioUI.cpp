@@ -18,6 +18,8 @@ using namespace SpriteStudio;
 int UICommon::setFramePotision(float x, float y) {
 	_frame.x = x;
 	_frame.y = y;
+	_linked_handle = kErrorCode;
+	_linked_part_name = "";
 	return kSuccessCode;
 }
 
@@ -38,10 +40,23 @@ UIAreaState UICommon::getAreaState(touch_t touch) {
 	if(_state != UIState::kActive) {
 		return UIAreaState::kNoTouch;
 	}
+	// 座標を移動用にとっておく
+	const Rect tmp_rect = _frame;
+
+	// リンクしているss::Playerがあるならば、そこと連動させる
+	SpriteStudioResult result;
+	if(SpriteStudio::Player::getPartState(_linked_handle, result, _linked_part_name.c_str()) == kSuccessCode) {
+		_frame.x += result.x;
+		_frame.y += getScreenHeight() - result.y;
+		_frame.width *= result.scaleX;
+		_frame.height *= result.scaleY;
+	}
 	// 現在エリアインしているなら**true**
 	const bool current_area_in = _frame.isContain(touch.x, touch.y);
 	// 前のフレームでエリアインしているなら**true**
 	const bool last_area_in = _frame.isContain(touch.pos_log_x[1], touch.pos_log_y[1]);
+	// 座標を元に戻す
+	_frame = tmp_rect;
 
 	// 前も今もタッチしていない
 	if(!touch.isLastTouch() && !touch.isCurrentTouch()) {
@@ -132,14 +147,14 @@ void UICommon::setLinkedPlayerHandle(int handle) {
 	_linked_handle = handle;
 }
 
-// リンク先のSpriteStudioPlayerの再生中のアニメーション名を取得する
-std::string UICommon::getLinkedAnimationName() {
-	return Player::getPlayAnimeName(_linked_handle);
+// リンク先のSpriteStudioPlayerのパーツ名を取得する
+std::string UICommon::getLinkedPartName() {
+	return _linked_part_name;
 }
 
-// リンク先のSpriteStudioPlayerの再生中のアニメーションを設定する
-void UICommon::setLinkedAnimationName(std::string animation_name) {
-	_linked_animation_name = animation_name;
+// リンク先のSpriteStudioPlayerのパーツ名を設定する
+void UICommon::setLinkedPartName(std::string part_name) {
+	_linked_part_name = part_name;
 }
 
 // アニメーションの再生カウントを取得する

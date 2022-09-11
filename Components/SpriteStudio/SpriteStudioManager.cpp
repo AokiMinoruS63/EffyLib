@@ -369,6 +369,7 @@ int SpriteStudioManager::getPlayerPartState(int handle, SpriteStudioResult& resu
 	result.part_boundsType = state.part_boundsType;
 	result.part_alphaBlendType = state.part_alphaBlendType;
 	result.part_labelcolor = state.part_labelcolor;
+	result.parent_index = state.parent_index;
 
 	return kSuccessCode;
 }

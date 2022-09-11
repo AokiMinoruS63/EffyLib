@@ -1931,6 +1931,7 @@ bool Player::getPartState(ResluteState& result, const char* name, int frameNo)
 					result.part_type = partData->type;							//パーツ種別
 					result.part_boundsType = partData->boundsType;				//当たり判定種類
 					result.part_alphaBlendType = partData->alphaBlendType;		// BlendType
+					result.parent_index = partData->parentIndex;
 					//ラベルカラー
 					std::string colorName = static_cast<const char*>(ptr(partData->colorLabel));
 					if (colorName == COLORLABELSTR_NONE)

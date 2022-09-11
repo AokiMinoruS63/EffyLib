@@ -114,7 +114,13 @@ void Button::run(touch_t touch, float dt) {
 	} else if (anime_state == UIAnimeState::kEntered || anime_state == UIAnimeState::kHover) {
 		// ボタンがタップされたらフェードアウト、アクション実行
 		if (area_state == UIAreaState::kJustRelease) {
-			if (changeAnimation(UIAnimeState::kFadeout) == kErrorCode) {
+			const int linked_handle = getLinkedPlayerHandle();
+			changeAnimation(UIAnimeState::kFadeout);
+			if (linked_handle == kErrorCode) {
+				if (changeAnimation(UIAnimeState::kFadeout) == kErrorCode) {
+					changeAnimation(UIAnimeState::kExited);
+				}
+			} else {
 				changeAnimation(UIAnimeState::kExited);
 			}
 			runAction();
@@ -150,17 +156,35 @@ int Button::draw() {
 	} else {
 		Rect frame = getFrame();
 		// TODO: リンクしているssPlayerの拡大率、アルファ値、角度を設定する
-		float scale = 1.0;
+		float scale_x = 1.0;
+		float scale_y = 1.0;
 		float radian = 0.0;
 		float alpha = 1.0;
 		int blend_mode = BlendMode::kNoBlend;
 		const int linked_handle = getLinkedPlayerHandle();
 		ScreenStateResume resume;
 		SpriteStudioResult result;
-		if(SpriteStudio::Player::getPartState(linked_handle, result, getLinkedAnimationName().c_str()) == kSuccessCode) {
+		if(SpriteStudio::Player::getPartState(linked_handle, result, getLinkedPartName().c_str()) == kSuccessCode) {
 			frame.x = result.x;
-			frame.y = result.y;
-			scale = result.scaleX;
+			frame.y = getScreenHeight() - result.y;
+			scale_x = result.scaleX;
+			scale_y = result.scaleY;
+			const char* root_part_name = SpriteStudio::Player::getPartName(linked_handle, 0);
+			// Rootの拡大率適用
+			if (getLinkedPartName() != root_part_name) {
+				SpriteStudioResult result2;
+				SpriteStudio::Player::getPartState(linked_handle, result2, SpriteStudio::Player::getPartName(linked_handle, 0));
+				scale_x *= result2.scaleX;
+				scale_y *= result2.scaleY;
+			}
+			// 親の拡大率適用
+			const char* parent_name = SpriteStudio::Player::getPartName(linked_handle, result.parent_index);
+			if (getLinkedPartName() != parent_name && getLinkedPartName() != root_part_name) {
+				SpriteStudioResult result2;
+				SpriteStudio::Player::getPartState(linked_handle, result2, parent_name);
+				scale_x *= result2.scaleX;
+				scale_y *= result2.scaleY;
+			}
 			alpha = ((float)result.opacity) * 255.0;
 			blend_mode = result.colorBlendType;
 			radian = result.rotationZ * (1.0 / 360.0) * kPiFloat;
@@ -169,7 +193,7 @@ int Button::draw() {
 			resume.saveBlend();
 			setDrawBlendMode(blend_mode, alpha);
 		}
-		returnValue = drawRotaGraph(frame.x, frame.y, scale, radian, getScreen(), true);
+		returnValue = drawRotaGraph3(frame.x, frame.y, frame.halfWidth(), frame.halfHeight(), scale_x, scale_y, radian, getScreen(), TRUE);
 		if(blend_mode != BlendMode::kNoBlend) {
 			resume.loadScreenState();
 		}

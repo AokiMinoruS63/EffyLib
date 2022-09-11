@@ -39,8 +39,8 @@ namespace SpriteStudio {
 		int _animation_count;
 		// SpriteStudioリンク用のアクセスハンドル。座標、スケール、透過率をリンクする
 		int _linked_handle;
-		// リンク先のアニメーション名
-		std::string _linked_animation_name;
+		// リンク先のパーツ名
+		std::string _linked_part_name;
 		// 条件を成立した時に行うコールバック関数
 		std::function<void()> _action;
 		// 矩形変数
@@ -154,18 +154,18 @@ namespace SpriteStudio {
 		void setLinkedPlayerHandle(int handle);
 
 		/**
-		 * @brief リンク先のSpriteStudioPlayerの再生中のアニメーション名を取得する
+		 * @brief リンク先のSpriteStudioPlayerのパーツ名を取得する
 		 * 
 		 * @return std::string 
 		 */
-		std::string getLinkedAnimationName();
+		std::string getLinkedPartName();
 
 		/**
-		 * @brief リンク先のSpriteStudioPlayerの再生中のアニメーションを設定する
+		 * @brief リンク先のSpriteStudioPlayerのパーツ名を設定する
 		 * 
-		 * @param motion_name 
+		 * @param part_name パーツ名
 		 */
-		void setLinkedAnimationName(std::string animation_name);
+		void setLinkedPartName(std::string part_name);
 
 		/**
 		 * @brief アニメーションの再生カウントを取得する
