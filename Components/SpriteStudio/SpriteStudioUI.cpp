@@ -45,7 +45,6 @@ UIAreaState UICommon::getAreaState(touch_t touch) {
 
 	// 前も今もタッチしていない
 	if(!touch.isLastTouch() && !touch.isCurrentTouch()) {
-		printfDx("notLastTouch && notCurrentTouch\n");
 		#ifdef __ANDROID__
 		return UIAreaState::kNoTouch;
 		#elif __APPLE__
@@ -54,7 +53,6 @@ UIAreaState UICommon::getAreaState(touch_t touch) {
 		return current_area_in ? UIAreaState::kAreaIn : UIAreaState::kNoTouch;
 		#endif
 	} else if (!touch.isLastTouch() && touch.isCurrentTouch()) {
-		printfDx("notLastTouch && CurrentTouch\n");
 		// 前のフレームはタッチせず、今のフレームでタッチ
 		// 今エリアインならタップ開始を返す
 		if (current_area_in) {
@@ -63,7 +61,6 @@ UIAreaState UICommon::getAreaState(touch_t touch) {
 			return UIAreaState::kNoTouch;
 		}
 	} else if (touch.isLastTouch() && touch.isCurrentTouch()) {
-		printfDx("LastTouch && CurrentTouch\n");
 		// 前も今もタッチしている
 		if (current_area_in) {
 			if (!last_area_in) {
@@ -89,7 +86,6 @@ UIAreaState UICommon::getAreaState(touch_t touch) {
 			}
 		}
 	} else {
-		printfDx("Before Touch Now Release.");
 		// 前はタッチ、今はリリース
 		return current_area_in ? UIAreaState::kJustRelease : UIAreaState::kNoTouch;
 	}
