@@ -207,7 +207,26 @@ struct Rect {
 	 */
 	const Vec2 rightBottomRelative();
 
-	/* 関数 */
+	// MARK: - 関数
+
+	/**
+	 * @brief 矩形の中に座標が含まれているかチェックする
+	 * 
+	 * @param x X座標
+	 * @param y Y座標
+	 * @return true 
+	 * @return false 
+	 */
+	bool isContain(float x, float y);
+
+	/**
+	 * @brief 矩形の中に座標が含まれているかチェックする
+	 * 
+	 * @param vec ２次元座標
+	 * @return true 
+	 * @return false 
+	 */
+	bool isContain(Vec2 vec);
 
 	/**
 	 * @brief 図形を移動させる

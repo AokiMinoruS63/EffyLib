@@ -168,9 +168,10 @@ class SpriteStudioManager: HandleObject<ss::Player> {
 	 * @brief ssbp名に含まれるアニメーション名のリストを返す
 	 * 
 	 * @param handle アクセスハンドル
+	 * @param ssae_name ssaeファイル名(指定しなければ全てのアニメーションを返す)
 	 * @return std::vector<std::string> 
 	 */
-	std::vector<std::string> getPlayerAnimeName(int handle);
+	std::vector<std::string> getPlayerAnimeName(int handle, std::string ssae_name = "");
 
 	/**
 	 * @brief 再生しているアニメーション名を返します.
@@ -214,6 +215,14 @@ class SpriteStudioManager: HandleObject<ss::Player> {
 	 * @return int 成功…kSuccessCode, 失敗…kErrorCode
 	 */
 	int setPlayerFrameNo(int handle, int frame_no);
+
+	/**
+	 * @brief 再生中のPlayerに座標などの設定値を反映させる
+	 * 再生前でないと、setPlayerPosition関数は反映されないため、再生中はこの関数を呼びます
+	 * 
+	 * @return int 
+	 */
+	int applyPlayer(int handle);
 
 	/**
 	 * @brief 再生スピードを取得します. 

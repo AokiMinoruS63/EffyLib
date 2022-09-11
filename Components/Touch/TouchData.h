@@ -14,7 +14,11 @@
 #include <vector>
 #include "Enum/TouchStatus.h"
 
-typedef struct {
+/**
+ * @brief タッチ情報
+ * 
+ */
+struct touch_t {
 	// タッチの状態
     TouchStatus status;
 	// 座標
@@ -29,6 +33,26 @@ typedef struct {
     bool double_tap;
 	// タッチを開始したインデックス
 	int beginIndex;
-}touch_t;
+
+	/**
+	 * @brief 前のフレームでタッチしているなら**true**
+	 * 
+	 * @return true 
+	 * @return false 
+	 */
+	bool isLastTouch() {
+		return status == TouchStatus::kNotRepeating || status == TouchStatus::kRepeating || status == TouchStatus::kJustRelease;
+	}
+
+	/**
+	 * @brief 現在タッチしているなら**true**
+	 * 
+	 * @return true 
+	 * @return false 
+	 */
+	bool isCurrentTouch() {
+		return status != TouchStatus::kJustRelease && status != TouchStatus::kNoTouch;
+	}
+};
 
 #endif

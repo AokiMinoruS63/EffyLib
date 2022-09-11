@@ -139,10 +139,21 @@ const std::string& SpriteStudioManager::getPlayerPlayPackName(int handle) {
 }
 
 // ssbpファイルに含まれるアニメーション名のリストを返す
-std::vector<std::string> SpriteStudioManager::getPlayerAnimeName(int handle) {
+std::vector<std::string> SpriteStudioManager::getPlayerAnimeName(int handle, std::string ssae_name) {
 	ss::Player *player = getHashData(handle);
 	std::string dataName = player == NULL ? "" : player->getPlayDataName();
-	return ss::ResourceManager::getInstance()->getAnimeName(dataName);
+	std::vector<std::string> list = ss::ResourceManager::getInstance()->getAnimeName(dataName);
+	if (ssae_name == "") {
+		return list;
+	}
+	std::vector<std::string> filter_list;
+	const std::string check = ssae_name + "/";
+	for (const auto& e : list) {
+		if (e.size() >= check.size() && std::equal(std::begin(check), std::end(check), std::begin(e))) {
+			filter_list.push_back(e);
+		}
+	}
+	return filter_list;
 }
 
 // 再生しているアニメーション名を返します.
@@ -188,6 +199,16 @@ int SpriteStudioManager::setPlayerFrameNo(int handle, int frame_no) {
 		return kErrorCode;
 	}
 	player->setFrameNo(frame_no);
+	return kSuccessCode;
+}
+
+// 再生中のPlayerに座標などの設定値を反映させる
+int SpriteStudioManager::applyPlayer(int handle) {
+	ss::Player *player = getHashData(handle);
+	if(player == NULL) {
+		return kErrorCode;
+	}
+	player->apply();
 	return kSuccessCode;
 }
 

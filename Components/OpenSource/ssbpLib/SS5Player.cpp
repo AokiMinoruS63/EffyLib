@@ -1313,6 +1313,10 @@ bool Player::init()
 	return true;
 }
 
+void Player::apply() {
+	setFrame(getFrameNo());
+}
+
 void Player::releaseResourceManager()
 {
 }

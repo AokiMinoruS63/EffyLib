@@ -1265,7 +1265,11 @@ public:
 	Player(void);
 	~Player();
 	bool init();
-
+	/**
+	 * @brief 再生中のアニメーションにsetPositionなどで変更した情報を適用する.
+	 * 
+	 */
+	void apply();
 
 protected:
 	void allocParts(int numParts, bool useCustomShaderProgram);

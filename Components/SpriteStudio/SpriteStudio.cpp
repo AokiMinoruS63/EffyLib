@@ -76,8 +76,8 @@ const std::string& Player::getPlayPackName(int handle) {
 }
 
 // Playerが持つアニメーション名のリストを取得する
-std::vector<std::string> Player::getAnimeNameList(int handle) {
-	return SpriteStudioManager::shared()->getPlayerAnimeName(handle);
+std::vector<std::string> Player::getAnimeNameList(int handle, std::string ssae_name) {
+	return SpriteStudioManager::shared()->getPlayerAnimeName(handle, ssae_name);
 }
 
 // 再生しているアニメーション名を返します.
@@ -95,14 +95,31 @@ int Player::getFrameNo(int handle) {
 	return SpriteStudioManager::shared()->getPlayerFrameNo(handle);
 }
 
+// アニメーションの終端まで行っていたら**true**
+bool Player::isEndFrame(int handle) {
+	int now_frame = getFrameNo(handle);
+	return now_frame >= 0 && now_frame >= getMaxFrame(handle) - 1 || getMaxFrame(handle) == 1;
+}
+
+// 0フレームのアニメーションなら**true**
+bool Player::isNoMotion(int handle) {
+	return getMaxFrame(handle) > 0;
+}
+
 // フレームサイズを取得する
-int getFrameSize(int handle, int* width, int* height) {
+int Player::getFrameSize(int handle, int* width, int* height) {
 	return SpriteStudioManager::shared()->getPlayerFrameSize(handle, width, height);
 }
 
 // 再生フレームNoを設定します.
 int Player::setFrameNo(int handle, int frame_no) {
 	return SpriteStudioManager::shared()->setPlayerFrameNo(handle, frame_no);
+}
+
+// 再生中のPlayerに座標などの設定値を反映させる
+// 再生前でないと、setPosition関数は反映されないため、再生中はこの関数を呼びます
+int Player::apply(int handle) {
+	return SpriteStudioManager::shared()->applyPlayer(handle);
 }
 
 // 再生スピードを取得します. 

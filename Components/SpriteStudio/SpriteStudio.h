@@ -21,7 +21,7 @@ namespace SpriteStudio {
 		/**
 		 * @brief SpriteStudioのモーションPlayerを追加する
 		 * 
-		 * @param path ファイルパス＋(ssbpファイル名 or ssproj名)
+		 * @param path ファイルパス＋ssbpファイル名
 		 * @return int アクセスハンドル
 		 */
 		int add(std::string path);
@@ -129,9 +129,10 @@ namespace SpriteStudio {
 		 * @brief Playerが持つアニメーション名のリストを取得する
 		 * 
 		 * @param handle アクセスハンドル
+		 * @param ssae_name ssaeファイル名(指定しなければ全てのアニメーションを返す)
 		 * @return const std::vector<std::string> 
 		 */
-		std::vector<std::string> getAnimeNameList(int handle);
+		std::vector<std::string> getAnimeNameList(int handle, std::string ssae_name = "");
 
 		/**
 		 * @brief 再生しているアニメーション名を返します.
@@ -158,6 +159,24 @@ namespace SpriteStudio {
 		int getFrameNo(int handle);
 
 		/**
+		 * @brief アニメーションの終端まで行っていたら**true**
+		 * 
+		 * @param handle アクセスハンドル
+		 * @return true 
+		 * @return false 
+		 */
+		bool isEndFrame(int handle);
+
+		/**
+		 * @brief 0フレームのアニメーションなら**true**
+		 * 
+		 * @param handle 
+		 * @return true 
+		 * @return false 
+		 */
+		bool isNoMotion(int handle);
+
+		/**
 		 * @brief フレームサイズを取得する
 		 * 
 		 * @param handle アクセスハンドル
@@ -175,6 +194,15 @@ namespace SpriteStudio {
 		 * @return int 成功…kSuccessCode, 失敗…kErrorCode
 		 */
 		int setFrameNo(int handle, int frame_no);
+
+		/**
+		 * @brief 再生中のPlayerに座標などの設定値を反映させる
+		 * 再生前でないと、setPosition関数は反映されないため、再生中はこの関数を呼びます
+		 * 
+		 * @param handle 
+		 * @return int 
+		 */
+		int apply(int handle);
 
 		/**
 		 * @brief 再生スピードを取得します. 

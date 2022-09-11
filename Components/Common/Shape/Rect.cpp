@@ -139,6 +139,16 @@ const Vec2 Rect::rightBottomRelative() {
 	return Vec2(halfWidth(), halfHeight());
 }
 
+// 矩形の中に座標が含まれているかチェックする
+bool Rect::isContain(float x, float y) {
+	return x > left().x && x < right().x && y > top().y && y < bottom().y;
+}
+
+// 矩形の中に座標が含まれているかチェックする
+bool Rect::isContain(Vec2 vec) {
+	return isContain(vec.x, vec.y);
+}
+
 // 図形を移動させる
 Vec2 Rect::movedBy(float x, float y) {
 	this->x += x;

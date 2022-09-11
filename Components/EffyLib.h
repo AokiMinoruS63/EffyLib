@@ -23,5 +23,6 @@
 #include "Utility/TypeConversion.h"
 #include "Utility/TypeExtensions.h"
 #include "SpriteStudio/SpriteStudio.h"
+#include "SpriteStudio/SpriteStudioButton.h"
 
 #endif
