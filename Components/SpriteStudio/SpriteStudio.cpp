@@ -103,7 +103,7 @@ bool Player::isEndFrame(int handle) {
 
 // 0フレームのアニメーションなら**true**
 bool Player::isNoMotion(int handle) {
-	return getMaxFrame(handle) > 0;
+	return getMaxFrame(handle) <= 1;
 }
 
 // フレームサイズを取得する
