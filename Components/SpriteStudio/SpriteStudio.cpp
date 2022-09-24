@@ -187,6 +187,11 @@ int Player::getPartState(int handle, SpriteStudioResult& result, const char* nam
 	return SpriteStudioManager::shared()->getPlayerPartState(handle, result, name, frame_no);
 }
 
+// パーツインデックスから、パーツ情報を取得します.
+int Player::getPartState(int handle, SpriteStudioResult& result, const int index, int frame_no) {
+	return SpriteStudioManager::shared()->getPlayerPartState(handle, result, index, frame_no);
+}
+
 // パーツ名からパーツの表示、非表示を設定します.
 int Player::setPartVisible(int handle, std::string parts_name, bool is_visible) {
 	return SpriteStudioManager::shared()->setPlayerPartVisible(handle, parts_name, is_visible);

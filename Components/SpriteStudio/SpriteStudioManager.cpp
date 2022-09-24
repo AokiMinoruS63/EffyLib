@@ -324,20 +324,13 @@ int SpriteStudioManager::getPlayerIndexOfPart(int handle, const char* part_name)
 	return player->indexOfPart(part_name);
 }
 
-// パーツの名から、パーツ情報を取得します.
-int SpriteStudioManager::getPlayerPartState(int handle, SpriteStudioResult& result, const char* name, int frame_no) {
-	ss::Player *player = getHashData(handle);
-	if(player == NULL) {
-		return kErrorCode;
-	}
-	ss::ResluteState state = ss::ResluteState();
-	bool is_success = player->getPartState(state, name, frame_no);
-	// 失敗したらエラーを返す
-	if(!is_success) {
-		result = SpriteStudioResult();
-		return kErrorCode;
-	}
-	// TODO: state を  resultに代入
+/**
+ * @brief ss::ResluteStateのパーツ情報をSpriteStudioResultに代入する
+ * 
+ * @param result EffyLib側で管理しているSpriteStudioのパーツ情報
+ * @param state ssbpLib側で管理しているSpriteStudioのパーツ情報
+ */
+void convertPartState(SpriteStudioResult& result, ss::ResluteState state) {
 	result.flags = state.flags;
 	result.cellIndex = state.cellIndex;
 	result.x = state.x;
@@ -370,6 +363,43 @@ int SpriteStudioManager::getPlayerPartState(int handle, SpriteStudioResult& resu
 	result.part_alphaBlendType = state.part_alphaBlendType;
 	result.part_labelcolor = state.part_labelcolor;
 	result.parent_index = state.parent_index;
+}
+
+// パーツの名から、パーツ情報を取得します.
+int SpriteStudioManager::getPlayerPartState(int handle, SpriteStudioResult& result, const char* name, int frame_no) {
+	ss::Player *player = getHashData(handle);
+	if(player == NULL ) {
+		return kErrorCode;
+	}
+	ss::ResluteState state = ss::ResluteState();
+	bool is_success = player->getPartState(state, name, frame_no);
+	// 失敗したらエラーを返す
+	if(!is_success) {
+		result = SpriteStudioResult();
+		return kErrorCode;
+	}
+	// ssbpLib側で管理しているSpriteStudioのパーツ情報からEffyLib側で管理しているSpriteStudioのパーツ情報に変換
+	convertPartState(result, state);
+
+	return kSuccessCode;
+}
+
+// パーツインデックスから、パーツ情報を取得します.
+int SpriteStudioManager::getPlayerPartState(int handle, SpriteStudioResult& result, const int index, int frame_no) {
+	ss::Player *player = getHashData(handle);
+	if(player == NULL) {
+		return kErrorCode;
+	}
+	ss::ResluteState state = ss::ResluteState();
+	bool is_success = player->getPartState(state, index, frame_no);
+	// 失敗したらエラーを返す
+	if(!is_success) {
+		result = SpriteStudioResult();
+		return kErrorCode;
+	}
+
+	// ssbpLib側で管理しているSpriteStudioのパーツ情報からEffyLib側で管理しているSpriteStudioのパーツ情報に変換
+	convertPartState(result, state);
 
 	return kSuccessCode;
 }

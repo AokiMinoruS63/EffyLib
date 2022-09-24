@@ -66,6 +66,47 @@ float getNowCountFloat() {
 	return ((float)getNowCount()) * 0.001;
 }
 
+// 描画エリアの取得
+int getDrawArea(int* sx, int* sy, int* gx, int* gy) {
+	RECT rect;
+	const int return_value = GetDrawArea(&rect);
+	*sx = rect.left;
+	*sy = rect.top;
+	*gx = rect.right;
+	*gy = rect.bottom;
+	return return_value;
+}
+
+// 描画エリアの取得
+int getDrawArea(Rect* rect) {
+	int sxi, syi, gxi, gyi;
+	const int return_value = getDrawArea(&sxi, &syi, &gxi, &gyi);
+	const int sx = (float)sxi;
+	const int sy = (float)syi;
+	const int gx = (float)gxi;
+	const int gy = (float)gyi;
+	rect->x = (gx - sx) * 0.5 + sx;
+	rect->y = (gy - sy) * 0.5 + sy;
+	rect->width = gx - sx;
+	rect->height = gy - sy;
+	return return_value;
+}
+
+// 描画エリアの設定
+int setDrawArea(int sx, int sy, int gx, int gy) {
+	return SetDrawArea(sx, sy, gx, gy);
+}
+
+// 描画エリアの設定
+int setDrawArea(Rect rect) {
+	return setDrawArea((int)rect.left().x, (int)rect.top().y, (int)rect.right().x, (int)rect.bottom().y);
+}
+
+// 描画エリアを画面全体にする
+int setDrawAreaFull() {
+	return SetDrawAreaFull();
+}
+
 // 明るさを取得する
 int getDrawBright(Color::Color* color) {
 	return GetDrawBright(&color->red, &color->green, &color->blue);

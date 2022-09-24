@@ -63,6 +63,16 @@ namespace SpriteStudio {
 		protected:
 
 		/**
+		 * @brief フレームを初期化する
+		 * 
+		 * @param handle フレームを作成する元のSpriteStudioPlayerのアクセスハンドル
+		 * @param x X座標
+		 * @param y Y座標
+		 * @return int 
+		 */
+		int initFrame(int handle, float x, float y);
+
+		/**
 		 * @brief 現在の描画エリアの座標を設定する
 		 * 
 		 * @param x 
@@ -77,6 +87,8 @@ namespace SpriteStudio {
 		 * @return Rect 
 		 */
 		Rect getFrame();
+
+		private:
 
 		/**
 		 * @brief 現在の描画エリアを設定する
@@ -219,6 +231,13 @@ namespace SpriteStudio {
 		 * @return int 
 		 */
 		int preRenderEnd();
+
+		/**
+		 * @brief preRender済のスクリーンを使用した共通描画処理
+		 * 
+		 * @return int 
+		 */
+		int drawCommon();
 
 		public:
 

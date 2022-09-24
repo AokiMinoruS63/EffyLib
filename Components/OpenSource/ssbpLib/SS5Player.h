@@ -1071,6 +1071,17 @@ public:
 	bool getPartState(ResluteState& result, const char* name, int frameNo = -1);
 
 	/**
+	 * @brief  パーツインデックスから、パーツ情報を取得します.
+	 * 
+	 * @param result         パーツ情報を受け取るバッファ
+	 * @param index          取得するインデックス
+	 * @param  frameNo       取得するフレーム番号 -1の場合は現在再生しているフレームが適用される
+	 * @return true 
+	 * @return false 
+	 */
+	bool getPartState(ResluteState& result, const int index, int frameNo = -1);
+
+	/**
 	* パーツ名からパーツの表示、非表示を設定します.
 	* コリジョン用のパーツや差し替えグラフィック等、SS5上で表示を行うがゲーム中では非表示にする場合に使用します。
 	* SSの非表示アトリビュート設定するわけではないので注意してください。

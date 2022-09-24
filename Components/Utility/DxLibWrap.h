@@ -89,6 +89,51 @@ float getNowCountFloat();
 // MARK -  色・スクリーン関係
 
 /**
+ * @brief 描画エリアの取得
+ * 
+ * @param sx 
+ * @param sy 
+ * @param gx 
+ * @param gy 
+ * @return int 0: 成功、-1: エラー発生
+ */
+int getDrawArea(int* sx, int* sy, int* gx, int* gy);
+
+/**
+ * @brief 描画エリアの取得
+ * 
+ * @param rect 
+ * @return int 0: 成功、-1: エラー発生
+ */
+int getDrawArea(Rect* rect);
+
+/**
+ * @brief 描画エリアの設定
+ * 
+ * @param sx 
+ * @param sy 
+ * @param gx 
+ * @param gy 
+ * @return int 
+ */
+int setDrawArea(int sx, int sy, int gx, int gy);
+
+/**
+ * @brief 描画エリアの設定
+ * 
+ * @param rect 
+ * @return int 
+ */
+int setDrawArea(Rect rect);
+
+/**
+ * @brief 描画エリアを画面全体にする
+ * 
+ * @return int 
+ */
+int setDrawAreaFull();
+
+/**
  * @brief 明るさを取得する
  * 
  * @param color 

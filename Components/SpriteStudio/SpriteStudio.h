@@ -319,6 +319,17 @@ namespace SpriteStudio {
 		int getPartState(int handle, SpriteStudioResult& result, const char* name, int frame_no = -1);
 
 		/**
+		 * @brief パーツインデックスから、パーツ情報を取得します.
+		 * 
+		 * @param handle アクセスハンドル
+		 * @param result パーツ情報を受け取るバッファ
+		 * @param index 取得するパーツインデックス
+		 * @param frame_no 取得するフレーム番号 -1の場合は現在再生しているフレームが適用される
+		 * @return int 成功…kSuccessCode, 失敗…kErrorCode
+		 */
+		int getPartState(int handle, SpriteStudioResult& result, const int index, int frame_no = -1);
+
+		/**
 		 * @brief パーツ名からパーツの表示、非表示を設定します.
 		 * コリジョン用のパーツや差し替えグラフィック等、SS5上で表示を行うがゲーム中では非表示にする場合に使用します。
 		 * SSの非表示アトリビュート設定するわけではないので注意してください。

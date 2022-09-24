@@ -24,5 +24,6 @@
 #include "Utility/TypeExtensions.h"
 #include "SpriteStudio/SpriteStudio.h"
 #include "SpriteStudio/SpriteStudioButton.h"
+#include "SpriteStudio/SpriteStudioSlider.h"
 
 #endif

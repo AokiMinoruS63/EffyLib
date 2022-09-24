@@ -11,7 +11,6 @@
 #include "SpriteStudio.h"
 #include "SpriteStudioButton.h"
 #include "../Common/Type/ReturnType.h"
-#include "../Common/Constant/MathConstant.h"
 #include <vector>
 
 using namespace SpriteStudio;
@@ -38,13 +37,8 @@ Button::Button(std::string path, std::string ssae_name, bool fadein_animation, f
 
 	// サイズを抽出するためにアニメを再生させる
 	play(UIAnimeState::kNormal);
-	// サイズ抽出。
-	int width, height;
-	Player::getFrameSize(_handle, &width, &height);
-	// スクリーン作成
-	this->makeScreen(width, height);
-	// 座標、フレームサイズを設定する
-	setFrame(Rect(x, y, (float)width, (float)height));
+	// フレーム初期化。
+	initFrame(_handle, x, y);
 	// フェードインアニメーションを再生するなら変更する
 	if(fadein_animation && _anime_list.size() >= (int)UIAnimeState::kFadein) {
 		changeAnimation(UIAnimeState::kFadein);
@@ -57,6 +51,7 @@ Button::Button(std::string path, std::string ssae_name, bool fadein_animation, f
 
 // デストラクタ
 Button::~Button() {
+	Player::remove(_handle);
 	// スクリーンをメモリから解放する
 	removeScreen();
 }
@@ -64,11 +59,11 @@ Button::~Button() {
 // ボタンを走らせる
 void Button::run(touch_t touch, float dt) {
 	// StateがkInvisibleなら処理しない
-	UIState state = getState();
-	UIAnimeState anime_state = getAnimeState();
+	const UIState state = getState();
 	if (state == UIState::kInvisible) {
 		return;
 	}
+	const UIAnimeState anime_state = getAnimeState();
 	// 現在のアニメーションフレーム取得
 	const int anime_frame = SpriteStudio::Player::getFrameNo(_handle);
 
@@ -150,58 +145,12 @@ int Button::draw() {
 	preRender();
 	
 	const UIAnimeState anime = getAnimeState();
-	int returnValue;
+	// フェードインかフェードアウトならスクリーンに収まらないのでそのまま描画
 	if(anime == UIAnimeState::kFadein || anime == UIAnimeState::kFadeout) {
-		returnValue = SpriteStudio::Player::draw(_handle);
-	} else {
-		Rect frame = getFrame();
-		// TODO: リンクしているssPlayerの拡大率、アルファ値、角度を設定する
-		float scale_x = 1.0;
-		float scale_y = 1.0;
-		float radian = 0.0;
-		float alpha = 1.0;
-		int blend_mode = BlendMode::kNoBlend;
-		const int linked_handle = getLinkedPlayerHandle();
-		ScreenStateResume resume;
-		SpriteStudioResult result;
-		if(SpriteStudio::Player::getPartState(linked_handle, result, getLinkedPartName().c_str()) == kSuccessCode) {
-			frame.x = result.x;
-			frame.y = getScreenHeight() - result.y;
-			scale_x = result.scaleX;
-			scale_y = result.scaleY;
-			const char* root_part_name = SpriteStudio::Player::getPartName(linked_handle, 0);
-			// Rootの拡大率適用
-			if (getLinkedPartName() != root_part_name) {
-				SpriteStudioResult result2;
-				SpriteStudio::Player::getPartState(linked_handle, result2, SpriteStudio::Player::getPartName(linked_handle, 0));
-				scale_x *= result2.scaleX;
-				scale_y *= result2.scaleY;
-			}
-			// 親の拡大率適用
-			const char* parent_name = SpriteStudio::Player::getPartName(linked_handle, result.parent_index);
-			if (getLinkedPartName() != parent_name && getLinkedPartName() != root_part_name) {
-				SpriteStudioResult result2;
-				SpriteStudio::Player::getPartState(linked_handle, result2, parent_name);
-				scale_x *= result2.scaleX;
-				scale_y *= result2.scaleY;
-			}
-			alpha = ((float)result.opacity) * 255.0;
-			blend_mode = result.colorBlendType;
-			radian = result.rotationZ * (1.0 / 360.0) * kPiFloat;
-		}
-		if(blend_mode != BlendMode::kNoBlend) {
-			resume.saveBlend();
-			setDrawBlendMode(blend_mode, alpha);
-		}
-		returnValue = drawRotaGraph3(frame.x, frame.y, frame.halfWidth(), frame.halfHeight(), scale_x, scale_y, radian, getScreen(), TRUE);
-		if(blend_mode != BlendMode::kNoBlend) {
-			resume.loadScreenState();
-		}
-		if(blend_mode != BlendMode::kNoBlend) {
-			resume.loadBlend();
-		}
+		return SpriteStudio::Player::draw(_handle);
 	}
-	return returnValue;
+	// それ以外の場合はスクリーンに描画済のものを描画する
+	return drawCommon();
 }
 
 // アニメーションを変更する
@@ -251,14 +200,12 @@ int Button::preRender() {
 	}
 	Rect frame = getFrame();
 
-	// 座標を変えても再生するまで座標の変更が反映されないため、再度再生する
-	SpriteStudio::Player::setPosition(_handle, frame.halfWidth(), frame.halfHeight());
-	SpriteStudio::Player::apply(_handle);
+	// スクリーン上の座標に変更する
+	setPosition(frame.halfWidth(), frame.halfHeight());
 	// 描画実行
 	clearDrawScreen();
 	SpriteStudio::Player::draw(_handle);
-	SpriteStudio::Player::setPosition(_handle, frame.x, frame.y);
-	SpriteStudio::Player::apply(_handle);
+	setPosition(frame.x, frame.y);
 	_is_draw_update = false;
 	return preRenderEnd();
 }
@@ -279,8 +226,8 @@ int Button::getPosition(float *x, float *y) {
 
 // 座標をセットする
 int Button::setPosition(float x, float y) {
-	setFramePotision(x, y);
-	return SpriteStudio::Player::setPosition(_handle, x, y);
+	SpriteStudio::Player::setPosition(_handle, x, y);
+	return SpriteStudio::Player::apply(_handle);
 }
 
 // ボタンを描画・判定共に行う状態にする

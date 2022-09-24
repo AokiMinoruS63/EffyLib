@@ -11,15 +11,27 @@
 #include "SpriteStudioUI.h"
 #include "SpriteStudio.h"
 #include "../Common/Type/ReturnType.h"
+#include "../Common/Constant/MathConstant.h"
 
 using namespace SpriteStudio;
+
+// フレームを初期化する
+int UICommon::initFrame(int handle, float x, float y) {
+	int width, height;
+	if (Player::getFrameSize(handle, &width, &height) == kErrorCode) {
+		return kErrorCode;
+	}
+	// スクリーン作成
+	this->makeScreen(width, height);
+	// 座標、フレームサイズを設定する
+	setFrame(Rect(x, y, (float)width, (float)height));
+	return kSuccessCode;
+}
 
 // 現在の描画エリアの座標を設定する
 int UICommon::setFramePotision(float x, float y) {
 	_frame.x = x;
 	_frame.y = y;
-	_linked_handle = kErrorCode;
-	_linked_part_name = "";
 	return kSuccessCode;
 }
 
@@ -202,6 +214,57 @@ int UICommon::preRenderEnd() {
 	_screen_resume.loadScreen();
 	_screen_resume.loadScreenState();
 	return kSuccessCode;
+}
+
+// preRender済のスクリーンを使用した共通描画処理
+int UICommon::drawCommon() {
+	Rect frame = getFrame();
+	// リンクしているssPlayerの拡大率、アルファ値、角度を設定する
+	float scale_x = 1.0;
+	float scale_y = 1.0;
+	float radian = 0.0;
+	float alpha = 1.0;
+	int blend_mode = BlendMode::kNoBlend;
+	const int linked_handle = getLinkedPlayerHandle();
+	ScreenStateResume resume;
+	SpriteStudioResult result;
+	if(SpriteStudio::Player::getPartState(linked_handle, result, getLinkedPartName().c_str()) == kSuccessCode) {
+		frame.x = result.x;
+		frame.y = getScreenHeight() - result.y;
+		scale_x = result.scaleX;
+		scale_y = result.scaleY;
+		const char* root_part_name = SpriteStudio::Player::getPartName(linked_handle, 0);
+		// Rootの拡大率適用
+		if (getLinkedPartName() != root_part_name) {
+			SpriteStudioResult result2;
+			SpriteStudio::Player::getPartState(linked_handle, result2, SpriteStudio::Player::getPartName(linked_handle, 0));
+			scale_x *= result2.scaleX;
+			scale_y *= result2.scaleY;
+		}
+		// 親の拡大率適用
+		const char* parent_name = SpriteStudio::Player::getPartName(linked_handle, result.parent_index);
+		if (getLinkedPartName() != parent_name && getLinkedPartName() != root_part_name) {
+			SpriteStudioResult result2;
+			SpriteStudio::Player::getPartState(linked_handle, result2, parent_name);
+			scale_x *= result2.scaleX;
+			scale_y *= result2.scaleY;
+		}
+		alpha = ((float)result.opacity) * 255.0;
+		blend_mode = result.colorBlendType;
+		radian = result.rotationZ * (1.0 / 360.0) * kPiFloat;
+	}
+	if(blend_mode != BlendMode::kNoBlend) {
+		resume.saveBlend();
+		setDrawBlendMode(blend_mode, alpha);
+	}
+	int returnValue = drawRotaGraph3(frame.x, frame.y, frame.halfWidth(), frame.halfHeight(), scale_x, scale_y, radian, getScreen(), TRUE);
+	if(blend_mode != BlendMode::kNoBlend) {
+		resume.loadScreenState();
+	}
+	if(blend_mode != BlendMode::kNoBlend) {
+		resume.loadBlend();
+	}
+	return returnValue;
 }
 
 // UIを動かした時の処理を実行する

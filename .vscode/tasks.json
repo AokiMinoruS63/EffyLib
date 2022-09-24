@@ -87,6 +87,7 @@
 				"build/b2WeldJoint.o",
 				"build/b2WheelJoint.o",
 				// Component of EffyLib
+				"build/SpriteStudioSlider.o",
 				"build/SpriteStudioButton.o",
 				"build/SpriteStudioUI.o",
 				"build/SpriteStudio.o",
@@ -236,6 +237,7 @@
 				"build/b2WeldJoint.o",
 				"build/b2WheelJoint.o",
 				// Component of EffyLib
+				"build/SpriteStudioSlider.o",
 				"build/SpriteStudioButton.o",
 				"build/SpriteStudioUI.o",
 				"build/SpriteStudio.o",
