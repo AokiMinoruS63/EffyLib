@@ -187,6 +187,14 @@ namespace SpriteStudio {
 		int getFrameSize(int handle, int* width, int* height);
 
 		/**
+		 * @brief プレイヤーのアニメーションがセットされているかチェックする
+		 * 
+		 * @param handle アクセスハンドル
+		 * @return int セット...TRUE, セットされていない…FALSE, 失敗…kErrorCode
+		 */
+		int isAnimation(int handle);
+
+		/**
 		 * @brief 再生フレームNoを設定します.
 		 * 
 		 * @param handle アクセスハンドル

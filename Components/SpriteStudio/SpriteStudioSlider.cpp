@@ -31,20 +31,6 @@ int getPartResult(int handle, SpriteStudioResult& result, int frame_no) {
 	return kSuccessCode;
 }
 
-/**
- * @brief モーションが存在するアニメなら**true**
- * 
- * @param handle アニメハンドル
- * @return int kErrorCode・・・存在しない、0 = FALSE, 1 = TRUE
- */
-int isMotion(int handle) {
-	// ハンドルが存在しなければ**false**
-	if (handle <= 0) {
-		return kErrorCode; 
-	}
-	return SpriteStudio::Player::isNoMotion(handle) ? FALSE : TRUE;
-}
-
 Slider::Slider(
 	std::string path, 
 	std::string ssae_meter, 
@@ -98,7 +84,7 @@ Slider::Slider(
 	setState(UIState::kActive);
 	_is_draw_update = true;
 
-	if (isMotion(_handle_frame) == TRUE || isMotion(_handle_frame_back)  == TRUE || isMotion(_handle_meter)  == TRUE ) {
+	if (updateMotionCheck()) {
 		_always_update = true;
 	}
 }
@@ -131,7 +117,7 @@ bool Slider::getAlwaysUpdateFlag() {
 // 毎フレーム描画更新するかどうかのフラグをセットする
 void Slider::setAlwaysUpdateFlag(bool flag) {
 	// 何もアニメーションをしないなら処理を行わない
-	if (isMotion(_handle_frame) != TRUE || isMotion(_handle_frame_back)  != TRUE || isMotion(_handle_meter)  != TRUE ) {
+	if (!updateMotionCheck()) {
 		return;
 	}
 	_always_update = flag;
@@ -144,19 +130,7 @@ void Slider::setAlwaysUpdateFlag(bool flag) {
 	SpriteStudio::Player::apply(_handle_meter);
 }
 
-/**
- * @brief モーションを更新する
- * 
- * @param handle ハンドル
- * @param dt 進行時間
- */
-void updateMotion(int handle, float dt) {
-	SpriteStudio::Player::update(handle, dt);
-	if(SpriteStudio::Player::isEndFrame(handle) && !SpriteStudio::Player::isNoMotion(handle)) {
-		SpriteStudio::Player::setFrameNo(handle, 0);
-	}
-}
-
+// 描画以外のスライダーの更新処理を行う
 void Slider::run(touch_t touch, float dt) {
 	// StateがkInvisibleなら処理しない
 	const UIState state = getState();
@@ -247,7 +221,7 @@ int Slider::draw() {
 	return drawCommon();
 }
 
-// 描画する
+// スクリーンにスライダーを描画する
 int Slider::preRender() {
 	if (!_is_draw_update && !_always_update) {
 		return kSuccessCode;
@@ -273,6 +247,11 @@ int Slider::preRender() {
 	setPosition(frame.x, frame.y);
 	_is_draw_update = false;
 	return preRenderEnd();
+}
+
+// 描画を更新するアニメーションが存在するかを返す
+bool Slider::updateMotionCheck() {
+	return isMotion(_handle_frame) == TRUE || isMotion(_handle_frame_back)  == TRUE || isMotion(_handle_meter)  == TRUE;
 }
 
 int Slider::setPosition(float x, float y) {

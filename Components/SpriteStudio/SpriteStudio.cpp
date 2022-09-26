@@ -111,6 +111,11 @@ int Player::getFrameSize(int handle, int* width, int* height) {
 	return SpriteStudioManager::shared()->getPlayerFrameSize(handle, width, height);
 }
 
+// プレイヤーのアニメーションがセットされているかチェックする
+int Player::isAnimation(int handle) {
+	return SpriteStudioManager::shared()->isPlayerAnimation(handle);
+}
+
 // 再生フレームNoを設定します.
 int Player::setFrameNo(int handle, int frame_no) {
 	return SpriteStudioManager::shared()->setPlayerFrameNo(handle, frame_no);

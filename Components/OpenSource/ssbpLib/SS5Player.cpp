@@ -3169,6 +3169,11 @@ int Player::getFrameSize(int* width, int* height) {
 	return 0;
 }
 
+// アニメーションをセットしているなら**true**
+bool Player::isAnimation() {
+	return _currentAnimeRef != NULL;
+}
+
 void Player::checkUserData(int frameNo)
 {
 	ToPointer ptr(_currentRs->data);

@@ -25,5 +25,6 @@
 #include "SpriteStudio/SpriteStudio.h"
 #include "SpriteStudio/SpriteStudioButton.h"
 #include "SpriteStudio/SpriteStudioSlider.h"
+#include "SpriteStudio/SpriteStudioGauge.h"
 
 #endif

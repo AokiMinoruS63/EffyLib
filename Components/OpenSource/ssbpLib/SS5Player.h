@@ -1272,6 +1272,14 @@ public:
 	 */
 	int getFrameSize(int* width, int* height);
 
+	/**
+	 * @brief アニメーションをセットしているなら**true**
+	 * 
+	 * @return true 
+	 * @return false 
+	 */
+	bool isAnimation();
+
 public:
 	Player(void);
 	~Player();

@@ -192,6 +192,15 @@ int SpriteStudioManager::getPlayerFrameSize(int handle, int* width, int* height)
 	return player->getFrameSize(width, height);
 }
 
+// プレイヤーのアニメーションがセットされているかチェックする
+int SpriteStudioManager::isPlayerAnimation(int handle) {
+	ss::Player *player = getHashData(handle);
+	if(player == NULL) {
+		return kErrorCode;
+	}
+	return player->isAnimation() ? 1 : 0;
+}
+
 // 再生フレームNoを設定します.
 int SpriteStudioManager::setPlayerFrameNo(int handle, int frame_no) {
 	ss::Player *player = getHashData(handle);

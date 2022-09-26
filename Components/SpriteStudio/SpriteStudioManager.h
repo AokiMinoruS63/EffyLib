@@ -208,6 +208,14 @@ class SpriteStudioManager: HandleObject<ss::Player> {
 	int getPlayerFrameSize(int handle, int* width, int* height);
 
 	/**
+	 * @brief プレイヤーのアニメーションがセットされているかチェックする
+	 * 
+	 * @param handle アクセスハンドル
+	 * @return int セット...TRUE, セットされていない…FALSE, 失敗…kErrorCode
+	 */
+	int isPlayerAnimation(int handle);
+
+	/**
 	 * @brief 再生フレームNoを設定します.
 	 * 
 	 * @param handle アクセスハンドル

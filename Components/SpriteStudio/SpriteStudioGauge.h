@@ -1,6 +1,6 @@
 /**
- * @file SpriteStudioSlider.h
- * @brief SpriteStudioのスライダー
+ * @file SpriteStudioGauge.h
+ * @brief つまみの無いSpriteStidioを使用したゲージクラス
  * 
  * Copyright (c) 2021-2022 AokiMinoru
  * Released under the MIT license.
@@ -8,8 +8,8 @@
  * 
  */
 
-#ifndef SPRITE_STUDIO_SLIDER_H
-#define SPRITE_STUDIO_SLIDER_H
+#ifndef SPRITE_STUDIO_GAUGE_H
+#define SPRITE_STUDIO_GAUGE_H
 
 #include "SpriteStudioUI.h"
 #include "../UI/UIAnimeState.h"
@@ -17,10 +17,10 @@
 
 namespace SpriteStudio {
 	/**
-	 * @brief SpriteStudioのスライダー
+	 * @brief SpriteStudio用のボタン
 	 * 
 	 */
-	class Slider: public UICommon {
+	class Gauge: public UICommon {
 
 		// MARK: - 変数
 		private:
@@ -31,22 +31,16 @@ namespace SpriteStudio {
 		int _handle_frame;
 		// 枠の背景のハンドル
 		int _handle_frame_back;
-		// つまみのハンドル
-		int _handle_thumb;
+		// マスクハンドル
+		int _handle_mask;
 		// メーターの値。0.0〜1.0
 		float _value;
-		// メーターの始点
-		Vec2 _start;
-		// メーターの終点
-		Vec2 _end;
-		// つまみをドラッグ中なら**true**
-		bool _dragging = false;
-		// つまみ操作以外にも毎フレーム描画更新するなら**true**
+		// メーター増減時以外にも毎フレーム描画更新するなら**true**
 		bool _always_update = false;
 
-		public:
-
 		// MARK: - コンストラクタ・デストラクタ
+
+		public:
 
 		/**
 		 * @brief コンストラクタ
@@ -55,16 +49,18 @@ namespace SpriteStudio {
 		 * @param ssae_meter メーター部分のssae名
 		 * @param ssae_frame フレーム部分のssae名
 		 * @param ssae_frame_back フレーム背景部分のssae名
-		 * @param ssae_thumb つまみ部分のssae名
+		 * @param ssae_mask マスク部分のssae名
 		 * @param x X座標
 		 * @param y Y座標
 		 * @param default_value メーターの初期値
 		 */
-		Slider(std::string path, std::string ssae_meter, std::string ssae_frame, std::string ssae_frame_back, std::string ssae_thumb, float x, float y, float default_value);
+		Gauge(std::string path, std::string ssae_meter, std::string ssae_frame, std::string ssae_frame_back, std::string ssae_mask, float x, float y, float default_value);
 
-		~Slider();
-
-		// MARK: - 関数
+		/**
+		 * @brief デストラクタ
+		 * 
+		 */
+		~Gauge();
 
 		/**
 		 * @brief スライダーの値（0.0 ~ 1.0）を取得する
@@ -96,15 +92,14 @@ namespace SpriteStudio {
 		void setAlwaysUpdateFlag(bool flag);
 
 		/**
-		 * @brief 描画以外のスライダーの更新処理を行う
+		 * @brief 描画以外のゲージの更新処理を行う
 		 * 
-		 * @param touch タッチ情報
 		 * @param dt 経過時間（ミリ秒）
 		 */
-		void run(touch_t touch, float dt);
+		void run(float dt);
 
 		/**
-		 * @brief スライダーを描画する
+		 * @brief ゲージを描画する
 		 * 
 		 * @return int 
 		 */
@@ -113,7 +108,7 @@ namespace SpriteStudio {
 		private:
 
 		/**
-		 * @brief スクリーンにスライダーを描画する
+		 * @brief ゲージをスクリーンに描画する
 		 * 
 		 * @return int 
 		 */
@@ -139,7 +134,6 @@ namespace SpriteStudio {
 		 * @return int 
 		 */
 		virtual int setPosition(float x, float y);
-
 	};
 }
 

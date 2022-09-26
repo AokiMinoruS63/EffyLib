@@ -199,8 +199,7 @@ int UICommon::preRenderInit() {
 	if(_screen == NULL) {
 		return kErrorCode;
 	}
-	_screen_resume.saveScreen();
-	_screen_resume.saveScreenState();
+	_screen_resume.saveScreenState(true);
 	_screen_resume.initScreenState();
 	setDrawScreen(_screen);
 	return kSuccessCode;
@@ -211,8 +210,7 @@ int UICommon::preRenderEnd() {
 	if(getDrawScreen() != _screen) {
 		return kErrorCode;
 	}
-	_screen_resume.loadScreen();
-	_screen_resume.loadScreenState();
+	_screen_resume.loadScreenState(true);
 	return kSuccessCode;
 }
 
@@ -265,6 +263,23 @@ int UICommon::drawCommon() {
 		resume.loadBlend();
 	}
 	return returnValue;
+}
+
+// モーションが存在するアニメか返す
+int UICommon::isMotion(int handle) {
+	// ハンドルが存在しなければ**false**
+	if (handle <= 0) {
+		return kErrorCode; 
+	}
+	return SpriteStudio::Player::isNoMotion(handle) ? FALSE : TRUE;
+}
+
+// モーションを更新する
+void UICommon::updateMotion(int handle, float dt) {
+	SpriteStudio::Player::update(handle, dt);
+	if(SpriteStudio::Player::isEndFrame(handle) && !SpriteStudio::Player::isNoMotion(handle)) {
+		SpriteStudio::Player::setFrameNo(handle, 0);
+	}
 }
 
 // UIを動かした時の処理を実行する

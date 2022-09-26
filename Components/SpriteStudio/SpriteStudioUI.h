@@ -239,6 +239,23 @@ namespace SpriteStudio {
 		 */
 		int drawCommon();
 
+		protected:
+		/**
+		 * @brief モーションが存在するアニメか返す
+		 * 
+		 * @param handle アニメハンドル
+		 * @return int kErrorCode・・・存在しない、0 = FALSE, 1 = TRUE
+ 		 */
+		int isMotion(int handle);
+
+		/**
+		 * @brief モーションを更新する
+		 * 
+		 * @param handle ハンドル
+		 * @param dt 進行時間
+		 */
+		void updateMotion(int handle, float dt);
+
 		public:
 
 		/**
